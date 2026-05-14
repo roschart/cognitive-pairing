@@ -1,3 +1,15 @@
+---
+name: cp-plan
+description: >
+  Create or update a living plan document for a project or workstream.
+  Use when starting a new plan, after major direction changes, after
+  several sessions to mark completed work, or when goals have shifted.
+  Plans are distinct from state (checkpoints) and context (memory).
+metadata:
+  author: roschart
+  version: "1.0"
+---
+
 # cp-plan
 
 Create or update a living plan document for a project or workstream.

@@ -1,3 +1,16 @@
+---
+name: cp-hydrate
+description: >
+  Reconstruct operational context in a new, clean AI session. Use when
+  starting a new session after a deliberate reset, opening the project
+  after a long pause, handing off to a different AI assistant, or
+  starting a focused sub-session. Generates a hydration prompt that
+  replaces conversation history.
+metadata:
+  author: roschart
+  version: "1.0"
+---
+
 # cp-hydrate
 
 Reconstruct operational context in a new, clean AI session.
@@ -28,6 +41,8 @@ Run `cp-hydrate` when:
 - Handing off to a different AI assistant
 - Starting a sub-session focused on a specific subtask
 
+Do NOT run mid-session — it is designed for session starts.
+
 ---
 
 ## Input
@@ -50,7 +65,7 @@ Provide the AI with:
 
 ---
 
-## Prompt (meta — asking the AI to generate the hydration prompt)
+## Prompt
 
 Use this instruction with your AI assistant:
 

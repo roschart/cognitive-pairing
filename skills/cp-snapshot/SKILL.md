@@ -1,3 +1,16 @@
+---
+name: cp-snapshot
+description: >
+  Create a raw, unfiltered capture of current state before experimental
+  or risky work. Use before trying something that might break the
+  current direction, starting a large refactor, or before discussions
+  that might overturn settled decisions. Snapshots are disposable
+  safety nets, not authoritative state.
+metadata:
+  author: roschart
+  version: "1.0"
+---
+
 # cp-snapshot
 
 Create a raw, unfiltered capture of current state before experimental
@@ -39,14 +52,14 @@ not authoritative.
 Provide the AI with:
 
 1. Current session context (conversation excerpt)
-2. The current `memory/active.md`
+2. The current `.cp/memory/active.md`
 3. A note on WHY the snapshot is being taken
 
 ---
 
 ## Output
 
-- Creates `snapshots/YYYY-MM-DDTHHMM-<label>.md`
+- Creates `.cp/snapshots/YYYY-MM-DDTHHMM-<label>.md`
 - Does NOT modify any other artifact
 - Disposable — can be pruned once the experiment resolves
 
@@ -55,7 +68,7 @@ Provide the AI with:
 ## Naming Convention
 
 ```text
-snapshots/
+.cp/snapshots/
   2026-05-14T1430-before-db-redesign.md
   2026-05-15T0900-alt-auth-experiment.md
 ```
@@ -76,7 +89,7 @@ cp-snapshot [label]
 Capture the current state as a raw snapshot. Include everything
 relevant to the current moment, even if incomplete or uncertain.
 
-Use this structure for snapshots/YYYY-MM-DDTHHMM-[label].md:
+Use this structure for .cp/snapshots/YYYY-MM-DDTHHMM-[label].md:
 
    # Snapshot: [label] — YYYY-MM-DDTHH:MM
 
@@ -90,7 +103,8 @@ Use this structure for snapshots/YYYY-MM-DDTHHMM-[label].md:
 
    ## Active Experiments
    What is being tried right now that may or may not work.
-   For each: what it is, what success looks like, what failure looks like.
+   For each: what it is, what success looks like, what failure
+   looks like.
 
    ## Abandoned Branches (This Session)
    Ideas tried and rejected in THIS session, not yet in memory.
@@ -120,7 +134,7 @@ Once the experiment resolves:
   memory, then `cp-checkpoint` if a milestone was reached. Prune the
   snapshot.
 - **If it failed:** recover from the snapshot. Load it alongside
-  `memory/active.md`. Decide what to restore, then continue.
+  `.cp/memory/active.md`. Decide what to restore, then continue.
 - **If inconclusive:** keep the snapshot active. Note its existence
   in memory's Open Questions.
 

@@ -1,3 +1,15 @@
+---
+name: cp-checkpoint
+description: >
+  Create a stable, recoverable state artifact at a coherent milestone.
+  Use when a meaningful phase completes, before major pivots, before
+  long pauses, or after resolving significant blocking issues.
+  Checkpoints are immutable once created and accumulate over time.
+metadata:
+  author: roschart
+  version: "1.0"
+---
+
 # cp-checkpoint
 
 Create a stable, recoverable state artifact at a coherent milestone.
@@ -10,8 +22,8 @@ A checkpoint is a point-in-time record of where the project stands.
 It is the recovery anchor for future sessions and the baseline for
 measuring progress.
 
-Unlike `memory/active.md` (which is replaced), checkpoints accumulate.
-They are immutable once created.
+Unlike `.cp/memory/active.md` (which is replaced), checkpoints
+accumulate. They are immutable once created.
 
 ---
 
@@ -36,24 +48,25 @@ milestones.
 
 Provide the AI with:
 
-1. The current `memory/active.md` (run `cp-compact` first if needed)
+1. The current `.cp/memory/active.md` (run `cp-compact` first if needed)
 2. The latest existing checkpoint (for comparison)
-3. A label or version tag (e.g., `v0.3`, `act-2-complete`, `db-schema-locked`)
+3. A label or version tag (e.g., `v0.3`, `act-2-complete`,
+   `db-schema-locked`)
 
 ---
 
 ## Output
 
-- Creates `checkpoints/YYYY-MM-DD-<label>.md`
-- Does NOT modify `memory/active.md`
-- Does NOT modify `plan.md`
+- Creates `.cp/checkpoints/YYYY-MM-DD-<label>.md`
+- Does NOT modify `.cp/memory/active.md`
+- Does NOT modify `plan-<slug>.md`
 
 ---
 
 ## Naming Convention
 
 ```text
-checkpoints/
+.cp/checkpoints/
   2026-05-14-v0.1.md           # semantic version
   2026-05-14-db-schema.md      # milestone label
   2026-05-15-v0.2-post-pivot.md  # version + label
@@ -71,8 +84,9 @@ Use this instruction with your AI assistant:
 ```
 cp-checkpoint [label]
 
-Using the current memory/active.md and the latest checkpoint (if
-provided), produce a new checkpoint file for checkpoints/YYYY-MM-DD-[label].md.
+Using the current .cp/memory/active.md and the latest checkpoint (if
+provided), produce a new checkpoint file for
+.cp/checkpoints/YYYY-MM-DD-[label].md.
 
 Use this exact structure:
 
@@ -107,7 +121,7 @@ Use this exact structure:
 Rules:
 - No narrative. No "we decided" or "after exploring".
 - State facts: "X is Y". "Z uses W". "The constraint is C."
-- Do not duplicate content from memory/active.md verbatim.
+- Do not duplicate content from .cp/memory/active.md verbatim.
   The checkpoint describes state; memory describes active context.
 - A checkpoint should be fully understandable without reading
   any previous artifact.

@@ -1,19 +1,32 @@
+---
+name: cp-compact
+description: >
+  Compress the current session's working state into a minimal
+  operational context file (.cp/memory/active.md). Use when context
+  feels heavy, before major pivots, preparing to end a session, or
+  when memory exceeds ~1500 words. This is operational compression,
+  not summarization.
+metadata:
+  author: roschart
+  version: "1.0"
+---
+
 # cp-compact
 
 Compress the current session's working state into a minimal operational
-context file (`memory/active.md`).
+context file (`.cp/memory/active.md`).
 
 ---
 
 ## Purpose
 
 Long sessions accumulate noise: exploratory tangents, resolved
-questions, corrected mistakes, discarded ideas. `/compact` removes
+questions, corrected mistakes, discarded ideas. `cp-compact` removes
 that noise and preserves only what is needed to continue working.
 
 This is NOT summarization. It is operational compression.
 
-The output is a replacement for `memory/active.md`, not an addition
+The output is a replacement for `.cp/memory/active.md`, not an addition
 to it.
 
 ---
@@ -26,7 +39,9 @@ Run `cp-compact` when:
 - About to make a major pivot
 - Preparing to end a working session
 - Approaching a stable milestone before checkpointing
-- Memory/active.md exceeds ~1500 words
+- `.cp/memory/active.md` exceeds ~1500 words
+
+Do NOT run after every few messages — compaction has overhead.
 
 ---
 
@@ -35,16 +50,17 @@ Run `cp-compact` when:
 Provide the AI with:
 
 1. The current session conversation (or a relevant excerpt)
-2. The current `memory/active.md` (if it exists)
-3. The latest `checkpoints/YYYY-MM-DD-vN.md` (optional but helpful)
+2. The current `.cp/memory/active.md` (if it exists)
+3. The latest `.cp/checkpoints/YYYY-MM-DD-label.md` (optional but
+   helpful)
 
 ---
 
 ## Output
 
-- Replaces `memory/active.md` with the compacted version
-- Archives the previous `memory/active.md` to
-  `memory/archive/YYYY-MM-DD.md`
+- Replaces `.cp/memory/active.md` with the compacted version
+- Archives the previous `.cp/memory/active.md` to
+  `.cp/memory/archive/YYYY-MM-DD.md`
 - Does NOT create a checkpoint (that is `cp-checkpoint`)
 
 ---
@@ -56,8 +72,8 @@ Use this instruction with your AI assistant:
 ```
 cp-compact
 
-Read the current session context and the existing memory/active.md
-(if provided). Produce a new memory/active.md that:
+Read the current session context and the existing .cp/memory/active.md
+(if provided). Produce a new .cp/memory/active.md that:
 
 1. Preserves ONLY what is needed to continue working effectively
 2. Removes: resolved questions, completed tasks, corrected mistakes,
