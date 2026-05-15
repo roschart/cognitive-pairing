@@ -21,3 +21,13 @@ must respect. Only the human approves additions or removals.
 - Operational over narrative — no "first we discussed..."
 - Markdown-only — every artifact readable without tooling
 - Git-native — all artifacts versionable and diffable
+
+## Session Model
+
+- Two bookends: human calls cp-hydrate (start) and
+  cp-session-end (close) — nothing else manually
+- cp-session-end orchestrates: compact → canon → checkpoint
+  → plan → delta
+- Agent proposes canon additions; human approves before write
+- Mundane workflow steps are never persisted in state
+  artifacts

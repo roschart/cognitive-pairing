@@ -20,8 +20,8 @@
 - **Deployment targets**: `~/.copilot/skills/` and
   `~/.codex/skills/`
 - **4 artifact types**: plan, canon, checkpoint, memory
-- **canon.md**: human-curated permanent truth, agent reads but
-  never modifies
+- **canon.md**: agent proposes additions, human approves
+  before write
 - **agent.md removed**: auto-execute is a security risk; human
   triggers skills manually
 - **cp-discover**: new skill for brownfield project onboarding
@@ -47,6 +47,9 @@
 - [x] test cp-discover with Haiku, Sonnet,
   GPT-5 mini · ✓ 2026-05-15
 - [x] evaluate agent.md auto-execute — rejected · ✓ 2026-05-15
+- [x] implement two-bookend session model · ✓ 2026-05-15
+- [x] add canon update flow to cp-session-end · ✓ 2026-05-15
+- [x] filter mundane noise from state artifacts · ✓ 2026-05-15
 
 ## Potential Work
 
@@ -62,6 +65,6 @@
 
 > Paused: 2026-05-15
 
-- Hydrate and receive feedback from real-world usage
-- Pathfinder campaign (non-code project) as first test case
-- Codex deployment test pending
+- Continue real-world validation in brownfield projects
+- Run `make sync` to deploy updated skills
+- Test Codex deployment (make deploy-codex)

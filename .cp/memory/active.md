@@ -8,37 +8,38 @@
 
 ## Active Constraints
 
-- agent.md and copilot-instructions.md do not auto-execute
-  skills — this is a security feature, not a bug
-- Human triggers skills manually (/cp-hydrate, /cp-discover)
+- Human triggers skills manually — no auto-execute
+- Session model: two bookends (hydrate + session-end),
+  everything else is embedded or agent-proposed
 
 ## Current Focus
 
-Session ended. Next session: hydrate, receive feedback from
-real-world usage of skills in brownfield projects.
+Validation phase. Skills are being used in brownfield
+projects. Feedback from Pathfinder session informed the
+two-bookend model and canon update flow.
 
 ## Key Relationships
 
-- cp-discover → bootstraps .cp/ in brownfield projects
-- cp-hydrate → loads context at session start (requires .cp/)
-- cp-compact → produces active.md (this file)
-- cp-checkpoint → produces immutable milestone records
-- count_tokens.py → lives inside cp-discover/scripts/
+- cp-hydrate (start) ↔ cp-session-end (close) = bookends
+- cp-session-end embeds: compact → canon → checkpoint → plan
+- cp-hydrate detects bloat → suggests cp-prune
+- cp-discover → one-time brownfield onboarding
 
 ## Unresolved Problems
 
 - Codex deployment not tested (make deploy-codex)
 - No automated test suite for skills
+- Deployed skills in ~/.copilot/skills/ are stale after
+  today's changes — need `make sync`
 
 ## Recent Decisions
 
-- agent.md removed: auto-execute is a security risk in any
-  agent (Copilot, Codex, Cursor) — human triggers skills
-- cp-discover created for brownfield onboarding with
-  token-aware project scanning
-- count_tokens.py moved from repo root to
-  skills/cp-discover/scripts/ with fallback for missing
-  tiktoken
+- Two-bookend session model: human calls only hydrate and
+  session-end; everything else is embedded or agent-proposed
+- Canon updates: agent proposes, human approves, agent writes
+- cp-hydrate suggests cp-prune when artifacts are bloated
+- Mundane workflow steps (commit, push, merge, deploy) are
+  never persisted in memory or delta
 
 ## Do Not Revisit
 
