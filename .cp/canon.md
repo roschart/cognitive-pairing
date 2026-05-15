@@ -13,6 +13,7 @@ must respect. Only the human adds or removes entries.
 - `.cp/` directory is analogous to `.git/` — infrastructure,
   not content
 - Plans live at project root, not inside `.cp/`
+- Human triggers skills manually — no auto-execute
 
 ## Design Principles
 

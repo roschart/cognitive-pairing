@@ -18,6 +18,10 @@ skills/
 │   └── SKILL.md
 ├── cp-compact/
 │   └── SKILL.md
+├── cp-discover/
+│   ├── SKILL.md
+│   └── scripts/
+│       └── count_tokens.py
 ├── cp-hydrate/
 │   └── SKILL.md
 ├── cp-plan/
@@ -41,6 +45,7 @@ Each `SKILL.md` contains:
 
 | Skill | Purpose |
 |-------|---------|
+| [cp-discover](cp-discover/SKILL.md) | Explore brownfield project and bootstrap `.cp/` |
 | [cp-hydrate](cp-hydrate/SKILL.md) | Load context at session start |
 | [cp-compact](cp-compact/SKILL.md) | Compress session into memory |
 | [cp-checkpoint](cp-checkpoint/SKILL.md) | Create stable state at milestones |
@@ -51,7 +56,8 @@ Each `SKILL.md` contains:
 ## Recommended Execution Order
 
 ```text
-Start of session:  cp-hydrate (ideally automatic)
+First time:        cp-discover (brownfield onboarding)
+Start of session:  cp-hydrate (ideally automatic via agent.md)
 During session:    work freely — no skills needed in flow
 End of work block: cp-compact → cp-checkpoint → cp-session-end
 Maintenance:       cp-prune (when memory exceeds ~1500 words)

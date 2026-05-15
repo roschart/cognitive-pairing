@@ -1,54 +1,49 @@
-# Working Memory — 2026-05-14
+# Working Memory — 2026-05-15
 
 ## Active Goals
 
-- Human review of changes on `feature/skill-refinement-and-makefile`
-- Decide on commit strategy and merge timing
-- Test Codex deployment when environment available
-
-## Canon
-
-- Skills use folder structure: `skill-name/SKILL.md`
-- YAML frontmatter requires `name` and `description` fields
-- Deploy targets: `~/.copilot/skills/` and `~/.codex/skills/`
-- Deprecated skills listed in `DEPRECATED` Makefile variable
-- All 7 skills restructured and deployed to Copilot
+- Real-world validation: use skills in personal repos
+- First test: Pathfinder campaign (non-code, Codex)
+- Collect feedback over 2-3 weeks
 
 ## Active Constraints
 
-- No commits or pushes — human reviews all changes first
-- Work is on branch `feature/skill-refinement-and-makefile`
-- `agents/openai.yaml` deferred for future work
+- agent.md and copilot-instructions.md do not auto-execute
+  skills — this is a security feature, not a bug
+- Human triggers skills manually (/cp-hydrate, /cp-discover)
 
 ## Current Focus
 
-Session ended. Next session: human review of all changes, then decide
-whether to commit/merge or iterate further.
+Session ended. Next session: hydrate, receive feedback from
+real-world usage of skills in brownfield projects.
 
 ## Key Relationships
 
-- `cp-compact` → produces `active.md` (this file)
-- `cp-checkpoint` → produces immutable milestone records
-- `cp-plan` → produces living plan at project root
-- `cp-session-end` → sequences compact + checkpoint + plan
-- Makefile → deploys skills to user directories
+- cp-discover → bootstraps .cp/ in brownfield projects
+- cp-hydrate → loads context at session start (requires .cp/)
+- cp-compact → produces active.md (this file)
+- cp-checkpoint → produces immutable milestone records
+- count_tokens.py → lives inside cp-discover/scripts/
 
 ## Unresolved Problems
 
-- Codex deployment not tested (only Copilot tested so far)
-- Main README.md not updated to reference `.cp/` usage
+- Codex deployment not tested (make deploy-codex)
+- No automated test suite for skills
 
 ## Recent Decisions
 
-- Skill folder structure: `skill-name/SKILL.md` (not flat files)
-- Template stored in `_template/` directory
-- Makefile uses regex-based help pattern for self-documentation
-- DEPRECATED variable for explicit skill removal list
-- ADR created for folder structure decision
+- agent.md removed: auto-execute is a security risk in any
+  agent (Copilot, Codex, Cursor) — human triggers skills
+- cp-discover created for brownfield onboarding with
+  token-aware project scanning
+- count_tokens.py moved from repo root to
+  skills/cp-discover/scripts/ with fallback for missing
+  tiktoken
 
 ## Do Not Revisit
 
-- Flat file structure (`cp-*.md` at skills root) — rejected; doesn't
-  match standard skill structure used by Copilot/Codex
-- Adding `agents/openai.yaml` now — deferred until Codex integration
-  becomes primary use case
+- Auto-execute via agent.md or copilot-instructions.md —
+  security risk, not viable
+- Flat file structure for skills — rejected in v1.0
+- Snapshots, templates, decisions as separate artifacts —
+  removed in v2.0

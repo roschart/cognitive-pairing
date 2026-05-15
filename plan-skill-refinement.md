@@ -2,65 +2,66 @@
 
 ## Context
 
-- Framework of 7 skills (`cp-*`) for AI-human session state management
-- Skills were restructured from flat files to folder structure
-- Makefile created for deploying to Copilot and Codex
-- All skills now have YAML frontmatter for proper triggering
+- Framework of 7 skills (`cp-*`) for AI-human session state
+  management
+- v1.0: Skills restructured to folder format with Makefile
+- v2.0: All skills rewritten to agent-driven voice, simplified
+  from 7 to 6 skills (removed cp-snapshot), 6 to 4 artifact
+  types (removed decisions/, snapshots/, templates/)
+- v2.1: Added cp-discover skill for brownfield onboarding,
+  removed agent.md (auto-execute not viable due to security)
 
 ## Decisions
 
 - **Folder structure**: `skill-name/SKILL.md` — matches standard
   Copilot/Codex skill format
-- **YAML frontmatter**: `name` and `description` fields required for
-  skill triggering
-- **Deployment targets**: `~/.copilot/skills/` and `~/.codex/skills/`
-- **Deprecated handling**: Explicit `DEPRECATED` variable in Makefile
+- **YAML frontmatter**: `name` and `description` fields required
+  for skill triggering
+- **Deployment targets**: `~/.copilot/skills/` and
+  `~/.codex/skills/`
+- **4 artifact types**: plan, canon, checkpoint, memory
+- **canon.md**: human-curated permanent truth, agent reads but
+  never modifies
+- **agent.md removed**: auto-execute is a security risk; human
+  triggers skills manually
+- **cp-discover**: new skill for brownfield project onboarding
+  with token-aware scanning
 
 ## Tasks
 
 - [x] create work branch · ✓ 2026-05-14
 - [x] define canonical skill template · ✓ 2026-05-14
 - [x] restructure existing skills · ✓ 2026-05-14
-    - [x] cp-checkpoint
-    - [x] cp-compact
-    - [x] cp-hydrate
-    - [x] cp-plan
-    - [x] cp-prune
-    - [x] cp-session-end
-    - [x] cp-snapshot
 - [x] homogenize skill content · ✓ 2026-05-14
-- [x] update skills/README.md · ✓ 2026-05-14
 - [x] create Makefile · ✓ 2026-05-14
 - [x] validate deployment · ✓ 2026-05-14
-- [-] dogfood the skills during this session
-    - [x] use cp-compact to create .cp/memory/active.md · ✓ 2026-05-14
-    - [x] use cp-checkpoint to create milestone · ✓ 2026-05-14
-    - [x] use cp-plan to create this plan · ✓ 2026-05-14
-    - [x] test cp-hydrate with fresh agent · ✓ 2026-05-14
-- [x] document decisions and next steps · ✓ 2026-05-14
-    - [x] ADR for folder structure decision
-    - [x] session delta created
-- [x] run cp-session-end · ✓ 2026-05-14
+- [x] dogfood the skills during sessions · ✓ 2026-05-14
+- [x] rewrite all skills to agent-driven v2.0 · ✓ 2026-05-15
+- [x] remove templates/, cp-snapshot, decisions/ · ✓ 2026-05-15
+- [x] create canon.md artifact · ✓ 2026-05-15
+- [x] update docs (architecture, artifact-spec,
+  anti-patterns) · ✓ 2026-05-15
+- [x] test cp-hydrate with Haiku + Sonnet via CLI · ✓ 2026-05-15
+- [x] create cp-discover skill · ✓ 2026-05-15
+- [x] move count_tokens.py into cp-discover/scripts · ✓ 2026-05-15
+- [x] test cp-discover with Haiku, Sonnet,
+  GPT-5 mini · ✓ 2026-05-15
+- [x] evaluate agent.md auto-execute — rejected · ✓ 2026-05-15
 
 ## Potential Work
 
-- [ ] redesign cp-hydrate: agent-driven context loading
-  instead of copy-paste prompt generation — the agent
-  reads `.cp/` artifacts itself and shows an alignment
-  summary on screen
-  **Promote when:** next iteration on skills
+- [ ] real-world validation: use skills in pathfinder (non-code)
+  and other personal repos for 2-3 weeks
+  **Promote when:** ready to start using framework seriously
 - [ ] add `agents/openai.yaml` to each skill
   **Promote when:** Codex integration becomes primary use case
 - [ ] create skill test suite
   **Promote when:** regression risk justifies investment
-- [ ] add pre-commit hooks for skill validation
-  **Promote when:** multiple contributors edit skills
 
 ## Next Session
 
-> Paused: 2026-05-14
+> Paused: 2026-05-15
 
-- Run `git diff` to review all changes
-- Decide: keep `.cp/` artifacts or add to `.gitignore`
-- Commit and merge when satisfied
-- Test `make deploy-codex` when Codex available
+- Hydrate and receive feedback from real-world usage
+- Pathfinder campaign (non-code project) as first test case
+- Codex deployment test pending

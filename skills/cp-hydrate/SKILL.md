@@ -99,8 +99,9 @@ The agent performs these steps:
 - Do not duplicate content between sections.
 - If total exceeds ~400 words, trim the least-critical sections.
 - Canon is shown in full — it is the non-negotiable ground truth.
-- If `.cp/` does not exist, tell the human and offer to create
-  the initial structure.
+- If `.cp/` does not exist, inform the human and suggest running
+  `cp-discover` to explore the project and bootstrap the initial
+  `.cp/` artifacts collaboratively.
 
 ---
 
