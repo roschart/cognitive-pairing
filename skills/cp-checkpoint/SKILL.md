@@ -1,26 +1,28 @@
 ---
 name: cp-checkpoint
 description: >
-  Create a stable, recoverable state artifact at a coherent milestone.
-  Use when a meaningful phase completes, before major pivots, before
-  long pauses, or after resolving significant blocking issues.
-  Checkpoints are immutable once created and accumulate over time.
+  Create a stable, recoverable state artifact at a coherent
+  milestone. Use when a meaningful phase completes, before major
+  pivots, before long pauses, or after resolving significant
+  blocking issues. Checkpoints are immutable once created and
+  accumulate over time.
 metadata:
   author: roschart
-  version: "1.0"
+  version: "2.0"
 ---
 
 # cp-checkpoint
 
-Create a stable, recoverable state artifact at a coherent milestone.
+Create a stable, recoverable state artifact at a coherent
+milestone.
 
 ---
 
 ## Purpose
 
-A checkpoint is a point-in-time record of where the project stands.
-It is the recovery anchor for future sessions and the baseline for
-measuring progress.
+A checkpoint is a point-in-time record of where the project
+stands. It is the recovery anchor for future sessions and the
+baseline for measuring progress.
 
 Unlike `.cp/memory/active.md` (which is replaced), checkpoints
 accumulate. They are immutable once created.
@@ -36,22 +38,9 @@ Run `cp-checkpoint` when:
 - About to make a major pivot (create one before AND after)
 - About to pause work for more than a few days
 - After resolving a significant conflict or redesign
-- Before a risky experiment (use `cp-snapshot` for quick pre-experiment
-  captures)
 
 Do NOT checkpoint after every session. Reserve it for genuine
 milestones.
-
----
-
-## Input
-
-Provide the AI with:
-
-1. The current `.cp/memory/active.md` (run `cp-compact` first if needed)
-2. The latest existing checkpoint (for comparison)
-3. A label or version tag (e.g., `v0.3`, `act-2-complete`,
-   `db-schema-locked`)
 
 ---
 
@@ -59,6 +48,7 @@ Provide the AI with:
 
 - Creates `.cp/checkpoints/YYYY-MM-DD-<label>.md`
 - Does NOT modify `.cp/memory/active.md`
+- Does NOT modify `.cp/canon.md`
 - Does NOT modify `plan-<slug>.md`
 
 ---
@@ -67,38 +57,41 @@ Provide the AI with:
 
 ```text
 .cp/checkpoints/
-  2026-05-14-v0.1.md           # semantic version
-  2026-05-14-db-schema.md      # milestone label
+  2026-05-14-v0.1.md             # semantic version
+  2026-05-14-db-schema.md        # milestone label
   2026-05-15-v0.2-post-pivot.md  # version + label
 ```
 
-Use labels when the version number is ambiguous or when the checkpoint
-marks a recognizable event.
+Use labels when the version number is ambiguous or when the
+checkpoint marks a recognizable event.
 
 ---
 
-## Prompt
+## Execution
 
-Use this instruction with your AI assistant:
+When `cp-checkpoint` is invoked the agent performs these steps:
 
-```
-cp-checkpoint [label]
+1. **Read inputs**
+    - `.cp/memory/active.md` (run `cp-compact` first if needed)
+    - `.cp/canon.md` (for awareness of locked facts — never
+      modify)
+    - The latest existing checkpoint in `.cp/checkpoints/`
+      (for comparison and to avoid duplication)
+    - A label or version tag provided by the human
 
-Using the current .cp/memory/active.md and the latest checkpoint (if
-provided), produce a new checkpoint file for
-.cp/checkpoints/YYYY-MM-DD-[label].md.
+2. **Produce a new checkpoint file** at
+   `.cp/checkpoints/YYYY-MM-DD-<label>.md` using this structure:
 
-Use this exact structure:
-
-   # Checkpoint: [label] — YYYY-MM-DD
+   ```markdown
+   # Checkpoint: <label> — YYYY-MM-DD
 
    ## Current State
-   One to three paragraphs. Factual. What is true about the project
-   right now. No narrative of how we got here.
+   One to three paragraphs. Factual. What is true about the
+   project right now. No narrative of how we got here.
 
    ## Resolved Decisions
-   Decisions that are made and locked. Present-tense statements.
-   Example: "The database uses PostgreSQL. This is not up for revision."
+   Decisions made and locked. Present-tense statements.
+   Example: "The database uses PostgreSQL."
 
    ## Active Constraints
    Hard limits that govern all future work.
@@ -112,20 +105,22 @@ Use this exact structure:
    ## Open Questions
    Things unresolved but not currently blocking.
 
-   ## Blocking Issues
-   If none: omit this section.
-
    ## Context Tags
-   #tag1 #tag2 (for search and retrieval)
+   #tag1 #tag2
+   ```
 
-Rules:
+3. **Show the checkpoint** to the human for review before
+   writing the file.
+
+### Rules
+
 - No narrative. No "we decided" or "after exploring".
-- State facts: "X is Y". "Z uses W". "The constraint is C."
-- Do not duplicate content from .cp/memory/active.md verbatim.
-  The checkpoint describes state; memory describes active context.
+- State facts: "X is Y". "Z uses W".
+- Do not duplicate canon.md content — the checkpoint describes
+  state at this moment; canon holds permanent truth.
 - A checkpoint should be fully understandable without reading
   any previous artifact.
-```
+- Omit Blocking Issues section if there are none.
 
 ---
 
@@ -133,11 +128,11 @@ Rules:
 
 Before committing the checkpoint:
 
-- [ ] Current State accurately describes the project without narrative
-- [ ] All major decisions from this phase are in Resolved Decisions
+- [ ] Current State describes the project without narrative
+- [ ] All major decisions from this phase are in Resolved
+      Decisions
 - [ ] No constraint from memory was silently dropped
 - [ ] Pending work is ordered by priority
-- [ ] Open Questions contains only things truly open (not re-opened
-  closed questions)
-- [ ] The file is self-contained — readable without prior context
+- [ ] Open Questions contains only things truly open
+- [ ] The file is self-contained
 - [ ] Committed to git

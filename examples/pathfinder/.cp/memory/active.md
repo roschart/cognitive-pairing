@@ -6,25 +6,13 @@
 - Resolve the hidden patron question (session 7 vs 9)
 - Build Lord Caerith's manor to a playable state
 
-## Canon
-
-- The Stolen Flame binds souls — it cannot be destroyed, only
-  contained or transferred
-- Lord Caerith knows he is being used by the patron but believes
-  he will eventually control the situation (he is wrong)
-- The Merchant Guild controls the eastern docks; the Thieves' Guild
-  controls the western docks — they are in a cold war
-- Party reputation with the City Watch is currently Neutral (3/10)
-- Veranthos has no functioning temple to Pharasma — the church was
-  destroyed 40 years ago; this is a plot-relevant gap
-
 ## Active Constraints
 
 - Players cannot learn the patron's identity before session 7
-- The artifact must not become a weapon — if players try to weaponize
-  it, it should resist in interesting ways
-- Lord Caerith must remain sympathetic enough that players don't
-  simply kill him on sight
+- The artifact must not become a weapon — if players try to
+  weaponize it, it should resist in interesting ways
+- Lord Caerith must remain sympathetic enough that players
+  don't simply kill him on sight
 
 ## Current Focus
 

@@ -1,7 +1,7 @@
 # Pathfinder Campaign — Example
 
-This directory demonstrates the Cognitive Pairing workflow applied to
-a tabletop RPG campaign preparation project.
+This directory demonstrates the Cognitive Pairing workflow applied
+to a tabletop RPG campaign preparation project.
 
 ## Structure
 
@@ -9,25 +9,19 @@ a tabletop RPG campaign preparation project.
 pathfinder/
 ├── plan-campaign-arc1.md   # Living plan (content layer)
 └── .cp/                    # State management layer
+    ├── canon.md            # Locked world/character facts
     ├── checkpoints/        # Stable state captures
-    ├── memory/
-    │   ├── active.md       # Current working memory
-    │   └── archive/        # Previous compacted memories
-    ├── decisions/          # World-building decisions (ADR-style)
-    └── snapshots/          # Pre-experiment state captures
+    └── memory/
+        ├── active.md       # Current working memory
+        └── archive/        # Previous compacted memories
 ```
 
-The `.cp/` folder is analogous to `.git/`: it holds infrastructure,
-not content. The project directory stays clean and focused on actual
-work artifacts.
-
-`.cp/` can also be nested — a subdirectory with its own workstream
-can have its own `.cp/`. This mirrors how `.gitignore` works: the
-nearest `.cp/` wins. In practice, one `.cp/` at the project root
-covers almost every use case.
+The `.cp/` folder is analogous to `.git/`: it holds
+infrastructure, not content.
 
 ## Reading Order
 
 1. `plan-campaign-arc1.md` — the living plan
-2. `.cp/memory/active.md` — current operational context
-3. `.cp/checkpoints/` — stable state captures
+2. `.cp/canon.md` — permanent ground truth
+3. `.cp/memory/active.md` — current operational context
+4. `.cp/checkpoints/` — stable state captures

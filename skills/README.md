@@ -1,8 +1,12 @@
 # Skills
 
 Each folder in this directory defines one workflow skill. Skills are
-prefixed with `cp-` (Cognitive Pairing) to avoid naming conflicts with
-built-in AI assistant commands.
+prefixed with `cp-` (Cognitive Pairing) to avoid naming conflicts
+with built-in AI assistant commands.
+
+Skills are designed for AI agents — the agent reads the skill
+definition and executes it directly. Both the human and the agent
+benefit from the shared artifacts.
 
 ## Folder Structure
 
@@ -20,41 +24,36 @@ skills/
 │   └── SKILL.md
 ├── cp-prune/
 │   └── SKILL.md
-├── cp-session-end/
-│   └── SKILL.md
-└── cp-snapshot/
+└── cp-session-end/
     └── SKILL.md
 ```
 
 Each `SKILL.md` contains:
 
-- **YAML frontmatter** — `name` and `description` for skill triggering
+- **YAML frontmatter** — `name` and `description` for triggering
 - **Purpose** — what it does and why
-- **Trigger** — when to invoke it
-- **Input** — what artifacts or context it reads
-- **Output** — what it produces and where
-- **Prompt** — the instruction to give the AI
-- **Review checklist** — what the human should verify before accepting
+- **Trigger** — when to invoke it (with measurable heuristics)
+- **Execution** — what the agent does step by step
+- **Output** — what files are created or modified
+- **Review checklist** — what the human verifies
 
 ## Skills Index
 
-| Skill | Command | Purpose |
-|-------|---------|---------|
-| [cp-checkpoint](cp-checkpoint/SKILL.md) | `cp-checkpoint` | Create stable state at milestones |
-| [cp-compact](cp-compact/SKILL.md) | `cp-compact` | Compress session into memory |
-| [cp-hydrate](cp-hydrate/SKILL.md) | `cp-hydrate` | Reconstruct context in new session |
-| [cp-plan](cp-plan/SKILL.md) | `cp-plan` | Create/update living plans |
-| [cp-prune](cp-prune/SKILL.md) | `cp-prune` | Remove stale content |
-| [cp-session-end](cp-session-end/SKILL.md) | `cp-session-end` | End-of-session wrap-up |
-| [cp-snapshot](cp-snapshot/SKILL.md) | `cp-snapshot` | Raw capture before experiments |
+| Skill | Purpose |
+|-------|---------|
+| [cp-hydrate](cp-hydrate/SKILL.md) | Load context at session start |
+| [cp-compact](cp-compact/SKILL.md) | Compress session into memory |
+| [cp-checkpoint](cp-checkpoint/SKILL.md) | Create stable state at milestones |
+| [cp-plan](cp-plan/SKILL.md) | Create/update living plans |
+| [cp-prune](cp-prune/SKILL.md) | Remove stale content |
+| [cp-session-end](cp-session-end/SKILL.md) | End-of-session wrap-up |
 
 ## Recommended Execution Order
 
 ```text
-Start of session:  cp-hydrate
-During session:    work freely — no skills needed in flow state
+Start of session:  cp-hydrate (ideally automatic)
+During session:    work freely — no skills needed in flow
 End of work block: cp-compact → cp-checkpoint → cp-session-end
-Before experiment: cp-snapshot
 Maintenance:       cp-prune (when memory exceeds ~1500 words)
 Plan changes:      cp-plan
 ```
@@ -63,7 +62,7 @@ Plan changes:      cp-plan
 
 `cp-` stands for Cognitive Pairing. The prefix:
 
-- Avoids conflicts with built-in slash commands (`/plan`, `/compact`)
+- Avoids conflicts with built-in commands (`/plan`, `/compact`)
 - Avoids ambiguity when multiple skill sets are loaded
 - Makes the skill's origin recognizable at a glance
 
@@ -82,11 +81,10 @@ See `make help` for all available targets.
 
 ## Integration
 
-These skills work with any AI assistant that accepts instructional
-context:
+These skills work with any AI assistant that can read
+instructional context:
 
 - **GitHub Copilot CLI** — deploy to `~/.copilot/skills/`
 - **OpenAI Codex** — deploy to `~/.codex/skills/`
-- **Claude / ChatGPT** — paste the `## Prompt` section at the start
-  of a session
-- **Any AI with long context** — include prompt as system context
+- **Any AI agent with file access** — point it at the
+  `skills/` directory

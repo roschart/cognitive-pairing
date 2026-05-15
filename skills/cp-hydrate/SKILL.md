@@ -1,34 +1,30 @@
 ---
 name: cp-hydrate
 description: >
-  Reconstruct operational context in a new, clean AI session. Use when
-  starting a new session after a deliberate reset, opening the project
-  after a long pause, handing off to a different AI assistant, or
-  starting a focused sub-session. Generates a hydration prompt that
-  replaces conversation history.
+  Load operational context at the start of a new session. The agent
+  reads .cp/ artifacts (canon.md, latest checkpoint, memory/active.md)
+  and the active plan, then shows an alignment summary on screen.
+  Use at the beginning of every session or after a conversation reset.
 metadata:
   author: roschart
-  version: "1.0"
+  version: "2.0"
 ---
 
 # cp-hydrate
 
-Reconstruct operational context in a new, clean AI session.
+Load operational context at the start of a new session.
 
 ---
 
 ## Purpose
 
-After a conversation reset, the new session has no memory of previous
-work. `cp-hydrate` generates a structured context injection — the
-"hydration prompt" — that restores the minimum necessary context for
-effective work without loading the entire history.
+After a conversation reset, the new session has no memory of
+previous work. `cp-hydrate` restores the minimum necessary context
+by reading the `.cp/` artifacts directly and showing the human an
+alignment summary so both parties start from the same state.
 
-This is the inverse of `cp-compact`. Compact reduces state; hydrate
-reconstructs it.
-
-The hydration prompt replaces the conversation history. It should be
-the FIRST thing the AI receives in a new session.
+This is the inverse of `cp-compact`. Compact reduces state;
+hydrate reconstructs it.
 
 ---
 
@@ -36,107 +32,83 @@ the FIRST thing the AI receives in a new session.
 
 Run `cp-hydrate` when:
 
-- Starting a new session after a deliberate reset
-- Opening the project after a long pause (days or weeks)
-- Handing off to a different AI assistant
-- Starting a sub-session focused on a specific subtask
+- Starting a new session (first skill to run)
+- After a deliberate conversation reset
+- Opening the project after a pause (hours, days, or weeks)
 
-Do NOT run mid-session — it is designed for session starts.
+This should be the FIRST thing that happens in a new session.
+Consider configuring it to run automatically via `agent.md` or
+equivalent project-level instructions.
 
 ---
 
-## Input
+## Execution
 
-Provide the AI with:
+The agent performs these steps:
 
-1. The latest `.cp/checkpoints/YYYY-MM-DD-label.md`
-2. The current `.cp/memory/active.md`
-3. The relevant `plan-<slug>.md` (Goals and Tasks at minimum)
-4. Optional: a note on what you want to work on this session
+1. **Locate `.cp/` directory** in the project root (or nearest
+   parent)
+2. **Read artifacts** in this order:
+    1. `.cp/canon.md` — ground truth (if it exists)
+    2. `.cp/checkpoints/` — find and read the latest checkpoint
+       (by filename date)
+    3. `.cp/memory/active.md` — current operational context
+    4. `plan-*.md` at project root — active plan(s)
+3. **Show alignment summary** on screen using this structure:
+
+```text
+## Session Context — YYYY-MM-DD
+[project name + one-sentence description]
+
+### Current State
+[From checkpoint: where the project stands. 2-3 sentences.]
+
+### Active Goals
+[From memory: what we are trying to achieve right now]
+
+### Canon
+[From canon.md: locked facts. Full list.]
+
+### Constraints
+[From memory: active session-specific constraints]
+
+### Current Focus
+[From memory: the specific task or problem]
+
+### Do Not Revisit
+[From memory: closed topics — hard constraints]
+```
+
+4. **Ask the human** what they want to work on this session
+   (unless the plan's "Next Session" section makes it obvious)
 
 ---
 
 ## Output
 
-- Generates a hydration prompt (structured context block)
-- The human pastes this prompt at the start of the new session
-- Not stored as a file by default (it is ephemeral)
-- Optional: save to `.cp/memory/hydration-YYYY-MM-DD.md` for reuse
+- No files created or modified — hydrate is read-only
+- The alignment summary is displayed on screen
+- The agent's context is now loaded and ready for work
 
 ---
 
-## Prompt
+## Rules
 
-Use this instruction with your AI assistant:
-
-```
-cp-hydrate [optional: what I want to work on this session]
-
-Using the provided checkpoint, .cp/memory/active.md, and
-plan-<slug>.md, generate a hydration prompt I can paste at the
-start of a new AI session.
-
-The hydration prompt must:
-1. Restore operational context — not history
-2. Fit in a single message (target 500–800 words)
-3. Use this structure:
-
-   # Session Context — YYYY-MM-DD
-   [project name + one-sentence description]
-
-   ## Current State
-   [From checkpoint: where the project stands. 2-3 sentences.]
-
-   ## Active Goals
-   [From memory: what we are trying to achieve right now]
-
-   ## Canon
-   [From memory: locked facts that cannot change]
-
-   ## Constraints
-   [Merged from checkpoint + memory: hard limits]
-
-   ## Current Focus
-   [From memory: the specific task for this session.
-    If the human provided a session focus, use that instead.]
-
-   ## Recent Decisions
-   [From memory: decisions still active and relevant]
-
-   ## Do Not Revisit
-   [From memory: closed topics — treat as hard constraints.
-    Do not re-open without explicit human instruction.]
-
-   ## Session Orientation
-   [1-2 sentences: what the human wants to accomplish today.
-    Leave blank if no focus was provided — the human will fill it.]
-
-Rules:
-  - No narrative. No "in the previous session...". No history.
-  - Every section must be immediately useful for reasoning.
-  - Do not duplicate content between sections.
-  - If total exceeds 800 words, trim the least-critical sections.
-```
-
----
-
-## Using the Hydration Prompt
-
-1. Generate using the prompt above
-2. Review: verify Current Focus matches today's intent
-3. Fill in Session Orientation if it is blank
-4. Open a new AI session (or reset the current one)
-5. Paste the hydration prompt as the first message
-6. Begin working — the AI now has the operational context
+- No narrative. No "in the previous session...". No history.
+- Every section must be immediately useful for reasoning.
+- Do not duplicate content between sections.
+- If total exceeds ~400 words, trim the least-critical sections.
+- Canon is shown in full — it is the non-negotiable ground truth.
+- If `.cp/` does not exist, tell the human and offer to create
+  the initial structure.
 
 ---
 
 ## Review Checklist
 
-Before pasting the hydration prompt:
+After the agent shows the alignment summary, the human verifies:
 
-- [ ] Current State is accurate as of the latest checkpoint
+- [ ] Current State matches reality
+- [ ] Canon is complete and accurate
 - [ ] Do Not Revisit includes all closed questions
-- [ ] Session Orientation is clear and specific
-- [ ] Total length is under 800 words
-- [ ] No narrative or history is present
+- [ ] No stale or incorrect information is present

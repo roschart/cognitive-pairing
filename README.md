@@ -14,86 +14,93 @@ Long AI-human sessions degrade over time:
 - Abandoned ideas pollute reasoning
 - Both parties lose clarity
 
-The solution is not better prompts. It is disciplined state management.
+The solution is not better prompts. It is disciplined state
+management.
 
 ## The Core Insight
 
 Humans already solve this problem naturally: notes, plans, ADRs,
-outlines, summaries, documentation. This framework formalizes those
-patterns into a set of composable, versionable, AI-readable artifacts.
+outlines, summaries, documentation. This framework formalizes
+those patterns into a set of composable, versionable,
+AI-readable artifacts.
 
 ## Artifact Hierarchy
 
-| Artifact         | Question it answers       | Owner            | Lifecycle   |
-|------------------|---------------------------|------------------|-------------|
-| `plan.md`        | Where are we going?       | Human-curated    | Living doc  |
-| `checkpoint/`    | Where are we now?         | AI-generated     | Per-milestone |
-| `memory/active`  | What do we need right now? | AI-generated    | Per-session |
-| `decisions/`     | Why did we choose this?   | Human-reviewed   | Permanent   |
-| `snapshots/`     | What exactly was happening? | AI-generated  | Disposable  |
+| Artifact         | Question it answers        | Owner         | Lifecycle     |
+|------------------|----------------------------|---------------|---------------|
+| `plan.md`        | Where are we going?        | Human-curated | Living doc    |
+| `canon.md`       | What is permanently true?  | Human-curated | Permanent     |
+| `checkpoint/`    | Where are we now?          | AI-generated  | Per-milestone |
+| `memory/active`  | What do we need right now? | AI-generated  | Per-session   |
 
-## Skills (Commands)
+## Skills
 
-| Skill               | Purpose                                        |
-|---------------------|------------------------------------------------|
-| `/checkpoint`       | Create a stable, recoverable state             |
-| `/compact`          | Compress working memory                        |
-| `/hydrate`          | Reconstruct context in a new session           |
-| `/plan`             | Create or update the living plan               |
-| `/snapshot`         | Raw state dump before risky experiments        |
-| `/prune`            | Remove stale content from memory               |
-| `/summarize-session`| End-of-session structured wrap-up              |
+| Skill            | Purpose                                  |
+|------------------|------------------------------------------|
+| `cp-hydrate`     | Load context at session start            |
+| `cp-compact`     | Compress working memory                  |
+| `cp-checkpoint`  | Create stable state at milestones        |
+| `cp-plan`        | Create or update the living plan         |
+| `cp-prune`       | Remove stale content from memory         |
+| `cp-session-end` | End-of-session structured wrap-up        |
+
+Skills are designed for AI agents — the agent reads the skill
+definition and executes it directly. Both the human and the
+agent benefit from the shared artifacts.
 
 ## Recommended Workflow
 
 ```text
-Long session (exploration, iteration, decision-making)
+New session
     ↓
-/compact   →  compress noisy history into memory/active.md
+cp-hydrate  →  agent loads .cp/ artifacts, shows alignment summary
     ↓
-/checkpoint →  lock stable state into checkpoints/
+Work (exploration, iteration, decision-making)
     ↓
-Conversation reset  (deliberate, not failure)
+cp-compact  →  compress noisy history into memory/active.md
     ↓
-/hydrate   →  reload context into clean session
+cp-checkpoint → lock stable state into checkpoints/ (if milestone)
     ↓
-Continue work
+cp-session-end → structured wrap-up
+    ↓
+Conversation reset (deliberate, not failure)
+    ↓
+New session → cp-hydrate again
 ```
 
-The reset is **good practice**, not failure. Clean context improves
-reasoning quality.
+The reset is **good practice**, not failure. Clean context
+improves reasoning quality.
 
 ## Project Structure
 
 ```text
 project/
-├── plan.md                 # Living plan — intent, goals, tasks
-├── checkpoints/            # Stable state captures
-│   └── YYYY-MM-DD-vN.md
-├── memory/
-│   ├── active.md           # Current operational context
-│   └── archive/            # Previous compacted states
-├── decisions/              # Decision log (ADR-style)
-│   └── NNN-title.md
-└── snapshots/              # Raw experimental captures
-    └── YYYY-MM-DDTHHM.md
+├── plan-<slug>.md          # Living plan — intent, goals, tasks
+└── .cp/                    # State management layer
+    ├── canon.md            # Locked facts (human-curated)
+    ├── checkpoints/        # Stable state captures
+    │   └── YYYY-MM-DD-label.md
+    └── memory/
+        ├── active.md       # Current operational context
+        └── archive/        # Previous compacted states
 ```
 
 ## Contents of This Repo
 
-- [`docs/`](docs/) — Architecture, workflow, artifact spec, anti-patterns
-- [`skills/`](skills/) — Skill definitions with prompts and usage guides
-- [`templates/`](templates/) — Artifact templates ready to copy
+- [`docs/`](docs/) — Architecture, artifact spec, anti-patterns
+- [`skills/`](skills/) — Skill definitions for AI agents
 - [`examples/pathfinder/`](examples/pathfinder/) — Working example
 
 ## Design Principles
 
 1. **State over history** — preserve decisions, not conversations
-2. **Operational over narrative** — active constraints, not story arcs
+2. **Operational over narrative** — active constraints, not arcs
 3. **Resumable over complete** — optimize for continuation
 4. **Human-readable AND AI-readable** — markdown, always
 5. **Versionable** — every artifact belongs in git
 6. **Composable** — artifacts reference each other, not duplicate
+7. **Skills serve both parties** — the agent executes, the human
+   reviews and steers
 
 ## Applicability
 

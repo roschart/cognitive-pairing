@@ -44,6 +44,11 @@
 
 ## Potential Work
 
+- [ ] redesign cp-hydrate: agent-driven context loading
+  instead of copy-paste prompt generation — the agent
+  reads `.cp/` artifacts itself and shows an alignment
+  summary on screen
+  **Promote when:** next iteration on skills
 - [ ] add `agents/openai.yaml` to each skill
   **Promote when:** Codex integration becomes primary use case
 - [ ] create skill test suite
