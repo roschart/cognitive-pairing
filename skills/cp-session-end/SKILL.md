@@ -122,6 +122,12 @@ steps:
   plan changes, or canon additions
 - Canon additions require explicit human approval — the
   agent proposes, the human decides
+- Never record mundane workflow steps as pending work.
+  Things like "merge PR", "push changes", "human review",
+  "deploy", or "commit" are obvious mechanics — they add
+  noise and mislead the next hydration into surfacing
+  trivial actions as the session focus. Only record items
+  that require genuine thought or decision.
 
 ---
 

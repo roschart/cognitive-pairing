@@ -103,6 +103,11 @@ When `cp-compact` is invoked the agent performs these steps:
 - No duplicates with checkpoint (reference it, don't repeat).
 - Canon facts live in `.cp/canon.md` — do not copy them into
   `active.md`.
+- No mundane operational steps. Never persist things like
+  "pending merge", "pending push", "pending human review",
+  "commit changes", or "deploy". These are obvious workflow
+  mechanics that add noise and distract on rehydration.
+  Only persist items that require genuine thought or decision.
 - Target length: 500–1000 words. Flag if more is genuinely
   needed.
 - If a section has nothing to add, omit it.
