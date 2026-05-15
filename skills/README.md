@@ -55,13 +55,16 @@ Each `SKILL.md` contains:
 
 ## Recommended Execution Order
 
+The human interacts with two bookends. Everything else is either
+embedded in those skills or proposed by the agent during work.
+
 ```text
 First time:        cp-discover (brownfield onboarding)
-Start of session:  cp-hydrate (ideally automatic via agent.md)
-During session:    work freely — no skills needed in flow
-End of work block: cp-compact → cp-checkpoint → cp-session-end
-Maintenance:       cp-prune (when memory exceeds ~1500 words)
-Plan changes:      cp-plan
+Session start:     cp-hydrate (human triggers explicitly)
+During session:    agent proposes checkpoint/plan when needed
+Session end:       cp-session-end (human triggers explicitly)
+                   → sequences: compact → canon → checkpoint → plan
+Maintenance:       cp-prune (suggested by hydrate when bloated)
 ```
 
 ## Prefix Rationale

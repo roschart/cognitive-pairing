@@ -50,14 +50,15 @@ Do NOT run mid-work — wait for a natural stopping point.
 
 ```text
 1. cp-compact    →  compress session into .cp/memory/active.md
-2. cp-checkpoint →  create if milestone was reached (optional)
-3. cp-plan       →  update plan if tasks changed (optional)
-4. session delta →  show structured delta on screen
+2. canon review  →  propose additions to .cp/canon.md (optional)
+3. cp-checkpoint →  create if milestone was reached (optional)
+4. cp-plan       →  update plan if tasks changed (optional)
+5. session delta →  show structured delta on screen
 ```
 
-Steps 2 and 3 are optional depending on what happened in the
-session. The agent asks the human before creating checkpoints
-or modifying plans.
+Steps 2–4 are optional depending on what happened in the
+session. The agent asks the human before modifying canon,
+creating checkpoints, or updating plans.
 
 ---
 
@@ -71,16 +72,25 @@ steps:
    `.cp/memory/active.md`. Read `.cp/canon.md` to ensure
    canon facts are not duplicated into memory.
 
-2. **STEP 2 — If a milestone was reached:**
+2. **STEP 2 — If permanent facts were established:**
+   Review decisions made during the session. Identify any
+   that qualify as permanent ground truth (stable facts
+   unlikely to change, not project-specific preferences).
+   Propose specific additions to `.cp/canon.md`. Show
+   the proposed lines and ask the human for approval.
+   Write to canon only after explicit confirmation.
+   If nothing qualifies, skip this step silently.
+
+3. **STEP 3 — If a milestone was reached:**
    Run `cp-checkpoint` with an appropriate label.
    Ask the human to confirm before creating the file.
 
-3. **STEP 3 — If tasks were completed, added, or direction
+4. **STEP 4 — If tasks were completed, added, or direction
    changed:**
    Propose specific changes to `plan-<slug>.md`.
    Ask the human to confirm before applying.
 
-4. **STEP 4 — Session delta:**
+5. **STEP 5 — Session delta:**
    Show a brief (5-10 bullet) structured delta on screen:
 
    ```text
@@ -108,10 +118,10 @@ steps:
   "then we..."
 - Only facts, decisions, and state changes
 - If nothing significant happened, say so explicitly
-- Confirm with the human before writing any checkpoint or
-  plan changes
-- Suggest canon.md additions if any permanent facts were
-  established this session
+- Confirm with the human before writing any checkpoint,
+  plan changes, or canon additions
+- Canon additions require explicit human approval — the
+  agent proposes, the human decides
 
 ---
 
@@ -146,6 +156,7 @@ chore(state): session wrap-up YYYY-MM-DD
 Before closing the session:
 
 - [ ] `.cp/memory/active.md` is updated and accurate
+- [ ] Canon additions proposed and approved (if any)
 - [ ] Plan tasks are marked complete if work was done
 - [ ] New tasks discovered are added to plan
 - [ ] Checkpoint created if a genuine milestone was reached

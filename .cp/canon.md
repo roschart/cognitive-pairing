@@ -1,7 +1,7 @@
 # Canon
 
 Locked facts for this project. Ground truth that all reasoning
-must respect. Only the human adds or removes entries.
+must respect. Only the human approves additions or removals.
 
 ## Framework
 

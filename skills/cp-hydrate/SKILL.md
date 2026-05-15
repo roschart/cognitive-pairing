@@ -37,8 +37,7 @@ Run `cp-hydrate` when:
 - Opening the project after a pause (hours, days, or weeks)
 
 This should be the FIRST thing that happens in a new session.
-Consider configuring it to run automatically via `agent.md` or
-equivalent project-level instructions.
+The human triggers it explicitly at the start of each session.
 
 ---
 
@@ -81,6 +80,12 @@ The agent performs these steps:
 
 4. **Ask the human** what they want to work on this session
    (unless the plan's "Next Session" section makes it obvious)
+5. **Check artifact health** before starting work:
+    - If `.cp/memory/active.md` exceeds ~1500 words, suggest
+      running `cp-prune` before starting
+    - If `.cp/checkpoints/` contains more than 5 files,
+      mention that old checkpoints could be archived
+    - These are suggestions, not blockers — the human decides
 
 ---
 

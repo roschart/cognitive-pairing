@@ -80,7 +80,8 @@ Locked facts that all reasoning must respect. The permanent
 record of what is true and non-negotiable.
 
 - **Location:** `.cp/canon.md`
-- **Maintained by:** Human only — the agent never modifies it
+- **Maintained by:** Human approves — the agent proposes,
+  the human confirms before any change is written
 - **Updated:** When a new fact becomes permanently locked
 - **Purpose:** Prevent re-litigation of settled questions;
   provide stable ground truth across sessions
@@ -120,22 +121,22 @@ right now.
               └──────────────┬──────────────┘
                              │
               ┌──────────────▼──────────────┐
-              │       Active Session         │
-              │  (conversation + work)       │
+              │       Active Session        │
+              │  (conversation + work)      │
               └──────────────┬──────────────┘
                              │
-               ┌─────────────▼─────────────┐
-               │       cp-compact          │
-               │  noise reduction          │
-               │  constraint extraction    │
-               └─────────────┬─────────────┘
+              ┌──────────────▼──────────────┐
+              │     cp-session-end          │
+              │  compact → canon review     │
+              │  → checkpoint → plan        │
+              └──────────────┬──────────────┘
                              │
           ┌──────────────────┼──────────────┐
           │                  │              │
  ┌────────▼───────┐ ┌───────▼──────┐ ┌─────▼──────┐
  │ .cp/memory/    │ │ .cp/         │ │ .cp/       │
  │ active.md      │ │ checkpoints/ │ │ canon.md   │
- │ (replaced)     │ │ (appended)   │ │ (stable)   │
+ │ (replaced)     │ │ (appended)   │ │ (approved) │
  └────────────────┘ └──────────────┘ └────────────┘
 ```
 
@@ -143,42 +144,44 @@ right now.
 
 ## Lifecycle of a Working Session
 
+The human interacts with two bookends: `cp-hydrate` at session
+start and `cp-session-end` at session close. Everything else is
+either embedded in those two skills or proposed by the agent
+during work.
+
 ```text
 1. Start session
-   → agent runs cp-hydrate automatically
+   → human runs cp-hydrate
    → reads canon.md + latest checkpoint + memory/active.md
    → shows alignment summary on screen
+   → checks artifact health (suggests cp-prune if bloated)
 
 2. Work
    → Explore, iterate, decide, build
-   → No state management needed during flow
+   → Agent may propose cp-checkpoint at milestones
+   → Agent may propose plan updates when tasks change
+   → No skills need to be called manually during work
 
-3. Compaction trigger (when any of these are true):
-   → More than ~30 exchanges without compaction
-   → memory/active.md exceeds ~1500 words
-   → About to make a major direction change
-   → Preparing to stop work for the day
-   → Reached a stable milestone
-
-4. cp-compact
-   → Compress current session into .cp/memory/active.md
-   → Archive previous memory to .cp/memory/archive/
-
-5. cp-checkpoint (only if a genuine milestone was reached)
-   → Create .cp/checkpoints/YYYY-MM-DD-label.md
-
-6. Optional: update plan-<slug>.md
-   → Mark completed tasks
-   → Add new tasks discovered
-   → Park or remove obsolete ideas
-
-7. cp-session-end
-   → Structured wrap-up: compact + optional checkpoint + delta
-
-8. Conversation reset (deliberate)
-   → Start fresh session
-   → cp-hydrate loads context automatically
+3. End session
+   → human runs cp-session-end, which sequences:
+     a. cp-compact → compress session into memory/active.md
+     b. canon review → propose additions (human approves)
+     c. cp-checkpoint → create if milestone reached (optional)
+     d. cp-plan → update plan if tasks changed (optional)
+     e. session delta → show structured summary on screen
 ```
+
+### Skill Trigger Summary
+
+| Skill | Triggered by | Frequency |
+|---|---|---|
+| cp-hydrate | Human (session start) | Every session |
+| cp-session-end | Human (session close) | Every session |
+| cp-compact | Embedded in session-end | Automatic |
+| cp-checkpoint | Agent proposes, human confirms | At milestones |
+| cp-plan | Agent proposes, human confirms | When tasks change |
+| cp-prune | Hydrate suggests when needed | Rare |
+| cp-discover | Human (once per project) | One-time |
 
 ---
 
@@ -204,10 +207,11 @@ function:
 
 ## Human vs AI Responsibilities
 
-### Human-curated (agent never modifies)
+### Human-curated (agent proposes, human approves)
 
 - `plan-<slug>.md` — human makes final calls on direction
-- `.cp/canon.md` — human decides what is permanently true
+- `.cp/canon.md` — agent proposes additions at session end,
+  human approves before anything is written
 - Checkpoint review — human validates before committing
 - Prune approvals — human decides what is truly dead
 
@@ -220,7 +224,6 @@ function:
 ### Collaborative (AI drafts, human edits)
 
 - Plan updates after sessions
-- Canon additions (AI suggests, human approves)
 - Memory trimming (AI compacts, human prunes further)
 
 ---
