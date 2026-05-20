@@ -1,85 +1,121 @@
 # Artifact Specification
 
-Each artifact type has a defined structure, purpose, and lifecycle.
+Each artifact type has a defined structure, purpose, and
+lifecycle. Every artifact with an owning skill stores its
+template in that skill's SKILL.md — this spec is the
+high-level reference.
+
+## Summary
+
+| Artifact   | Purpose             | Skill         | Location             | On end  |
+|------------|---------------------|---------------|----------------------|---------|
+| project    | Intent and scope    | cp-project    | `.cp/project.md`     | Archive |
+| plan       | Work and progress   | cp-plan       | `.cp/plans/`         | Archive |
+| canon      | Locked ground truth | (human-owned) | `.cp/canon.md`       | N/A     |
+| checkpoint | Stable state        | cp-checkpoint | `.cp/checkpoints/`   | Archive |
+| memory     | Operational context | cp-compact    | `.cp/memory/active`  | Replace |
 
 ---
 
-## plan.md
+## .cp/project.md — Project Declaration
 
-**Purpose:** Living declaration of intent.
+| Field       | Value                                    |
+|-------------|------------------------------------------|
+| Purpose     | Master declaration of intent and scope   |
+| Skill       | cp-project                               |
+| Location    | `.cp/project.md`                         |
+| Owner       | Human-curated                            |
+| Create when | Multiple plans anticipated, non-obvious  |
+|             | constraints, or project identity needed  |
+| Not needed  | Simple tasks where one plan suffices     |
+| On end      | Archive (rarely — projects outlive plans)|
 
-**Owner:** Human-curated.
+**Lifecycle:** Created once at project inception. Rarely
+modified — refined, not rewritten. Survives across all
+sessions and plans.
 
-**Lifecycle:** Created once at project start. Never replaced.
-Sections evolve: active tasks move to completed; ideas move to
-parked or pruned.
+**Template:** See `cp-project` skill for structure.
 
-**When to update:**
-- Direction changes
-- New goals identified
-- Tasks completed or abandoned
-- Major decisions affect scope
+**What belongs in project.md vs canon.md:**
 
-**Structure:**
+- Project: declarations made BEFORE or AT THE START
+  (initial intent, constraints, style)
+- Canon: decisions made DURING the project (emergent
+  truth that must be locked)
 
-```markdown
-# Plan: <project name>
+**What belongs in project.md vs plan.md:**
 
-## Context
-2-5 bullet summary of the current situation.
-
-## Decisions
-Decisions already made that constrain the plan.
-Format: - **decision**: one-line rationale
-
-## Tasks
-Committed scope. Indented checkboxes for hierarchy.
-States: [ ] pending  [-] in progress  [x] done · ✓ YYYY-MM-DD
-
-## Potential Work
-Ideas not yet committed. Each has a promotion condition.
-
-## Next Session
-> Paused: YYYY-MM-DD
-1-3 specific pickup points.
-```
+- Project: WHAT and WHY (direction, identity, constraints)
+- Plan: HOW and HOW MUCH (tasks, progress, next steps)
 
 **Anti-patterns:**
 
-- Using plan.md as a conversation transcript
+- Turning the project document into a task list (that is
+  the plan's job)
+- Updating it after every session (it should be stable)
+- Including implementation details (those belong in plans
+  or canon)
+- Duplicating constraints already in canon.md
+
+---
+
+## .cp/plans/plan-slug.md — Work Plan
+
+| Field       | Value                                    |
+|-------------|------------------------------------------|
+| Purpose     | Living declaration of work and progress  |
+| Skill       | cp-plan                                  |
+| Location    | `.cp/plans/plan-<slug>.md`               |
+| Owner       | Human-curated                            |
+| Create when | Work needs tracking across sessions      |
+| Not needed  | One-shot tasks solvable in a prompt      |
+| On end      | Archive to `.cp/plans/archive/`          |
+
+**Lifecycle:** Created once per workstream. Never replaced.
+Sections evolve: active tasks move to completed; ideas move
+to parked or pruned.
+
+**Template:** See `cp-plan` skill for structure.
+
+**Anti-patterns:**
+
+- Using the plan as a conversation transcript
 - Deleting completed sections instead of marking done
 - Letting it grow without pruning (becomes noise)
 
 ---
 
-## .cp/canon.md
+## .cp/canon.md — Ground Truth
 
-**Purpose:** Permanent ground truth. Locked facts that all
-reasoning must respect.
+| Field       | Value                                    |
+|-------------|------------------------------------------|
+| Purpose     | Permanent ground truth. Locked facts     |
+| Skill       | (human-owned — no dedicated skill)       |
+| Location    | `.cp/canon.md`                           |
+| Owner       | Human-curated only                       |
+| Create when | A decision must never be re-litigated    |
+| Not needed  | Session-specific constraints (use memory)|
+| On end      | N/A — canon is permanent                 |
 
-**Owner:** Human-curated only. The agent reads this file but
-never modifies it.
+**Lifecycle:** Grows slowly. Items are added when a fact
+becomes permanently locked. Items are removed only when
+genuinely obsolete (rare).
 
-**Lifecycle:** Grows slowly. Items are added when a fact becomes
-permanently locked. Items are removed only when genuinely
-obsolete (rare).
-
-**When to update:**
-- A decision is made that should never be re-litigated
-- A project invariant is established
-- A constraint becomes permanent (not session-specific)
+Canon has no owning skill. The agent reads it but never
+modifies it directly. `cp-session-end` proposes additions;
+the human approves before anything is written.
 
 **Structure:**
 
 ```markdown
 # Canon
 
-Locked facts for this project. Ground truth that all reasoning
-must respect. Only the human adds or removes entries.
+Locked facts for this project. Ground truth that all
+reasoning must respect. Only the human adds or removes
+entries.
 
 ## Project
 
-- <project-level locked fact>
 - <project-level locked fact>
 
 ## Technical
@@ -92,64 +128,41 @@ must respect. Only the human adds or removes entries.
 ```
 
 **What belongs in canon vs memory:**
+
 - Canon: permanent facts that survive across all sessions
 - Memory (Active Constraints): session-specific or temporary
   constraints that may change
 
-**What belongs in canon vs checkpoint (Resolved Decisions):**
+**What belongs in canon vs checkpoint:**
+
 - Canon: the WHAT — "The database is PostgreSQL"
 - Checkpoint: the snapshot — what was true at that moment
 
 ---
 
-## .cp/checkpoints/YYYY-MM-DD-label.md
+## .cp/checkpoints/YYYY-MM-DD-label.md — Stable State
 
-**Purpose:** Stable, recoverable state at a coherent milestone.
+| Field       | Value                                    |
+|-------------|------------------------------------------|
+| Purpose     | Recoverable state at a coherent milestone|
+| Skill       | cp-checkpoint                            |
+| Location    | `.cp/checkpoints/YYYY-MM-DD-label.md`    |
+| Owner       | AI-generated, human-reviewed             |
+| Create when | Milestone reached, before pivots or      |
+|             | long pauses                              |
+| Not needed  | After every session (only at milestones) |
+| On end      | Archive to `.cp/checkpoints/archive/`    |
 
-**Owner:** AI-generated, human-reviewed.
+**Lifecycle:** Immutable once committed. Never edited.
+Accumulate over time. Old checkpoints are reference
+material, not active state.
 
-**Lifecycle:** Immutable once committed. Never edited. Accumulate
-over time. Old checkpoints are reference material, not active
-state.
+**Template:** See `cp-checkpoint` skill for structure.
 
 **Naming convention:**
 
 - `2026-05-14-v0.1.md` — date + semantic version
 - `2026-05-14-pathfinder-act2.md` — date + label
-
-**When to create:**
-
-- Reached a stable milestone
-- About to make a major pivot
-- Before a long pause (days without work)
-- After resolving a blocking issue
-
-**Structure:**
-
-```markdown
-# Checkpoint: <label> — YYYY-MM-DD
-
-## Current State
-Factual, concise. What is true right now. No narrative.
-
-## Resolved Decisions
-Decisions made and locked. Present-tense statements.
-
-## Active Constraints
-Hard limits that govern all future work.
-
-## Current Direction
-What we are working toward from this point.
-
-## Pending Work
-Ordered by priority.
-
-## Open Questions
-Things unresolved but not currently blocking.
-
-## Context Tags
-#tag1 #tag2
-```
 
 **What NOT to include:**
 
@@ -159,46 +172,23 @@ Things unresolved but not currently blocking.
 
 ---
 
-## .cp/memory/active.md
+## .cp/memory/active.md — Operational Context
 
-**Purpose:** Minimal operational context to reason effectively
-right now.
-
-**Owner:** AI-generated via `cp-compact`, human-trimmed.
+| Field       | Value                                    |
+|-------------|------------------------------------------|
+| Purpose     | Minimal context to reason effectively    |
+| Skill       | cp-compact                               |
+| Location    | `.cp/memory/active.md`                   |
+| Owner       | AI-generated via cp-compact              |
+| Create when | At each compaction cycle (session end)   |
+| Not needed  | N/A — always maintained                  |
+| On end      | Replace (previous archived to            |
+|             | `memory/archive/YYYY-MM-DD.md`)          |
 
 **Lifecycle:** Replaced at each compaction cycle. Previous
-version archived to `memory/archive/YYYY-MM-DD.md`.
+version archived. 500–1500 words max.
 
-**Goal:** Should fit in a single AI context injection. 500–1500
-words max. If it grows beyond that, it needs pruning.
-
-**Structure:**
-
-```markdown
-# Working Memory — YYYY-MM-DD
-
-## Active Goals
-What we are trying to achieve RIGHT NOW.
-
-## Active Constraints
-Hard limits on current work. Session-specific or temporary.
-(Permanent constraints belong in canon.md.)
-
-## Current Focus
-The specific problem or task we are working on now.
-
-## Key Relationships
-Important dependencies or tensions between elements.
-
-## Unresolved Problems
-Open problems affecting current work. Actual blockers.
-
-## Recent Decisions
-Decisions from recent sessions that are still active.
-
-## Do Not Revisit
-Explicitly abandoned ideas. Brief reason for each.
-```
+**Template:** See `cp-compact` skill for structure.
 
 **What NOT to include:**
 

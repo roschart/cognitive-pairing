@@ -26,23 +26,25 @@ AI-readable artifacts.
 
 ## Artifact Hierarchy
 
-| Artifact         | Question it answers        | Owner         | Lifecycle     |
-|------------------|----------------------------|---------------|---------------|
-| `plan.md`        | Where are we going?        | Human-curated | Living doc    |
-| `canon.md`       | What is permanently true?  | Human-curated | Permanent     |
-| `checkpoint/`    | Where are we now?          | AI-generated  | Per-milestone |
-| `memory/active`  | What do we need right now? | AI-generated  | Per-session   |
+| Artifact         | Question it answers             | Owner         | Lifecycle     |
+|------------------|---------------------------------|---------------|---------------|
+| `project.md`     | What are we building and why?   | Human-curated | Stable        |
+| `plans/`         | How and how much is left?       | Human-curated | Living doc    |
+| `canon.md`       | What is permanently true?       | Human-curated | Permanent     |
+| `checkpoint/`    | Where are we now?               | AI-generated  | Per-milestone |
+| `memory/active`  | What do we need right now?      | AI-generated  | Per-session   |
 
 ## Skills
 
 | Skill            | Purpose                                  |
 |------------------|------------------------------------------|
-| `cp-hydrate`     | Load context at session start            |
-| `cp-compact`     | Compress working memory                  |
-| `cp-checkpoint`  | Create stable state at milestones        |
-| `cp-plan`        | Create or update the living plan         |
-| `cp-prune`       | Remove stale content from memory         |
-| `cp-session-end` | End-of-session structured wrap-up        |
+| `cp-project`     | Create or refine the project declaration  |
+| `cp-hydrate`     | Load context at session start             |
+| `cp-compact`     | Compress working memory                   |
+| `cp-checkpoint`  | Create stable state at milestones         |
+| `cp-plan`        | Create or update the living plan          |
+| `cp-prune`       | Remove stale content from memory          |
+| `cp-session-end` | End-of-session structured wrap-up         |
 
 Skills are designed for AI agents — the agent reads the skill
 definition and executes it directly. Both the human and the
@@ -75,9 +77,13 @@ improves reasoning quality.
 
 ```text
 project/
-├── plan-<slug>.md          # Living plan — intent, goals, tasks
+├── [project content files]
 └── .cp/                    # State management layer
+    ├── project.md          # Project declaration (intent)
     ├── canon.md            # Locked facts (human-curated)
+    ├── plans/
+    │   ├── plan-<slug>.md  # Living plans
+    │   └── archive/        # Completed plans
     ├── checkpoints/        # Stable state captures
     │   └── YYYY-MM-DD-label.md
     └── memory/

@@ -2,9 +2,10 @@
 name: cp-hydrate
 description: >
   Load operational context at the start of a new session. The agent
-  reads .cp/ artifacts (canon.md, latest checkpoint, memory/active.md)
-  and the active plan, then shows an alignment summary on screen.
-  Use at the beginning of every session or after a conversation reset.
+  reads .cp/ artifacts (project.md, canon.md, latest checkpoint,
+  memory/active.md) and the active plans, then shows an alignment
+  summary on screen. Use at the beginning of every session or after
+  a conversation reset.
 metadata:
   author: roschart
   version: "2.0"
@@ -48,16 +49,21 @@ The agent performs these steps:
 1. **Locate `.cp/` directory** in the project root (or nearest
    parent)
 2. **Read artifacts** in this order:
-    1. `.cp/canon.md` — ground truth (if it exists)
-    2. `.cp/checkpoints/` — find and read the latest checkpoint
+    1. `.cp/project.md` — project declaration (if it exists)
+    2. `.cp/canon.md` — ground truth (if it exists)
+    3. `.cp/checkpoints/` — find and read the latest checkpoint
        (by filename date)
-    3. `.cp/memory/active.md` — current operational context
-    4. `plan-*.md` at project root — active plan(s)
+    4. `.cp/memory/active.md` — current operational context
+    5. `.cp/plans/plan-*.md` — active plan(s)
 3. **Show alignment summary** on screen using this structure:
 
 ```text
 ## Session Context — YYYY-MM-DD
 [project name + one-sentence description]
+
+### Project
+[From project.md: identity, intent, and priority hierarchy.
+Omit if project.md does not exist.]
 
 ### Current State
 [From checkpoint: where the project stands. 2-3 sentences.]

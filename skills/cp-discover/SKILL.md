@@ -104,10 +104,15 @@ Once the human says "enough exploring":
 1. Create `.cp/` directory structure:
     - `.cp/canon.md` — from confirmed canon candidates
     - `.cp/memory/active.md` — working context from exploration
-    - `.cp/checkpoints/` — empty (first checkpoint after real work)
+    - `.cp/plans/` — empty (first plan after real work starts)
+    - `.cp/checkpoints/` — empty (first checkpoint after real
+      work)
+    - `.cp/project.md` — optional; create only if the human
+      has articulated project-level intent, constraints, or
+      style during exploration. Ask before creating.
 2. Display what was created
-3. Suggest: "Run `cp-compact` after your first working session to
-   capture state."
+3. Suggest: "Run `cp-compact` after your first working session
+   to capture state."
 
 ---
 

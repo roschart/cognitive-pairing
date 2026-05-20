@@ -5,14 +5,17 @@ must respect. Only the human approves additions or removals.
 
 ## Framework
 
-- Artifact types: plan, canon, checkpoint, memory
+- Artifact types: project, plan, canon, checkpoint, memory
+- Each artifact has an owning skill that contains its
+  template; canon is the exception (human-owned)
+- All management artifacts live inside `.cp/`
 - Skills are agent-executed, not copy-paste prompts
 - Skills use folder structure: `skill-name/SKILL.md`
 - YAML frontmatter requires `name` and `description` fields
 - Deploy targets: `~/.copilot/skills/` and `~/.codex/skills/`
 - `.cp/` directory is analogous to `.git/` — infrastructure,
   not content
-- Plans live at project root, not inside `.cp/`
+- Plans live at `.cp/plans/`, not at project root
 - Human triggers skills manually — no auto-execute
 
 ## Design Principles

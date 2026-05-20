@@ -49,7 +49,7 @@ milestones.
 - Creates `.cp/checkpoints/YYYY-MM-DD-<label>.md`
 - Does NOT modify `.cp/memory/active.md`
 - Does NOT modify `.cp/canon.md`
-- Does NOT modify `plan-<slug>.md`
+- Does NOT modify `.cp/plans/plan-<slug>.md`
 
 ---
 

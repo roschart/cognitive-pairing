@@ -109,7 +109,8 @@ canonical artifact. Others reference it.
 - Permanent locked facts → `canon.md`
 - Current state → latest checkpoint
 - Session-specific constraints → `memory/active.md`
-- Goals and tasks → `plan.md`
+- Goals and tasks → `plans/plan-<slug>.md`
+- Project intent and constraints → `project.md`
 
 **Detection:** Copy-pasting content between artifact files.
 
@@ -154,15 +155,16 @@ explained by decisions; constraints are silently violated.
 
 ## Anti-Pattern 9: The Plan Becomes a Todo List
 
-**Symptom:** `plan.md` degrades into a flat list of tasks.
-The Goals and Direction sections are never updated.
+**Symptom:** `plan-<slug>.md` degrades into a flat list of
+tasks. The Goals and Direction sections are never updated.
 
 **Why it fails:** The plan loses its strategic function. It
 becomes a task tracker, which is not its job.
 
-**Correct behavior:** `plan.md` should always answer "why are
-we doing any of this?" alongside the tasks. If the goals
-section hasn't been touched in months, the plan is degraded.
+**Correct behavior:** `plan-<slug>.md` should always answer
+"why are we doing any of this?" alongside the tasks. If the
+goals section hasn't been touched in months, the plan is
+degraded.
 
 **Detection:** Plan has more than 20 tasks; Goals section
 says something generic like "build the thing".
@@ -218,6 +220,6 @@ When no checkpoint or memory files exist.
 working session.
 
 **Recovery:** Reconstruct from whatever artifacts remain.
-If `plan.md` and `canon.md` survived, they provide goals
-and ground truth. Commit messages and code comments can
-reconstruct a rough checkpoint manually.
+If `project.md`, active plans, and `canon.md` survived, they
+provide intent, goals, and ground truth. Commit messages and
+code comments can reconstruct a rough checkpoint manually.

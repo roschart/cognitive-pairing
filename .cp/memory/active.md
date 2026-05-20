@@ -1,45 +1,37 @@
-# Working Memory — 2026-05-15
+# Working Memory — 2026-05-20
 
 ## Active Goals
 
 - Real-world validation: use skills in personal repos
-- First test: Pathfinder campaign (non-code, Codex)
-- Collect feedback over 2-3 weeks
+- Test cp-project with the Pathfinder campaign using the
+  GM assistant super-prompt
+- Validate new artifact model (5 types, plans inside .cp/)
 
 ## Active Constraints
 
 - Human triggers skills manually — no auto-execute
-- Session model: two bookends (hydrate + session-end),
-  everything else is embedded or agent-proposed
+- Agent must not commit without explicit human permission
 
 ## Current Focus
 
-Validation phase. Skills are being used in brownfield
-projects. Feedback from Pathfinder session informed the
-two-bookend model and canon update flow.
+Validation phase. v3 artifact model implemented (project.md
+as 5th artifact, plans inside .cp/, artifact-spec refactored
+to reference-only). Next: deploy updated skills and test
+cp-project in pathfinder with the GM assistant prompt.
 
 ## Key Relationships
 
-- cp-hydrate (start) ↔ cp-session-end (close) = bookends
-- cp-session-end embeds: compact → canon → checkpoint → plan
-- cp-hydrate detects bloat → suggests cp-prune
-- cp-discover → one-time brownfield onboarding
+- cp-project → creates .cp/project.md (intent layer)
+- cp-plan → creates .cp/plans/plan-<slug>.md (work layer)
+- artifact-spec.md → reference only, templates live in
+  owning skills
+- cp-hydrate reads project.md first in artifact load order
 
 ## Unresolved Problems
 
+- Deployed skills in ~/.copilot/skills/ are stale — need
+  `make sync`
 - Codex deployment not tested (make deploy-codex)
-- No automated test suite for skills
-- Deployed skills in ~/.copilot/skills/ are stale after
-  today's changes — need `make sync`
-
-## Recent Decisions
-
-- Two-bookend session model: human calls only hydrate and
-  session-end; everything else is embedded or agent-proposed
-- Canon updates: agent proposes, human approves, agent writes
-- cp-hydrate suggests cp-prune when artifacts are bloated
-- Mundane workflow steps (commit, push, merge, deploy) are
-  never persisted in memory or delta
 
 ## Do Not Revisit
 
@@ -48,3 +40,5 @@ two-bookend model and canon update flow.
 - Flat file structure for skills — rejected in v1.0
 - Snapshots, templates, decisions as separate artifacts —
   removed in v2.0
+- agents/openai.yaml for each skill — discarded
+- Skill test suite — discarded (YAGNI)

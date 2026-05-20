@@ -34,14 +34,18 @@ cognitive budget processing history instead of generating insight.
 
 ## Directory Layout
 
-Content and state management are separated at the directory level:
+All management artifacts live inside `.cp/`. Project content
+lives outside it:
 
 ```text
 project/
-├── plan-<slug>.md          # Living plan (human-visible)
-├── [other project files]
+├── [project content files]
 └── .cp/                    # State management layer
+    ├── project.md          # Project declaration (intent)
     ├── canon.md            # Locked facts (human-curated)
+    ├── plans/
+    │   ├── plan-<slug>.md  # Living plans
+    │   └── archive/        # Completed plans
     ├── checkpoints/
     │   └── YYYY-MM-DD-label.md
     └── memory/
@@ -61,18 +65,30 @@ the project root covers almost every project.
 
 ## Artifact Model
 
-Four artifact types, each with a distinct purpose and lifecycle:
+Five artifact types, each with a distinct purpose and lifecycle:
 
-### plan-slug.md — Intent
+### .cp/project.md — Intent
+
+The master declaration of what the project is, why it exists,
+and what constraints govern all work.
+
+- **Location:** `.cp/project.md`
+- **Maintained by:** Human (created once, rarely refined)
+- **Updated:** Only when intent, constraints, or style change
+- **Answers:** What are we building and why?
+
+### .cp/plans/plan-slug.md — Work
 
 The living declaration of goals, direction, and tasks.
 
-- **Location:** Project root (content layer, not inside `.cp/`)
+- **Location:** `.cp/plans/` (completed plans archived to
+  `.cp/plans/archive/`)
 - **Maintained by:** Human (with AI assistance)
 - **Updated:** Continuously as direction changes
 - **Never replaced:** One file per workstream; evolves in place
-- **Multiple plans:** Parallel workstreams each get their own slug
-- **Answers:** Where are we going?
+- **Multiple plans:** Parallel workstreams each get their own
+  slug
+- **Answers:** How are we doing it and how much is left?
 
 ### .cp/canon.md — Ground Truth
 
@@ -117,6 +133,8 @@ right now.
               ┌─────────────────────────────┐
               │       cp-hydrate            │
               │  reads .cp/ artifacts       │
+              │  (project, canon, plans,    │
+              │   checkpoint, memory)       │
               │  shows alignment summary    │
               └──────────────┬──────────────┘
                              │
@@ -152,7 +170,8 @@ during work.
 ```text
 1. Start session
    → human runs cp-hydrate
-   → reads canon.md + latest checkpoint + memory/active.md
+   → reads project.md + canon.md + latest checkpoint
+     + memory/active.md + active plans
    → shows alignment summary on screen
    → checks artifact health (suggests cp-prune if bloated)
 
@@ -180,6 +199,7 @@ during work.
 | cp-compact | Embedded in session-end | Automatic |
 | cp-checkpoint | Agent proposes, human confirms | At milestones |
 | cp-plan | Agent proposes, human confirms | When tasks change |
+| cp-project | Human (project inception) | Once per project |
 | cp-prune | Hydrate suggests when needed | Rare |
 | cp-discover | Human (once per project) | One-time |
 
@@ -188,20 +208,23 @@ during work.
 ## Separation of Concerns
 
 ```text
-plan-slug.md          → INTENT  Where we are going
-.cp/canon.md          → TRUTH   What is permanently locked
-.cp/checkpoints/      → STATE   Where we are now
-.cp/memory/active.md  → CONTEXT What we need to reason now
+.cp/project.md        → INTENT    What we are building and why
+.cp/plans/            → WORK      How we do it and how much is left
+.cp/canon.md          → TRUTH     What is permanently locked
+.cp/checkpoints/      → STATE     Where we are now
+.cp/memory/active.md  → CONTEXT   What we need to reason now
 ```
 
 These are NOT redundant. Each serves a different cognitive
 function:
 
+- Project is stable; plans evolve constantly
 - Canon is permanent; memory is ephemeral
-- Plan is aspirational; checkpoints are factual
-- You can update the plan without checkpointing
+- Plans are aspirational; checkpoints are factual
+- You can update a plan without checkpointing
 - You can compact memory without checkpointing
 - Canon survives every compact and hydrate cycle unchanged
+- Project frames all work; plans decompose it
 
 ---
 
@@ -209,7 +232,10 @@ function:
 
 ### Human-curated (agent proposes, human approves)
 
-- `plan-<slug>.md` — human makes final calls on direction
+- `.cp/project.md` — human declares project intent and
+  constraints
+- `.cp/plans/plan-<slug>.md` — human makes final calls on
+  direction
 - `.cp/canon.md` — agent proposes additions at session end,
   human approves before anything is written
 - Checkpoint review — human validates before committing

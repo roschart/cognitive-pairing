@@ -87,7 +87,7 @@ steps:
 
 4. **STEP 4 — If tasks were completed, added, or direction
    changed:**
-   Propose specific changes to `plan-<slug>.md`.
+   Propose specific changes to `.cp/plans/plan-<slug>.md`.
    Ask the human to confirm before applying.
 
 5. **STEP 5 — Session delta:**

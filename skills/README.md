@@ -26,6 +26,8 @@ skills/
 │   └── SKILL.md
 ├── cp-plan/
 │   └── SKILL.md
+├── cp-project/
+│   └── SKILL.md
 ├── cp-prune/
 │   └── SKILL.md
 └── cp-session-end/
@@ -41,11 +43,30 @@ Each `SKILL.md` contains:
 - **Output** — what files are created or modified
 - **Review checklist** — what the human verifies
 
+## Artifact Layout
+
+All management artifacts live inside `.cp/`:
+
+```text
+.cp/
+├── project.md          # Project declaration (intent)
+├── canon.md            # Locked facts (human-curated)
+├── plans/
+│   ├── plan-<slug>.md  # Living plans
+│   └── archive/        # Completed plans
+├── checkpoints/
+│   └── YYYY-MM-DD-label.md
+└── memory/
+    ├── active.md
+    └── archive/
+```
+
 ## Skills Index
 
 | Skill | Purpose |
 |-------|---------|
 | [cp-discover](cp-discover/SKILL.md) | Explore brownfield project and bootstrap `.cp/` |
+| [cp-project](cp-project/SKILL.md) | Create or refine the project declaration |
 | [cp-hydrate](cp-hydrate/SKILL.md) | Load context at session start |
 | [cp-compact](cp-compact/SKILL.md) | Compress session into memory |
 | [cp-checkpoint](cp-checkpoint/SKILL.md) | Create stable state at milestones |
@@ -60,6 +81,7 @@ embedded in those skills or proposed by the agent during work.
 
 ```text
 First time:        cp-discover (brownfield onboarding)
+Project start:     cp-project (when complexity warrants it)
 Session start:     cp-hydrate (human triggers explicitly)
 During session:    agent proposes checkpoint/plan when needed
 Session end:       cp-session-end (human triggers explicitly)

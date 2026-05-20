@@ -70,7 +70,8 @@ When `cp-prune` is invoked the agent performs these steps:
     - `.cp/memory/active.md`
     - `.cp/canon.md` (to verify locked facts are intact)
     - The latest checkpoint in `.cp/checkpoints/`
-    - `plan-<slug>.md` (to verify what is still active)
+    - `.cp/plans/plan-<slug>.md` (to verify what is still
+      active)
 
 2. **Apply the relevance test** to each item in memory:
    "If this were missing from context, would it affect

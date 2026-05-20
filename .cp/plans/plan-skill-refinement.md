@@ -56,10 +56,8 @@
 - [ ] real-world validation: use skills in pathfinder (non-code)
   and other personal repos for 2-3 weeks
   **Promote when:** ready to start using framework seriously
-- [ ] add `agents/openai.yaml` to each skill
-  **Promote when:** Codex integration becomes primary use case
-- [ ] create skill test suite
-  **Promote when:** regression risk justifies investment
+- ~~add `agents/openai.yaml` to each skill~~ — discarded
+- ~~create skill test suite~~ — discarded
 
 ## Next Session
 

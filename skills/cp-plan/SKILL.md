@@ -54,13 +54,15 @@ memory or checkpoints.
 ## File Naming
 
 ```text
-plan-<slug>.md at project root (not inside .cp/)
+.cp/plans/plan-<slug>.md
 
 Examples:
-  plan-auth-system.md
-  plan-db-migration.md
-  plan-pathfinder-arc2.md
+  .cp/plans/plan-auth-system.md
+  .cp/plans/plan-db-migration.md
+  .cp/plans/plan-pathfinder-arc2.md
 ```
+
+Completed plans move to `.cp/plans/archive/`.
 
 Use a slug that describes the workstream, not the date.
 
@@ -68,7 +70,7 @@ Use a slug that describes the workstream, not the date.
 
 ## Output
 
-- Creates or updates `plan-<slug>.md` at project root
+- Creates or updates `.cp/plans/plan-<slug>.md`
 - Does NOT create a new file per session — one plan per
   workstream
 - Human reviews and commits
@@ -128,14 +130,16 @@ promotion condition.
 When `cp-plan` is invoked the agent performs these steps:
 
 1. **Read inputs**
-    - The current `plan-<slug>.md` (if updating)
+    - The current `.cp/plans/plan-<slug>.md` (if updating)
+    - `.cp/project.md` (if it exists, for project-level
+      intent and constraints)
     - The latest checkpoint in `.cp/checkpoints/`
     - `.cp/memory/active.md`
     - `.cp/canon.md` (for awareness of locked facts)
     - Any new goals or direction from the current session
 
-2. **Produce or update** `plan-<slug>.md` using this
-   structure:
+2. **Produce or update** `.cp/plans/plan-<slug>.md` using
+   this structure:
 
    ```markdown
    # Plan: <descriptive title>
