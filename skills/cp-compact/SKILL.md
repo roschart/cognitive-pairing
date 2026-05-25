@@ -47,24 +47,73 @@ Do NOT run after every few messages — compaction has overhead.
 
 ---
 
+## Sub-agent execution
+
+File reading is delegated to a cheap sub-agent so that `.cp/`
+file contents never enter the main context window. Only the
+structured output lands in main context.
+
+### Sub-agent prompt
+
+```text
+Read the following files from the .cp/ directory and return
+a structured snapshot. Do not infer or add anything not
+present in the files.
+
+Files to read (in order):
+1. .cp/memory/active.md
+2. .cp/canon.md
+3. .cp/checkpoints/ — find and read the most recent file
+   (highest date in filename)
+
+Return exactly this format:
+
+### Sub-agent output
+
+**Read:** <comma-separated list of files successfully read>
+**Missing:** <files not found, or "none">
+
+#### Existing memory (active.md)
+<full content of active.md, verbatim>
+
+#### Latest checkpoint summary
+<2–3 sentences: current state and pending work from the
+checkpoint. No narrative.>
+
+#### Canon facts
+<bullet list of every canon fact — these must NOT be
+duplicated in the new active.md>
+
+Word budget: 500 words maximum.
+```
+
+### How the main agent uses the output
+
+1. **Launch sub-agent** (model: haiku) with the prompt above
+2. **Receive structured snapshot** — `.cp/` files are now
+   out of main context
+3. **Use snapshot + current session conversation** to
+   produce the new `active.md` (see Execution below)
+4. **Archive** the previous `active.md` and write the new one
+
+---
+
 ## Execution
 
 When `cp-compact` is invoked the agent performs these steps:
 
-1. **Read inputs**
-    - The current session conversation
-    - The existing `.cp/memory/active.md` (if present)
-    - The latest checkpoint in `.cp/checkpoints/` (optional
-      but helpful for deduplication)
-    - `.cp/canon.md` (permanent, human-curated facts — never
-      modified by this skill)
+1. **Launch sub-agent** to read `.cp/` files (see
+   Sub-agent execution above). Wait for the structured
+   snapshot.
 
-2. **Produce a new `.cp/memory/active.md`** that:
-    - Preserves ONLY what is needed to continue working
+2. **Produce a new `.cp/memory/active.md`** using the
+   snapshot and the current session conversation. The new
+   file must:
+    - Preserve ONLY what is needed to continue working
       effectively
-    - Removes: resolved questions, completed tasks, corrected
+    - Remove: resolved questions, completed tasks, corrected
       mistakes, abandoned ideas, conversational noise
-    - Uses this exact structure:
+    - Use this exact structure:
 
       ## Active Goals
       What we are trying to achieve RIGHT NOW. Not long-term
@@ -95,6 +144,10 @@ When `cp-compact` is invoked the agent performs these steps:
    `.cp/memory/archive/YYYY-MM-DD.md`
 
 4. **Write the new file** in place of the old one.
+
+5. **Show the new `active.md`** to the human for review
+   before writing (or state that it has been written if
+   invoked non-interactively).
 
 ### Rules
 

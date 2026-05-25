@@ -44,11 +44,68 @@ Do NOT run mid-work — wait for a natural stopping point.
 
 ---
 
+## Sub-agent execution
+
+Before the orchestration sequence begins, an initial sub-agent
+read determines which optional steps are needed. This keeps
+`.cp/` file contents out of the main context.
+
+### Initial sub-agent prompt
+
+```text
+Read the following files from the .cp/ directory and return
+a structured status snapshot. Do not infer or add anything.
+
+Files to read:
+1. .cp/memory/active.md
+2. .cp/canon.md
+3. .cp/checkpoints/ — list all files; read the most recent
+4. .cp/plans/plan-*.md — all active plans
+
+Return exactly this format:
+
+### Sub-agent output
+
+**Read:** <files successfully read>
+**Missing:** <files not found, or "none">
+
+#### Memory word count
+<integer word count of active.md>
+
+#### Checkpoint count
+<integer number of files in .cp/checkpoints/>
+
+#### Latest checkpoint date
+<YYYY-MM-DD of most recent checkpoint filename>
+
+#### Open tasks across plans
+<For each plan: plan slug + count of unchecked tasks.>
+
+#### Canon snapshot
+<Full list of canon facts — one bullet per fact.>
+
+Word budget: 250 words maximum.
+```
+
+### How the main agent uses the output
+
+1. **Launch sub-agent** (model: haiku) before starting
+   the sequence
+2. **Receive status snapshot** — determines which of steps
+   2–4 are relevant
+3. **Proceed through the orchestration sequence** below;
+   each sub-skill (compact, checkpoint, plan) will
+   internally delegate its own file reads to sub-agents
+
+---
+
 ## Execution Sequence
 
 `cp-session-end` is a meta-skill that sequences other skills:
 
 ```text
+0. initial read  →  sub-agent snapshot (determines which
+                    steps are needed)
 1. cp-compact    →  compress session into .cp/memory/active.md
 2. canon review  →  propose additions to .cp/canon.md (optional)
 3. cp-checkpoint →  create if milestone was reached (optional)
@@ -67,12 +124,16 @@ creating checkpoints, or updating plans.
 When `cp-session-end` is invoked the agent performs these
 steps:
 
-1. **STEP 1 — Always required:**
-   Run `cp-compact`. Produce an updated
-   `.cp/memory/active.md`. Read `.cp/canon.md` to ensure
-   canon facts are not duplicated into memory.
+1. **STEP 0 — Always required:**
+   Launch initial sub-agent (see Sub-agent execution above).
+   Use the snapshot to decide which optional steps apply.
 
-2. **STEP 2 — If permanent facts were established:**
+2. **STEP 1 — Always required:**
+   Run `cp-compact`. Produce an updated
+   `.cp/memory/active.md`. Canon facts are handled by
+   cp-compact's own sub-agent — no direct file read needed.
+
+3. **STEP 2 — If permanent facts were established:**
    Review decisions made during the session. Identify any
    that qualify as permanent ground truth (stable facts
    unlikely to change, not project-specific preferences).
@@ -81,16 +142,16 @@ steps:
    Write to canon only after explicit confirmation.
    If nothing qualifies, skip this step silently.
 
-3. **STEP 3 — If a milestone was reached:**
+4. **STEP 3 — If a milestone was reached:**
    Run `cp-checkpoint` with an appropriate label.
    Ask the human to confirm before creating the file.
 
-4. **STEP 4 — If tasks were completed, added, or direction
+5. **STEP 4 — If tasks were completed, added, or direction
    changed:**
    Propose specific changes to `.cp/plans/plan-<slug>.md`.
    Ask the human to confirm before applying.
 
-5. **STEP 5 — Session delta:**
+6. **STEP 5 — Session delta:**
    Show a brief (5-10 bullet) structured delta on screen:
 
    ```text

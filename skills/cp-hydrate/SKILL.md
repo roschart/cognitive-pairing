@@ -42,20 +42,84 @@ The human triggers it explicitly at the start of each session.
 
 ---
 
+## Sub-agent execution
+
+File reading is delegated to a cheap sub-agent so that `.cp/`
+file contents never enter the main context window. Only the
+alignment summary lands in main context.
+
+### Sub-agent prompt
+
+```text
+Read the following files from the .cp/ directory and return
+a structured alignment summary. Do not infer or add anything
+not present in the files.
+
+Files to read (in order):
+1. .cp/project.md — if it exists
+2. .cp/canon.md — if it exists
+3. .cp/checkpoints/ — find and read the most recent file
+   (highest date in filename)
+4. .cp/memory/active.md — if it exists
+5. .cp/plans/plan-*.md — all active plans
+
+Return exactly this format:
+
+### Sub-agent output
+
+**Read:** <comma-separated list of files successfully read>
+**Missing:** <files not found, or "none">
+
+#### Project
+<From project.md: identity and intent in 1–2 sentences.
+Omit if project.md not found.>
+
+#### Current State
+<From checkpoint: where the project stands. 2–3 sentences.
+Omit if no checkpoint found.>
+
+#### Active Goals
+<From active.md: bullet list of current goals.>
+
+#### Canon
+<From canon.md: full list of locked facts, verbatim.>
+
+#### Constraints
+<From active.md: hard limits on current work.>
+
+#### Current Focus
+<From active.md: the specific task or problem right now.>
+
+#### Do Not Revisit
+<From active.md: closed topics, one line each.>
+
+#### Active Plans
+<For each plan-*.md found: plan name + 2–3 bullet next steps.>
+
+Word budget: 400 words maximum.
+```
+
+### How the main agent uses the output
+
+1. **Launch sub-agent** (model: haiku) with the prompt above
+2. **Receive alignment summary** — `.cp/` files are now
+   out of main context
+3. **Display the summary** to the human (reformatted as
+   `## Session Context — YYYY-MM-DD`)
+4. **Proceed** to ask what the human wants to work on
+
+---
+
 ## Execution
 
 The agent performs these steps:
 
-1. **Locate `.cp/` directory** in the project root (or nearest
-   parent)
-2. **Read artifacts** in this order:
-    1. `.cp/project.md` — project declaration (if it exists)
-    2. `.cp/canon.md` — ground truth (if it exists)
-    3. `.cp/checkpoints/` — find and read the latest checkpoint
-       (by filename date)
-    4. `.cp/memory/active.md` — current operational context
-    5. `.cp/plans/plan-*.md` — active plan(s)
-3. **Show alignment summary** on screen using this structure:
+1. **Launch sub-agent** to read `.cp/` files (see
+   Sub-agent execution above). Wait for the alignment
+   summary.
+
+2. **Display the alignment summary** to the human using
+   this structure:
 
 ```text
 ## Session Context — YYYY-MM-DD

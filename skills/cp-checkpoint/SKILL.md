@@ -67,19 +67,69 @@ checkpoint marks a recognizable event.
 
 ---
 
+## Sub-agent execution
+
+File reading is delegated to a cheap sub-agent so that `.cp/`
+file contents never enter the main context window.
+
+### Sub-agent prompt
+
+```text
+Read the following files from the .cp/ directory and return
+a structured snapshot. Do not infer or add anything not
+present in the files.
+
+Files to read (in order):
+1. .cp/memory/active.md
+2. .cp/canon.md
+3. .cp/checkpoints/ — find and read the most recent file
+   (highest date in filename)
+
+Return exactly this format:
+
+### Sub-agent output
+
+**Read:** <comma-separated list of files successfully read>
+**Missing:** <files not found, or "none">
+
+#### Current state (from active.md)
+<Active Goals, Current Focus, Pending Work — verbatim from
+active.md. Omit other sections.>
+
+#### Resolved decisions (from latest checkpoint)
+<Bullet list of decisions listed in the checkpoint.>
+
+#### Canon facts
+<Full list of canon facts — must NOT be duplicated in the
+checkpoint.>
+
+Word budget: 350 words maximum.
+```
+
+### How the main agent uses the output
+
+1. **Launch sub-agent** (model: haiku) with the prompt above
+2. **Receive structured snapshot** — `.cp/` files are now
+   out of main context
+3. **Use snapshot + human-provided label** to produce the
+   checkpoint file
+4. **Show draft** to human for review before writing
+
+---
+
 ## Execution
 
-When `cp-checkpoint` is invoked the agent performs these steps:
+When `cp-checkpoint` is invoked the agent performs these
+steps:
 
-1. **Read inputs**
-    - `.cp/memory/active.md` (run `cp-compact` first if needed)
-    - `.cp/canon.md` (for awareness of locked facts — never
-      modify)
-    - The latest existing checkpoint in `.cp/checkpoints/`
-      (for comparison and to avoid duplication)
-    - A label or version tag provided by the human
+1. **Launch sub-agent** to read `.cp/` files (see
+   Sub-agent execution above). Wait for the structured
+   snapshot.
 
-2. **Produce a new checkpoint file** at
+2. **Ask the human** for a label or version tag if not
+   already provided.
+
+3. **Produce a new checkpoint file** at
    `.cp/checkpoints/YYYY-MM-DD-<label>.md` using this structure:
 
    ```markdown
@@ -109,8 +159,10 @@ When `cp-checkpoint` is invoked the agent performs these steps:
    #tag1 #tag2
    ```
 
-3. **Show the checkpoint** to the human for review before
-   writing the file.
+3. **Show the checkpoint draft** to the human for review
+   before writing the file.
+
+4. **Write the file** only after human confirmation.
 
 ### Rules
 

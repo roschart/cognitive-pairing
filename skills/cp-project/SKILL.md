@@ -65,13 +65,58 @@ Do NOT run when:
 
 ---
 
+## Sub-agent execution
+
+File reading is delegated to a cheap sub-agent so that `.cp/`
+file contents never enter the main context window.
+
+### Sub-agent prompt
+
+```text
+Read the following files from the .cp/ directory and return
+their content verbatim. Do not infer or add anything.
+
+Files to read:
+1. .cp/project.md — if it exists
+2. .cp/canon.md — if it exists
+
+Return exactly this format:
+
+### Sub-agent output
+
+**Read:** <comma-separated list of files successfully read>
+**Missing:** <files not found, or "none">
+
+#### project.md content
+<Verbatim content, or "not found">
+
+#### canon.md content
+<Verbatim content, or "not found">
+
+Word budget: 300 words maximum.
+```
+
+### How the main agent uses the output
+
+1. **Launch sub-agent** (model: haiku) with the prompt above
+2. **Receive content** — `.cp/` files are now out of main
+   context
+3. **Gather intent from the human** (for new declarations)
+   or **identify what changed** (for refinements)
+4. **Draft `.cp/project.md`** and show to human before writing
+
+---
+
 ## Execution
 
 When `cp-project` is invoked the agent performs these steps:
 
 ### Creating a new project declaration
 
-1. **Gather intent** from the human. Ask focused questions:
+1. **Launch sub-agent** to read `.cp/` files (see
+   Sub-agent execution above). Wait for the content.
+
+2. **Gather intent** from the human. Ask focused questions:
     - What is this project? (identity — not features)
     - Why does it exist? (intent — what outcome matters)
     - What constraints bound the work? (time, budget,
@@ -125,13 +170,14 @@ When `cp-project` is invoked the agent performs these steps:
 
 ### Refining an existing project declaration
 
-1. **Read** the current `.cp/project.md`
-2. **Read** `.cp/canon.md` for awareness of locked facts
-3. **Identify** what has changed — ask the human what
+1. **Launch sub-agent** to read `.cp/` files (see
+   Sub-agent execution above). The sub-agent returns the
+   current project.md and canon.md content.
+2. **Identify** what has changed — ask the human what
    triggered the refinement
-4. **Propose specific edits** — show before/after for each
+3. **Propose specific edits** — show before/after for each
    section that changes
-5. **Apply changes** only after human approval
+4. **Apply changes** only after human approval
 
 ### Rules
 

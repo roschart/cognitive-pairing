@@ -62,16 +62,67 @@ boundaries or during maintenance sessions.
 
 ---
 
+## Sub-agent execution
+
+File reading is delegated to a cheap sub-agent so that `.cp/`
+file contents never enter the main context window.
+
+### Sub-agent prompt
+
+```text
+Read the following files from the .cp/ directory and return
+a structured analysis. Do not infer or add anything not
+present in the files.
+
+Files to read (in order):
+1. .cp/memory/active.md
+2. .cp/canon.md
+3. .cp/checkpoints/ — find and read the most recent file
+4. .cp/plans/plan-*.md — all active plans
+
+Return exactly this format:
+
+### Sub-agent output
+
+**Read:** <comma-separated list of files successfully read>
+**Missing:** <files not found, or "none">
+
+#### Full active.md content
+<Verbatim content of active.md>
+
+#### Latest checkpoint — current state
+<Current State and Pending Work sections only, verbatim.>
+
+#### Active plans — task status
+<For each plan found: plan name + full task list with current
+check states.>
+
+#### Canon facts
+<Full list — items in active.md that duplicate canon should
+be removed.>
+
+Word budget: 600 words maximum.
+```
+
+### How the main agent uses the output
+
+1. **Launch sub-agent** (model: haiku) with the prompt above
+2. **Receive structured analysis** — `.cp/` files are now
+   out of main context
+3. **Apply the relevance test** to each item: "if missing,
+   would it affect current or near-future work?"
+4. **Produce pruned `active.md` draft + removal list**
+5. **Show draft** to human for review before writing
+
+---
+
 ## Execution
 
 When `cp-prune` is invoked the agent performs these steps:
 
-1. **Read inputs**
-    - `.cp/memory/active.md`
-    - `.cp/canon.md` (to verify locked facts are intact)
-    - The latest checkpoint in `.cp/checkpoints/`
-    - `.cp/plans/plan-<slug>.md` (to verify what is still
-      active)
+1. **Launch sub-agent** to read `.cp/` files (see
+   Sub-agent execution above). Wait for the structured
+   analysis.
 
 2. **Apply the relevance test** to each item in memory:
    "If this were missing from context, would it affect

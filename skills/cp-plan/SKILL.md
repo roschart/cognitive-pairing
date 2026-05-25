@@ -125,18 +125,69 @@ promotion condition.
 
 ---
 
+## Sub-agent execution
+
+File reading is delegated to a cheap sub-agent so that `.cp/`
+file contents never enter the main context window.
+
+### Sub-agent prompt
+
+```text
+Read the following files from the .cp/ directory and return
+a structured context summary. Do not infer or add anything
+not present in the files.
+
+Files to read (in order):
+1. .cp/plans/plan-<slug>.md — the plan being updated
+   (if updating an existing plan)
+2. .cp/project.md — if it exists
+3. .cp/memory/active.md
+4. .cp/canon.md
+5. .cp/checkpoints/ — find and read the most recent file
+
+Return exactly this format:
+
+### Sub-agent output
+
+**Read:** <comma-separated list of files successfully read>
+**Missing:** <files not found, or "none">
+
+#### Current plan state
+<If plan file found: full task list with current check states
+and the Next Session section. Verbatim.>
+
+#### Active goals and focus
+<From active.md: Active Goals and Current Focus only.>
+
+#### Project constraints
+<From project.md: Constraints and Priority Hierarchy only.
+Omit if project.md not found.>
+
+#### Canon facts
+<Full list of canon facts — do not contradict them in the
+updated plan.>
+
+Word budget: 400 words maximum.
+```
+
+### How the main agent uses the output
+
+1. **Launch sub-agent** (model: haiku) with the prompt above
+2. **Receive structured context** — `.cp/` files are now
+   out of main context
+3. **Use context + session direction** to produce or update
+   the plan file
+4. **Show draft** to human for review before writing
+
+---
+
 ## Execution
 
 When `cp-plan` is invoked the agent performs these steps:
 
-1. **Read inputs**
-    - The current `.cp/plans/plan-<slug>.md` (if updating)
-    - `.cp/project.md` (if it exists, for project-level
-      intent and constraints)
-    - The latest checkpoint in `.cp/checkpoints/`
-    - `.cp/memory/active.md`
-    - `.cp/canon.md` (for awareness of locked facts)
-    - Any new goals or direction from the current session
+1. **Launch sub-agent** to read `.cp/` files (see
+   Sub-agent execution above). Wait for the structured
+   context.
 
 2. **Produce or update** `.cp/plans/plan-<slug>.md` using
    this structure:
