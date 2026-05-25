@@ -42,3 +42,6 @@ must respect. Only the human approves additions or removals.
 - `.cp/` file contents never enter the main context window
 - Sub-agent output contract: structured summary ≤ 600 words
   plus a list of files read / missing
+- Skills never specify a model name — only the intent
+  (e.g. "cheapest/fastest available"); the executing agent
+  chooses the appropriate model for its environment
