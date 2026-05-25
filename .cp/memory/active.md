@@ -1,44 +1,47 @@
-# Working Memory — 2026-05-20
+# Working Memory — 2026-05-25
 
 ## Active Goals
 
-- Real-world validation: use skills in personal repos
-- Test cp-project with the Pathfinder campaign using the
-  GM assistant super-prompt
-- Validate new artifact model (5 types, plans inside .cp/)
+- Validate sub-agent pattern in a real session across projects
+- Real-world validation: Pathfinder campaign (cp-project,
+  non-code repo) still pending
 
 ## Active Constraints
 
 - Human triggers skills manually — no auto-execute
 - Agent must not commit without explicit human permission
+- Skills must never specify model names — only intent
 
 ## Current Focus
 
-Validation phase. v3 artifact model implemented (project.md
-as 5th artifact, plans inside .cp/, artifact-spec refactored
-to reference-only). Next: deploy updated skills and test
-cp-project in pathfinder with the GM assistant prompt.
+Sub-agent pattern validated in-session: cp-session-end step 0
+and cp-compact both executed correctly — `.cp/` files never
+entered main context. PR #1 open. Next: merge after one more
+real-session validation in a different project.
 
 ## Key Relationships
 
-- cp-project → creates .cp/project.md (intent layer)
-- cp-plan → creates .cp/plans/plan-<slug>.md (work layer)
-- artifact-spec.md → reference only, templates live in
-  owning skills
-- cp-hydrate reads project.md first in artifact load order
+- cp-compact before /compact builtin: cp-compact extracts
+  state with domain knowledge while conversation is full;
+  /compact (builtin) can then safely free context
+- Sub-agent pattern: main agent never reads `.cp/` files
+  directly — delegates, receives structured output only
+- cp-session-end step 0: initial sub-agent snapshot drives
+  which optional steps run
 
-## Unresolved Problems
+## Recent Decisions
 
-- Deployed skills in ~/.copilot/skills/ are stale — need
-  `make sync`
-- Codex deployment not tested (make deploy-codex)
+- cp-compact always runs before /compact builtin — order
+  matters; reverse risks lossy discard of unpreserved state
 
 ## Do Not Revisit
 
-- Auto-execute via agent.md or copilot-instructions.md —
+- Auto-execute via agent.md/copilot-instructions.md —
   security risk, not viable
-- Flat file structure for skills — rejected in v1.0
+- Flat file structure for skills — rejected v1.0
 - Snapshots, templates, decisions as separate artifacts —
-  removed in v2.0
-- agents/openai.yaml for each skill — discarded
+  removed v2.0
+- agents/openai.yaml per skill — discarded
 - Skill test suite — discarded (YAGNI)
+- Hardcoded model names in skills — rejected; use intent
+- Running /compact before cp-compact — lossy, wrong order
