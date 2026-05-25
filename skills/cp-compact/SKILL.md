@@ -180,6 +180,13 @@ When `cp-compact` is invoked the agent performs these steps:
    before writing (or state that it has been written if
    invoked non-interactively).
 
+6. **Remind the human** to run `/compact` if they want to
+   free the current session's context window:
+
+   > `cp-compact` is done. To free context window memory,
+   > run `/compact` now (runtime built-in). Everything
+   > important has already been saved to `active.md`.
+
 ### Rules
 
 - No narrative. No "we discussed" or "first we tried".
@@ -210,3 +217,4 @@ Before accepting the compacted memory:
 - [ ] No narrative or history is present
 - [ ] Nothing resolved in this session still appears as open
 - [ ] Canon facts are not duplicated from `.cp/canon.md`
+- [ ] Human has been reminded to run `/compact` if needed
