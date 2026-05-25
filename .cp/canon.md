@@ -34,3 +34,11 @@ must respect. Only the human approves additions or removals.
 - Agent proposes canon additions; human approves before write
 - Mundane workflow steps are never persisted in state
   artifacts
+
+## Execution Model
+
+- Sub-agents (Haiku) handle all `.cp/` file reading; the
+  main agent receives only structured output
+- `.cp/` file contents never enter the main context window
+- Sub-agent output contract: structured summary ≤ 600 words
+  plus a list of files read / missing

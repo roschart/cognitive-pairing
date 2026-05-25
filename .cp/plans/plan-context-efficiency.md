@@ -25,24 +25,25 @@
 
 ## Tasks
 
-- [ ] redesign cp-compact (highest impact, clearest flow fix)
-    - [ ] define corrected flow in SKILL.md: sub-agent reads →
+- [x] redesign cp-compact (highest impact, clearest flow fix) · ✓ 2026-05-25
+    - [x] define corrected flow in SKILL.md: sub-agent reads →
           summarises → main agent writes `active.md`
-    - [ ] define sub-agent output contract (schema + word limit)
-    - [ ] test end-to-end in this branch
-- [ ] redesign cp-hydrate
-    - [ ] define output contract (alignment summary + key paths)
-    - [ ] add `## Sub-agent execution` section to SKILL.md
-    - [ ] test with Haiku sub-agent
-- [ ] redesign cp-session-end
-    - [ ] identify which orchestration steps benefit from
+    - [x] define sub-agent output contract (schema + word limit)
+- [x] redesign cp-hydrate · ✓ 2026-05-25
+    - [x] define output contract (alignment summary + key paths)
+    - [x] add `## Sub-agent execution` section to SKILL.md
+- [x] redesign cp-session-end · ✓ 2026-05-25
+    - [x] identify which orchestration steps benefit from
           delegation
-    - [ ] update SKILL.md
-- [ ] redesign cp-checkpoint
-    - [ ] update SKILL.md
+    - [x] update SKILL.md
+- [x] redesign cp-checkpoint · ✓ 2026-05-25
+    - [x] update SKILL.md
+- [x] redesign cp-plan · ✓ 2026-05-25
+- [x] redesign cp-prune · ✓ 2026-05-25
+- [x] redesign cp-project · ✓ 2026-05-25
+- [x] run `make sync` to deploy updated skills · ✓ 2026-05-25
 - [ ] update canon with sub-agent execution rule
-- [ ] run `make sync` to deploy updated skills
-- [ ] validate all four skills in a real session
+- [ ] validate all skills in a real session
 
 ## Potential Work
 
@@ -56,6 +57,6 @@
 
 > Active: 2026-05-25
 
-- Start with cp-compact: define corrected flow + output contract
-- Edit `skills/cp-compact/SKILL.md`
-- Smoke-test in this branch before touching other skills
+- Propose and approve canon addition for sub-agent rule
+- Validate updated skills in a real session (cp-hydrate first)
+- Token-count benchmark: measure context savings with updated hydrate
