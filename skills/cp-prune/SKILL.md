@@ -106,7 +106,7 @@ Word budget: 600 words maximum.
 
 ### How the main agent uses the output
 
-1. **Launch sub-agent** (model: haiku) with the prompt above
+1. **Launch sub-agent** (use the cheapest/fastest model available — this is a file-reading task, not a reasoning task) with the prompt above
 2. **Receive structured analysis** — `.cp/` files are now
    out of main context
 3. **Apply the relevance test** to each item: "if missing,

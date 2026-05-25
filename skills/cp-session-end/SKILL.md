@@ -89,7 +89,7 @@ Word budget: 250 words maximum.
 
 ### How the main agent uses the output
 
-1. **Launch sub-agent** (model: haiku) before starting
+1. **Launch sub-agent** (use the cheapest/fastest model available — this is a file-reading task, not a reasoning task) before starting
    the sequence
 2. **Receive status snapshot** — determines which of steps
    2–4 are relevant
