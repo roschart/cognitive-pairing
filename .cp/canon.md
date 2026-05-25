@@ -37,11 +37,14 @@ must respect. Only the human approves additions or removals.
 
 ## Execution Model
 
-- Sub-agents (Haiku) handle all `.cp/` file reading; the
-  main agent receives only structured output
+- Sub-agents handle all `.cp/` file reading; the main agent
+  receives only structured output
 - `.cp/` file contents never enter the main context window
 - Sub-agent output contract: structured summary ≤ 600 words
   plus a list of files read / missing
 - Skills never specify a model name — only the intent
   (e.g. "cheapest/fastest available"); the executing agent
   chooses the appropriate model for its environment
+- `cp-compact` always runs before the runtime `/compact`
+  builtin; cp-compact preserves state with domain knowledge
+  first, then /compact may free context safely

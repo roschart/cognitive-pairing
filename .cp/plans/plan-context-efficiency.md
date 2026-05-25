@@ -14,14 +14,18 @@
 ## Decisions
 
 - **Sub-agent model**: reader sub-agents use
-  `task(agent_type: "explore", model: "haiku")` — cheap and fast
-  for file reading; main agent never reads source files directly
+  `task(agent_type: "explore")` cheapest/fastest available —
+  file-reading task, not reasoning; main agent never reads
+  source files directly
 - **Output contract**: sub-agent returns a structured summary
   (~300 words max) plus a list of key file paths
-- **cp-compact corrected flow**: sub-agent reads all `.cp/` files
-  → produces compact summary → terminates → main agent writes
-  `active.md` using only the sub-agent output
+- **cp-compact corrected flow**: sub-agent reads `.cp/` files
+  → main agent uses output + conversation to write `active.md`
 - **Scope**: all skills that read `.cp/` files are candidates
+- **cp-compact before /compact**: always run `cp-compact`
+  first (domain-aware extraction), then optionally run the
+  runtime `/compact` builtin to free context window; running
+  `/compact` first risks lossy discard of unpreserved state
 
 ## Tasks
 

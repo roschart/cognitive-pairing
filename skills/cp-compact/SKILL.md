@@ -47,7 +47,38 @@ Do NOT run after every few messages — compaction has overhead.
 
 ---
 
-## Sub-agent execution
+## Context window vs. persistent state
+
+`cp-compact` writes state to disk. It does NOT free the current
+session's context window — the conversation history is
+append-only and cannot be removed in-session.
+
+To free the context window, use the runtime's built-in `/compact`
+command **after** running `cp-compact`:
+
+```
+1. cp-compact (this skill)
+   → Full conversation still available
+   → Extracts what matters with domain knowledge
+   → Writes active.md — important state now persisted
+
+2. /compact (runtime built-in, optional)
+   → Compresses conversation context, freeing memory
+   → Lossy is acceptable — everything important is
+     already in active.md
+   → Only needed if continuing the current session
+```
+
+Running `/compact` first is wrong: it may discard decisions
+or context that `cp-compact` would have captured. Always run
+`cp-compact` first.
+
+If ending the session (via `cp-session-end`), `/compact` is
+not needed — the session closes anyway.
+
+---
+
+
 
 File reading is delegated to a cheap sub-agent so that `.cp/`
 file contents never enter the main context window. Only the
