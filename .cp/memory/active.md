@@ -2,48 +2,46 @@
 
 ## Active Goals
 
-- Validate sub-agent pattern in a real session (cp-hydrate
-  first — most visible)
-- Real-world validation: use skills in personal repos
-  (Pathfinder campaign still pending)
+- Validate sub-agent pattern in a real session across projects
+- Real-world validation: Pathfinder campaign (cp-project,
+  non-code repo) still pending
 
 ## Active Constraints
 
 - Human triggers skills manually — no auto-execute
 - Agent must not commit without explicit human permission
 - Skills must never specify model names — only intent
-  (e.g. "cheapest/fastest available")
 
 ## Current Focus
 
-Sub-agent delegation pattern implemented across all 7
-cp-* skills (feat/context-efficiency-subagents, PR #1).
-Next: validate in a real session, then merge to main.
+Sub-agent pattern validated in-session: cp-session-end step 0
+and cp-compact both executed correctly — `.cp/` files never
+entered main context. PR #1 open. Next: merge after one more
+real-session validation in a different project.
 
 ## Key Relationships
 
+- cp-compact before /compact builtin: cp-compact extracts
+  state with domain knowledge while conversation is full;
+  /compact (builtin) can then safely free context
 - Sub-agent pattern: main agent never reads `.cp/` files
-  directly — delegates to cheap sub-agent, receives
-  structured output only
-- cp-compact corrected flow: sub-agent reads existing state
-  → main agent uses output + conversation to write active.md
+  directly — delegates, receives structured output only
 - cp-session-end step 0: initial sub-agent snapshot drives
   which optional steps run
 
-## Unresolved Problems
+## Recent Decisions
 
-- Real-session validation of updated skills not yet done
-- plan-v3-artifact-model has 0 open tasks → candidate
-  for archiving to `.cp/plans/archive/`
+- cp-compact always runs before /compact builtin — order
+  matters; reverse risks lossy discard of unpreserved state
 
 ## Do Not Revisit
 
-- Auto-execute via agent.md or copilot-instructions.md —
+- Auto-execute via agent.md/copilot-instructions.md —
   security risk, not viable
-- Flat file structure for skills — rejected in v1.0
+- Flat file structure for skills — rejected v1.0
 - Snapshots, templates, decisions as separate artifacts —
-  removed in v2.0
-- agents/openai.yaml for each skill — discarded
+  removed v2.0
+- agents/openai.yaml per skill — discarded
 - Skill test suite — discarded (YAGNI)
-- Hardcoded model names in skills (e.g. "haiku") —
-  rejected; use intent, not model ID
+- Hardcoded model names in skills — rejected; use intent
+- Running /compact before cp-compact — lossy, wrong order
