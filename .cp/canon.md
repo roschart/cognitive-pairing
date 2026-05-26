@@ -48,3 +48,5 @@ must respect. Only the human approves additions or removals.
 - `cp-compact` always runs before the runtime `/compact`
   builtin; cp-compact preserves state with domain knowledge
   first, then /compact may free context safely
+- cp-workflows is a meta-skill providing foundation rules;
+  loaded when using any cp-* skill (not in every session)
