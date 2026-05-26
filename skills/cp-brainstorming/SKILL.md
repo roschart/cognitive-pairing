@@ -251,6 +251,49 @@ clarify thought, not fossilize confusion.
 
 ---
 
+## Context Artifacts
+
+Brainstorming does not happen in a vacuum. It must stay coherent with
+existing project artifacts — the "andamios" (scaffolding) built by other
+skills.
+
+At the start of a brainstorming session, check for and read these
+artifacts when they exist:
+
+| Artifact | Location | What it contains | When to read |
+|----------|----------|------------------|--------------|
+| Canon | `.cp/canon.md` | Locked framework truths | Always, if exists |
+| Project | `.cp/project.md` | Macro design, intent, constraints, scope | When brainstorming affects project direction |
+| Active plan(s) | `.cp/plans/plan-*.md` | Current workstream goals and tasks | When brainstorming is scoped to a specific plan |
+| Active memory | `.cp/memory/active.md` | Session-to-session working state | When picking up multi-session brainstorming |
+| Latest checkpoint | `.cp/checkpoints/` | Recent milestone state | When context is needed from prior work |
+
+Read these artifacts directly in the main context window — they are
+small files designed for agent consumption.
+
+### Why this matters
+
+These artifacts form a coherent ecosystem. If brainstorming proposes a
+design that contradicts the project constraints, ignores canon facts, or
+duplicates work already captured in a plan, the ecosystem fractures.
+
+Coherence is not just internal to the thing being designed. Coherence
+includes alignment with the surrounding context.
+
+### What to do with artifact content
+
+- **Canon**: Treat as immutable truth unless explicitly challenged
+- **Project**: Use constraints and intent as design boundaries
+- **Plans**: Avoid duplicating committed work; build on stated direction
+- **Memory**: Continue threads from prior sessions instead of restarting
+- **Checkpoints**: Understand what has already been decided or built
+
+If brainstorming reveals that an artifact is wrong or outdated, surface
+the tension explicitly and let the human decide whether to update the
+artifact.
+
+---
+
 ## Canon Awareness
 
 Use `canon.md` to avoid re-exploring settled context.

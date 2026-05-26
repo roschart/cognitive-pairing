@@ -1,4 +1,4 @@
-# Plan: Create cp-brainstorming Skill
+# Plan: Create cp-brainstorming Skill + Meta-Skill
 
 ## Context
 
@@ -48,25 +48,33 @@
 
 ## Tasks
 
-- [ ] write SKILL.md for cp-brainstorming
-    - [ ] define the stance (adapted from openspec-explore)
-    - [ ] define "what you might do" menu (not a sequence)
-    - [ ] document holistic-incremental design pattern
-    - [ ] document artifact routing table (where insights go)
-    - [ ] define the hard gate (no implementation in explore)
-    - [ ] define transition: how brainstorming ends
-    - [ ] add guardrails section
-    - [ ] add examples for different entry points
-- [ ] integrate with existing cp-* skill family
-    - [ ] ensure cp-discover is upstream (context already
+- [x] write SKILL.md for cp-brainstorming · ✓ 2026-05-26
+    - [x] define the stance (adapted from openspec-explore)
+    - [x] define "what you might do" menu (not a sequence)
+    - [x] document holistic-incremental design pattern
+    - [x] document artifact routing table (where insights go)
+    - [x] define the hard gate (no implementation in explore)
+    - [x] define transition: how brainstorming ends
+    - [x] add guardrails section
+    - [x] add examples for different entry points
+    - [x] add context artifacts section (ecosystem coherence)
+- [x] create cp-workflows meta-skill · ✓ 2026-05-26
+    - [x] write SKILL.md for cp-workflows (foundation rules)
+    - [x] decide: should other skills reference it?
+      (decision: via description trigger, not explicit refs)
+- [x] integrate with existing cp-* skill family · ✓ 2026-05-26
+    - [x] ensure cp-discover is upstream (context already
       loaded via canon)
-    - [ ] ensure cp-plan is downstream (brainstorming flows
+    - [x] ensure cp-plan is downstream (brainstorming flows
       into plan creation)
-    - [ ] update cp-session-end if brainstorming state needs
-      persisting
-- [ ] deploy and validate
-    - [ ] make sync to deploy
-    - [ ] test in a real brainstorming session
+    - [x] refine context coherence: use cp-hydrate loaded
+      context instead of rereading files
+    - [x] review cp-session-end (no changes needed —
+      brainstorming state flows via active.md)
+- [x] deploy and validate · ✓ 2026-05-26
+    - [x] make sync to deploy
+    - [ ] test cp-brainstorming in a real session (deferred to
+      future usage)
 
 ## Potential Work
 

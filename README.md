@@ -36,15 +36,17 @@ AI-readable artifacts.
 
 ## Skills
 
-| Skill            | Purpose                                  |
-|------------------|------------------------------------------|
-| `cp-project`     | Create or refine the project declaration  |
-| `cp-hydrate`     | Load context at session start             |
-| `cp-compact`     | Compress working memory                   |
-| `cp-checkpoint`  | Create stable state at milestones         |
-| `cp-plan`        | Create or update the living plan          |
-| `cp-prune`       | Remove stale content from memory          |
-| `cp-session-end` | End-of-session structured wrap-up         |
+| Skill              | Purpose                                  |
+|--------------------|------------------------------------------|
+| `cp-workflows`     | Foundation rules (loaded with any cp-*)  |
+| `cp-project`       | Create or refine the project declaration |
+| `cp-hydrate`       | Load context at session start            |
+| `cp-brainstorming` | Structured thinking before implementation|
+| `cp-compact`       | Compress working memory                  |
+| `cp-checkpoint`    | Create stable state at milestones        |
+| `cp-plan`          | Create or update the living plan         |
+| `cp-prune`         | Remove stale content from memory         |
+| `cp-session-end`   | End-of-session structured wrap-up        |
 
 Skills are designed for AI agents — the agent reads the skill
 definition and executes it directly. Both the human and the
