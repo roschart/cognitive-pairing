@@ -66,20 +66,33 @@ Canon > Project > Plan > Memory > Checkpoint
 
 ## `.cp/` Resolution
 
-When any cp-* skill needs to locate `.cp/`, walk upward from cwd:
+**Always use the `scripts/find-cp-dir.sh` script** (bundled with
+this skill) to resolve the nearest `.cp/` directory. Never use
+`find` searching downward from the repo root — that bypasses
+monorepo scoping and picks the wrong context.
 
-1. Check the current working directory for `.cp/`
-2. If not found, move up one directory level and repeat
-3. Stop at the git root (directory containing `.git/`) —
-   never search above it
-4. If `.cp/` is not found before the git root, report it as absent
+Run it from the skill's base directory (provided in skill context):
 
-This mirrors how `git` locates `.git/`.
+```bash
+CP_DIR=$(bash scripts/find-cp-dir.sh)
+```
 
-**Monorepo scoping:** The first `.cp/` found wins. Placing `.cp/`
-inside a subdirectory (e.g. `terraform/.cp/`) scopes the context
-to that area only — walking up will find a root-level `.cp/` as
-a fallback only when no scoped one exists.
+The script walks **upward** from `$PWD` (or a given path) and
+returns the first `.cp/` it finds. Exit codes:
+
+| Code | Meaning |
+|------|---------|
+| `0` | Found — path printed to stdout |
+| `1` | Not found — stopped at `.git/` boundary |
+| `2` | Not found — reached `$HOME` with no git root |
+
+Exit code `1` → `.cp/` absent at this scope; suggest `cp-discover`.
+Exit code `2` → not inside a git repo; inform the human.
+
+**Monorepo scoping:** The first `.cp/` found wins. A `.cp/` inside
+a subdirectory (e.g. `docs/pci/vikingcloud-templates/.cp/`) scopes
+context to that area. The root-level `.cp/` is only reached if no
+scoped one exists above the cwd.
 
 ---
 
