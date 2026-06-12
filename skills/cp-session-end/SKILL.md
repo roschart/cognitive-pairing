@@ -124,6 +124,11 @@ creating checkpoints, or updating plans.
 When `cp-session-end` is invoked the agent performs these
 steps:
 
+**Before starting:** Invoke `cp-workflows`. Follow its
+`.cp/` Resolution rules to locate the `.cp/` directory (walk
+up from cwd to git root). All reads and writes below use the
+resolved path.
+
 1. **STEP 0 — Always required:**
    Launch initial sub-agent (see Sub-agent execution above).
    Use the snapshot to decide which optional steps apply.

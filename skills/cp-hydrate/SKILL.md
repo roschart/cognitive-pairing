@@ -114,6 +114,11 @@ Word budget: 400 words maximum.
 
 The agent performs these steps:
 
+**Step 0 — Load foundation rules and resolve `.cp/`:**
+Invoke `cp-workflows`. Follow its `.cp/` Resolution rules
+to locate the working `.cp/` directory (walk up from cwd to
+git root). Use the resolved path for all steps below.
+
 1. **Launch sub-agent** to read `.cp/` files (see
    Sub-agent execution above). Wait for the alignment
    summary.

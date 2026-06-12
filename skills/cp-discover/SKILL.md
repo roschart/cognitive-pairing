@@ -44,6 +44,14 @@ Do NOT run if `.cp/` already exists — use `cp-hydrate` instead.
 
 ## Execution
 
+### Phase 0 — Load foundation rules
+
+Invoke `cp-workflows`. Walk up from cwd to git root looking
+for an existing `.cp/` directory. If one is found, warn the
+human — `cp-hydrate` should be used instead. If not found,
+proceed; `.cp/` will be created in cwd by default (ask the
+human if they want it elsewhere).
+
 ### Phase 1 — Scan (non-interactive)
 
 1. Run `scripts/count_tokens.py` on the project root

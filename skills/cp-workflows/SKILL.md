@@ -64,27 +64,22 @@ Canon > Project > Plan > Memory > Checkpoint
 
 ---
 
-## Skills You'll Call
+## `.cp/` Resolution
 
-Most sessions use only:
-- **cp-hydrate** — first command of every session
-- **cp-session-end** — last command of every session
+When any cp-* skill needs to locate `.cp/`, walk upward from cwd:
 
-Occasionally:
-- **cp-brainstorming** — structured thinking before
-  implementation
-- **cp-discover** — bootstrap `.cp/` in a new project
+1. Check the current working directory for `.cp/`
+2. If not found, move up one directory level and repeat
+3. Stop at the git root (directory containing `.git/`) —
+   never search above it
+4. If `.cp/` is not found before the git root, report it as absent
 
-Rarely (usually orchestrated):
-- **cp-compact** — compress active memory (called by
-  cp-session-end)
-- **cp-checkpoint** — capture milestone (called by
-  cp-session-end)
-- **cp-plan** — create/update plan (called by workflows or
-  human)
-- **cp-project** — define project (called by cp-discover)
-- **cp-prune** — clean stale artifacts (suggested, not
-  automatic)
+This mirrors how `git` locates `.git/`.
+
+**Monorepo scoping:** The first `.cp/` found wins. Placing `.cp/`
+inside a subdirectory (e.g. `terraform/.cp/`) scopes the context
+to that area only — walking up will find a root-level `.cp/` as
+a fallback only when no scoped one exists.
 
 ---
 
