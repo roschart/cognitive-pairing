@@ -50,3 +50,9 @@ must respect. Only the human approves additions or removals.
   first, then /compact may free context safely
 - cp-workflows is a meta-skill providing foundation rules;
   loaded when using any cp-* skill (not in every session)
+- `.cp/` resolution: start from cwd, walk up to git root
+  (`.git/`); use the first `.cp/` found. Subdirectory `.cp/`
+  scopes context to that area; root `.cp/` is the fallback
+- Entry-point skills (cp-hydrate, cp-session-end,
+  cp-discover) load cp-workflows at Step 0 to resolve
+  `.cp/` — resolution logic lives in cp-workflows only (DRY)

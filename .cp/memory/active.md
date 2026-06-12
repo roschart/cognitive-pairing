@@ -1,11 +1,11 @@
-# Working Memory — 2026-05-26
+# Working Memory — 2026-06-12
 
 ## Active Goals
 
-- Validate sub-agent pattern in a real session across projects
-- Real-world validation: Pathfinder campaign (cp-project,
-  non-code repo) still pending
 - Test cp-brainstorming in a real brainstorming session
+- Explore additional context compression / cost reduction
+  (Copilot cost increase flagged this session)
+- Test Codex deployment (`make deploy-codex`)
 
 ## Active Constraints
 
@@ -16,30 +16,30 @@
 
 ## Current Focus
 
-cp-brainstorming and cp-workflows (meta-skill) completed and
-deployed. PR #1 open on `feat/context-efficiency-subagents`.
-Ready to test in real usage.
+`.cp/` upward traversal implemented and committed (ee672bc).
+cp-workflows is now the single source of resolution logic;
+entry-point skills (cp-hydrate, cp-session-end, cp-discover)
+load it at Step 0. Real-world validation of sub-agent pattern
+confirmed this session.
 
 ## Key Relationships
 
-- cp-workflows loaded when using any cp-* skill — provides
-  foundation rules for session model, context coherence,
-  and artifact hierarchy
-- cp-brainstorming uses context from cp-hydrate instead of
-  rereading .cp/ files — maintains coherence with loaded
-  session state
+- cp-workflows loaded by cp-hydrate, cp-session-end, and
+  cp-discover at Step 0 — single source for resolution logic
+  and foundation rules
+- `.cp/` resolution: walk up from cwd to git root; first
+  `.cp/` found wins (monorepo scoping enabled)
 - Sub-agent pattern: all .cp/ reading delegated; main agent
   receives structured output only
 
 ## Recent Decisions
 
-- cp-workflows is a meta-skill triggered "when using any
-  cp-* skill" — not loaded in every session, only when
-  cognitive-pairing skills are active
-- cp-brainstorming does not reread .cp/ files — uses
-  cp-hydrate loaded context; asks human if info is missing
-- cp-session-end needs no changes for brainstorming state —
-  flows via active.md automatically
+- `.cp/` resolution lives in cp-workflows only (DRY) —
+  entry-point skills reference it, never duplicate it
+- Monorepo scoping via subdirectory `.cp/` is an explicit
+  supported pattern (e.g. `terraform/.cp/`)
+- "Skills You'll Call" section removed from cp-workflows —
+  noise when loaded as foundation reference
 
 ## Do Not Revisit
 
@@ -54,3 +54,5 @@ Ready to test in real usage.
 - Running /compact before cp-compact — lossy, wrong order
 - Adding framework structure doc for cp-workflows — not
   needed (grows organically)
+- Duplicating `.cp/` resolution logic per-skill — rejected
+  this session; DRY via cp-workflows
