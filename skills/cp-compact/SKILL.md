@@ -78,18 +78,10 @@ not needed — the session closes anyway.
 
 ---
 
+## File reading
 
-
-File reading is delegated to a cheap sub-agent so that `.cp/`
-file contents never enter the main context window. Only the
-structured output lands in main context.
-
-### Sub-agent prompt
-
-```text
-Read the following files from the .cp/ directory and return
-a structured snapshot. Do not infer or add anything not
-present in the files.
+Read `.cp/` files directly — do not delegate this to a
+sub-agent.
 
 Files to read (in order):
 1. .cp/memory/active.md
@@ -97,35 +89,20 @@ Files to read (in order):
 3. .cp/checkpoints/ — find and read the most recent file
    (highest date in filename)
 
-Return exactly this format:
+From these, build an internal snapshot:
 
-### Sub-agent output
+- Existing memory (active.md): full content, verbatim.
+- Latest checkpoint summary: 2–3 sentences on current state
+  and pending work from the checkpoint. No narrative.
+- Canon facts: bullet list of every canon fact — these must
+  NOT be duplicated in the new active.md.
 
-**Read:** <comma-separated list of files successfully read>
-**Missing:** <files not found, or "none">
+### How the main agent uses this
 
-#### Existing memory (active.md)
-<full content of active.md, verbatim>
-
-#### Latest checkpoint summary
-<2–3 sentences: current state and pending work from the
-checkpoint. No narrative.>
-
-#### Canon facts
-<bullet list of every canon fact — these must NOT be
-duplicated in the new active.md>
-
-Word budget: 500 words maximum.
-```
-
-### How the main agent uses the output
-
-1. **Launch sub-agent** (use the cheapest/fastest model available — this is a file-reading task, not a reasoning task) with the prompt above
-2. **Receive structured snapshot** — `.cp/` files are now
-   out of main context
-3. **Use snapshot + current session conversation** to
+1. **Read the files directly** and build the snapshot above.
+2. **Use snapshot + current session conversation** to
    produce the new `active.md` (see Execution below)
-4. **Archive** the previous `active.md` and write the new one
+3. **Archive** the previous `active.md` and write the new one
 
 ---
 
@@ -133,9 +110,8 @@ Word budget: 500 words maximum.
 
 When `cp-compact` is invoked the agent performs these steps:
 
-1. **Launch sub-agent** to read `.cp/` files (see
-   Sub-agent execution above). Wait for the structured
-   snapshot.
+1. **Read `.cp/` files directly** (see File reading above)
+   and build the internal snapshot.
 
 2. **Produce a new `.cp/memory/active.md`** using the
    snapshot and the current session conversation. The new

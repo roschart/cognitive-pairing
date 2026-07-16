@@ -42,18 +42,11 @@ The human triggers it explicitly at the start of each session.
 
 ---
 
-## Sub-agent execution
+## File reading
 
-File reading is delegated to a cheap sub-agent so that `.cp/`
-file contents never enter the main context window. Only the
-alignment summary lands in main context.
-
-### Sub-agent prompt
-
-```text
-Read the following files from the .cp/ directory and return
-a structured alignment summary. Do not infer or add anything
-not present in the files.
+Read `.cp/` files directly — do not delegate this to a
+sub-agent. Read each file listed below yourself and build the
+alignment summary from their contents.
 
 Files to read (in order):
 1. .cp/project.md — if it exists
@@ -63,9 +56,9 @@ Files to read (in order):
 4. .cp/memory/active.md — if it exists
 5. .cp/plans/plan-*.md — all active plans
 
-Return exactly this format:
-
-### Sub-agent output
+Build the internal summary in this shape (do not print this
+intermediate form — go straight to the final display format
+in step 2 below):
 
 **Read:** <comma-separated list of files successfully read>
 **Missing:** <files not found, or "none">
@@ -97,16 +90,14 @@ Omit if no checkpoint found.>
 <For each plan-*.md found: plan name + 2–3 bullet next steps.>
 
 Word budget: 400 words maximum.
-```
 
-### How the main agent uses the output
+### How the main agent uses this
 
-1. **Launch sub-agent** (use the cheapest/fastest model available — this is a file-reading task, not a reasoning task) with the prompt above
-2. **Receive alignment summary** — `.cp/` files are now
-   out of main context
-3. **Display the summary** to the human (reformatted as
+1. **Read the files directly** and build the alignment
+   summary above.
+2. **Display the summary** to the human (reformatted as
    `## Session Context — YYYY-MM-DD`)
-4. **Proceed** to ask what the human wants to work on
+3. **Proceed** to ask what the human wants to work on
 
 ---
 
@@ -119,9 +110,8 @@ Invoke `cp-workflows`. Follow its `.cp/` Resolution rules
 to locate the working `.cp/` directory (walk up from cwd to
 git root). Use the resolved path for all steps below.
 
-1. **Launch sub-agent** to read `.cp/` files (see
-   Sub-agent execution above). Wait for the alignment
-   summary.
+1. **Read `.cp/` files directly** (see File reading above)
+   and build the alignment summary.
 
 2. **Display the alignment summary** to the human using
    this structure:

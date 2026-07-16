@@ -65,45 +65,23 @@ Do NOT run when:
 
 ---
 
-## Sub-agent execution
+## File reading
 
-File reading is delegated to a cheap sub-agent so that `.cp/`
-file contents never enter the main context window.
-
-### Sub-agent prompt
-
-```text
-Read the following files from the .cp/ directory and return
-their content verbatim. Do not infer or add anything.
+Read `.cp/` files directly — do not delegate this to a
+sub-agent.
 
 Files to read:
 1. .cp/project.md — if it exists
 2. .cp/canon.md — if it exists
 
-Return exactly this format:
+Hold their content (verbatim, if found) for use below.
 
-### Sub-agent output
+### How the main agent uses this
 
-**Read:** <comma-separated list of files successfully read>
-**Missing:** <files not found, or "none">
-
-#### project.md content
-<Verbatim content, or "not found">
-
-#### canon.md content
-<Verbatim content, or "not found">
-
-Word budget: 300 words maximum.
-```
-
-### How the main agent uses the output
-
-1. **Launch sub-agent** (use the cheapest/fastest model available — this is a file-reading task, not a reasoning task) with the prompt above
-2. **Receive content** — `.cp/` files are now out of main
-   context
-3. **Gather intent from the human** (for new declarations)
+1. **Read the files directly.**
+2. **Gather intent from the human** (for new declarations)
    or **identify what changed** (for refinements)
-4. **Draft `.cp/project.md`** and show to human before writing
+3. **Draft `.cp/project.md`** and show to human before writing
 
 ---
 
@@ -113,8 +91,7 @@ When `cp-project` is invoked the agent performs these steps:
 
 ### Creating a new project declaration
 
-1. **Launch sub-agent** to read `.cp/` files (see
-   Sub-agent execution above). Wait for the content.
+1. **Read `.cp/` files directly** (see File reading above).
 
 2. **Gather intent** from the human. Ask focused questions:
     - What is this project? (identity — not features)
@@ -170,9 +147,8 @@ When `cp-project` is invoked the agent performs these steps:
 
 ### Refining an existing project declaration
 
-1. **Launch sub-agent** to read `.cp/` files (see
-   Sub-agent execution above). The sub-agent returns the
-   current project.md and canon.md content.
+1. **Read `.cp/` files directly** (see File reading above)
+   to get the current project.md and canon.md content.
 2. **Identify** what has changed — ask the human what
    triggered the refinement
 3. **Propose specific edits** — show before/after for each

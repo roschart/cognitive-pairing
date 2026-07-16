@@ -125,17 +125,10 @@ promotion condition.
 
 ---
 
-## Sub-agent execution
+## File reading
 
-File reading is delegated to a cheap sub-agent so that `.cp/`
-file contents never enter the main context window.
-
-### Sub-agent prompt
-
-```text
-Read the following files from the .cp/ directory and return
-a structured context summary. Do not infer or add anything
-not present in the files.
+Read `.cp/` files directly — do not delegate this to a
+sub-agent.
 
 Files to read (in order):
 1. .cp/plans/plan-<slug>.md — the plan being updated
@@ -145,39 +138,25 @@ Files to read (in order):
 4. .cp/canon.md
 5. .cp/checkpoints/ — find and read the most recent file
 
-Return exactly this format:
+From these, build an internal context summary:
 
-### Sub-agent output
+- Current plan state: if plan file found, full task list
+  with current check states and the Next Session section,
+  verbatim.
+- Active goals and focus: from active.md, Active Goals and
+  Current Focus only.
+- Project constraints: from project.md, Constraints and
+  Priority Hierarchy only. Omit if project.md not found.
+- Canon facts: full list — do not contradict them in the
+  updated plan.
 
-**Read:** <comma-separated list of files successfully read>
-**Missing:** <files not found, or "none">
+### How the main agent uses this
 
-#### Current plan state
-<If plan file found: full task list with current check states
-and the Next Session section. Verbatim.>
-
-#### Active goals and focus
-<From active.md: Active Goals and Current Focus only.>
-
-#### Project constraints
-<From project.md: Constraints and Priority Hierarchy only.
-Omit if project.md not found.>
-
-#### Canon facts
-<Full list of canon facts — do not contradict them in the
-updated plan.>
-
-Word budget: 400 words maximum.
-```
-
-### How the main agent uses the output
-
-1. **Launch sub-agent** (use the cheapest/fastest model available — this is a file-reading task, not a reasoning task) with the prompt above
-2. **Receive structured context** — `.cp/` files are now
-   out of main context
-3. **Use context + session direction** to produce or update
+1. **Read the files directly** and build the context
+   summary above.
+2. **Use context + session direction** to produce or update
    the plan file
-4. **Show draft** to human for review before writing
+3. **Show draft** to human for review before writing
 
 ---
 
@@ -185,9 +164,8 @@ Word budget: 400 words maximum.
 
 When `cp-plan` is invoked the agent performs these steps:
 
-1. **Launch sub-agent** to read `.cp/` files (see
-   Sub-agent execution above). Wait for the structured
-   context.
+1. **Read `.cp/` files directly** (see File reading above)
+   and build the internal context summary.
 
 2. **Produce or update** `.cp/plans/plan-<slug>.md` using
    this structure:

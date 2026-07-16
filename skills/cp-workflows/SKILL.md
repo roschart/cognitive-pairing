@@ -40,13 +40,15 @@ When working during a session:
 
 ---
 
-## Sub-Agent Pattern
+## File Reading
 
-All `.cp/` file reading happens via sub-agents:
-- `.cp/` files never enter main context
-- Main agent receives structured output only (≤600 words)
-- Skills specify intent ("cheapest/fastest available"), not
-  model names
+All `.cp/` file reading is done directly by the main agent:
+- Read `.cp/` files yourself with the file-reading tool
+- Do not delegate `.cp/` reads to a sub-agent — this task is
+  small enough not to need one, and delegating it adds
+  overhead without saving context
+- Skills that need `.cp/` content specify which files to read
+  and how to summarize them internally
 
 ---
 
