@@ -12,6 +12,9 @@ must respect. Only the human approves additions or removals.
 - Skills are agent-executed, not copy-paste prompts
 - Skills use folder structure: `skill-name/SKILL.md`
 - YAML frontmatter requires `name` and `description` fields
+- Skills are authored and reviewed in this repository's `skills/`
+- Deploy skills through this repository's Makefile; never edit deployed
+  copies in user directories directly
 - Deploy targets: `~/.copilot/skills/` and `~/.codex/skills/`
 - `.cp/` directory is analogous to `.git/` — infrastructure,
   not content

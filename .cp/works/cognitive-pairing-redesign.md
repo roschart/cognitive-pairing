@@ -5,10 +5,10 @@
 CP is being redesigned using lessons from months of daily use. Its
 purpose is to keep a human and an AI agent aligned while work outlasts
 one conversation, without forcing documentation on small tasks. This
-work currently emphasizes discovery. Its first artifact maps the
-current skills and artifacts to their proposed successors and records
-a candidate Git milestone flow. Next: test the minimum work-document
-contract against three work sizes.
+work now has a mapping of existing skills and artifacts and a candidate
+Git milestone flow. Drafts of `cp-sync` and `cp-work` exist in this
+repository but are not deployed. A `cp-milestone` draft now exists.
+Next: review the first milestone commit before testing `cp-work`.
 
 ## Why This Work Exists
 
@@ -94,7 +94,8 @@ task need not create one. `cp-work` can create it explicitly;
 `cp-start` selects and reads it. The agent maintains it during ordinary
 work, while `cp-sync` reconciles its state and reports a short delta.
 Related works link to each other; a parent is another work, not a
-mandatory project layer.
+mandatory project layer. Tasks remain simple checks unless a block
+needs its own context or subordinate checks.
 
 ### Executive Summary
 
@@ -110,23 +111,25 @@ ordinary parts of the document unless they need their own skill contract.
 ### Git Milestone Marker
 
 **Present:** Git versions documents, but CP has no agreed convention for
-finding significant states in commit history. **Future:** An optional,
-searchable marker in the message of a human-approved commit identifies
-a milestone for one work. It is not another Markdown artifact, a
-routine `cp-sync` output, or a reason for a skill to commit on its own.
+finding significant states in commit history. **Future:** A searchable
+marker in a human-approved commit identifies a declared milestone for
+one work. It is not another Markdown artifact or a routine `cp-sync`
+output; a sync alone never authorizes a commit.
 The exact convention and retrieval command remain to be defined.
 The first proposed convention uses a descriptive commit subject with
 `CP-Work: <slug>` and `CP-Milestone: <slug>` in the message body. A
 candidate lookup is:
 
 ```bash
-git log --oneline --grep='^CP-Milestone:' -- .cp/works/<slug>.md
+git log --oneline --all-match \
+  --grep='^CP-Work: <slug>$' --grep='^CP-Milestone:'
 ```
 
-The work document must be included in the approved commit. Related code
-may join it only after reviewing the exact file set. A milestone does
-not imply that the work is complete, a PR exists, or an external work
-item changes state.
+Include the work document when syncing changes it; do not manufacture
+an edit just to make the commit appear in its path history. Review the
+exact file set before including related code. A milestone always syncs
+and commits, but it does not imply that the work is complete, a PR
+exists, or an external work item changes state.
 
 ## Skills
 
@@ -191,14 +194,16 @@ conversation to replace `memory/active.md`; the built-in `/compact`
 must be run separately to free conversation context. **Strength:**
 Captures operational state during ongoing work. **Future:** Replace
 with `cp-sync` (candidate), which reconciles only the selected work.
-Copilot's `/compact` remains a separate operation.
+Copilot's `/compact` remains a separate operation, useful after any
+sync that has made the work safe to resume.
 
 ### `cp-checkpoint`
 
 **Present:** Reads memory, canon, and the latest checkpoint and creates
 a dated immutable file at a milestone. **Tension:** These files have
-not proved useful for resuming work. **Future:** Retire; an optional,
-approved Git milestone marker replaces new checkpoint files.
+not proved useful for resuming work. **Future:** Retire; an approved
+Git milestone commit replaces new checkpoint files when a milestone is
+declared.
 
 ### `cp-session-end`
 
@@ -228,31 +233,38 @@ small task. If a resumed conversation's association is uncertain, ask.
 
 ### `cp-work` (candidate)
 
-**Present:** Does not exist. **Future:** Explicitly create or reshape
-a work document, including an optional coordinating parent. Use a
-small structure by default and add sections when they solve a real
-problem. This skill is not the sole editor: the agent may maintain
-the selected work during ordinary collaboration.
+**Present:** An opt-in draft exists in `skills/cp-work/`; it has not
+been deployed or field-tested. **Future:** Explicitly create or reshape
+a work document, including an optional coordinating parent. Use a small
+structure by default and add sections when they solve a real problem.
+This skill is not the sole editor: the agent may maintain the selected
+work during ordinary collaboration.
 
 ### `cp-sync` (candidate)
 
-**Present:** Does not exist. **Future:** Reconcile the selected work
-with the conversation and actual outcomes; verify tasks, decisions,
-and especially the executive summary. Write only meaningful changes,
-then show a brief delta for human correction. Ask rather than guess
-the work if its identity is uncertain; never silently amend canon or
-create a commit. It does not free Copilot's context window.
+**Present:** An opt-in draft exists in `skills/cp-sync/`; this document
+is its manual trial, not a run of an installed skill. **Future:**
+Reconcile the selected work with the conversation and actual outcomes;
+verify tasks, decisions, and especially the executive summary. Write
+only meaningful changes, then show a brief delta for human correction.
+Ask rather than guess the work if its identity is uncertain; never
+silently amend canon or create a commit. It does not free Copilot's
+context window.
 
 ### `cp-milestone` (candidate)
 
-**Present:** Does not exist. **Future:** Invoke `cp-sync` for the
-selected work, show its delta and the exact proposed file set, and
-request explicit approval before committing only the reviewed changes
-with searchable work and milestone markers. Suggest `/compact` after
-the commit if the conversation continues; do not run it automatically.
-Opening a PR and moving an external work item to review are common
-follow-up steps in professional work, not prerequisites or automatic
-consequences of a CP milestone. Personal work needs no work item.
+**Present:** An opt-in draft exists in `skills/cp-milestone/`; it has
+not been deployed or used to commit.
+**Future:** Invoke `cp-sync` for the selected work, show its delta and
+the exact proposed file set, and request explicit approval before
+committing only the reviewed changes with searchable work and milestone
+markers. Suggest `/compact` after the commit if the conversation
+continues; do not run it automatically.
+Opening a PR and updating or closing an external work item are optional
+follow-up steps, not prerequisites or automatic consequences of a CP
+milestone. Their links may be added to the work when available; a PR
+created after the commit cannot be linked in that same commit. Personal
+work needs no work item.
 
 ### `cp-migrate` (candidate)
 
@@ -299,10 +311,28 @@ migration cannot be handled safely as a one-time guided process.
   the agent asks rather than updating an inferred destination.
 - Starting a conversation lists available works before reading one.
   Syncing writes the selected document and reports a short delta for
-  human correction. Copilot's `/compact` separately frees context.
+  human correction. Copilot's `/compact` separately frees context and
+  can follow a routine sync without a milestone commit.
 - The current document is the live state. Milestones, if worth marking,
-  use approved Git commits with a searchable message convention rather
-  than appended checkpoint files. No skill commits automatically.
+  require a sync and an approved Git commit with a searchable message
+  convention rather than appended checkpoint files. No skill commits
+  without human approval.
+
+## Task Representation
+
+Default to checklist items for bounded tasks and nested checks for
+straightforward breakdowns. Use a `###` heading under `## Tasks` only
+when a substantial block needs its own context, criteria, or subordinate
+checks; its heading groups the checks rather than introducing a second
+status field. Do not turn every checkbox into a structured record.
+
+PRs and external work items are optional links, not properties every
+task must carry. Place a link beneath a task when the relationship is
+useful and unambiguous; place it at work or milestone level when it
+spans several tasks. Omit absent links rather than writing `PR: no` or
+`Work item: no`. A task may span multiple PRs, and a PR may cover
+multiple tasks. Add links when known, without rewriting an earlier
+milestone commit solely to record a PR created afterward.
 
 ## Work Modes
 
@@ -342,18 +372,50 @@ cannot, the next task is discovery, not a vague implementation checkbox.
           including content that must survive migration.
 - [ ] Define a usable work-document contract.
     - [ ] Test a tiny work, a paused long-running work, and a parent with
-          children; identify the minimum and optional sections for each.
+          children; test the adaptive task format and identify the
+          minimum and optional sections for each.
     - [ ] Define how the executive summary stays concise and accurate
           when tasks or decisions change.
     - [ ] Define work selection, pause, follow-up, completion, rejection,
           and archive behavior without forcing exclusive modes.
+- [ ] Draft and exercise `cp-sync` on this work.
+    - [x] Draft an opt-in sync for one explicitly selected,
+          existing work without requiring `cp-work` or migrating
+          legacy artifacts.
+    - [x] Reconcile this document with verified outcomes and the
+          current conversation; check tasks, decisions, and executive
+          summary without inventing progress or committing changes.
+    - [ ] Review the resulting delta and refine the sync contract
+          before testing another work.
+- [ ] Mark the first milestone before testing `cp-work`.
+    - [x] Draft `cp-milestone` to sync the selected work, present
+          the exact commit scope and message for approval, and
+          suggest `/compact` afterward.
+    - [ ] Review the synced work and selected repository changes,
+          then make an approved, searchable milestone commit.
+    - [ ] Suggest the built-in `/compact` after committing; the human
+          decides when to run it.
+- [ ] Field-test the first `cp-work` draft on two real works.
+    - [x] Draft `cp-work` in this repository as an opt-in trial.
+    - [ ] Deploy it through the repository Makefile when approved;
+          never edit installed copies directly.
+    - [ ] Have a separate agent use it to review or reshape this
+          redesign work, preserving its useful content.
+    - [ ] Have a separate agent use it to create a work for the idle
+          Alloy log-replay investigation (AB#13452); do not investigate
+          or change Alloy or the external work item in this trial.
+    - [ ] Review both documents for factual accuracy, useful task
+          granularity, concise orientation, and optional links;
+          refine `cp-work` and revisit `cp-sync` from observed failures.
 - [ ] Turn the interaction model into actionable skill contracts.
     - [ ] Settle skill names and start/sync responsibilities, including
           a new task with no document and a resumed named conversation.
     - [ ] Specify sync's write target, short delta, no-change behavior,
           ambiguity handling, and canon-approval boundary.
     - [ ] Decide the milestone commit convention and a matching Git log
-          query; require no commit for routine syncs.
+          query, which files belong in the commit, and how later PR or
+          work-item links are recorded; require no commit for routine
+          syncs.
 - [ ] Design a safe migration using this repository as a first case.
     - [ ] Map each existing plan to a work; identify whether any project
           merits a coordinating parent work.
@@ -370,7 +432,10 @@ cannot, the next task is discovery, not a vague implementation checkbox.
 
 - Which proposed skill names and divisions of responsibility survive
   comparison with actual usage?
-- What exact content, if any, deserves a milestone marker in Git?
+- What qualifies as a milestone, and which related changes belong in
+  its approved Git commit?
+- What should mark a declared milestone if all relevant changes were
+  already committed and a sync produces no meaningful edits?
 - How should an active conversation discover that its selected work
   changed elsewhere before it syncs?
 - Does this iteration need a release number, and how does that relate
@@ -378,7 +443,6 @@ cannot, the next task is discovery, not a vague implementation checkbox.
 
 ## Next Action
 
-Test the minimum work-document contract with a tiny work, a paused
-long-running work, and a coordinating parent. Then define the executive
-summary's update rules before writing the first skill implementation
-brief.
+Review the selected work and exact files for the first approved
+milestone commit. After that, suggest `/compact` before field-testing
+`cp-work`.

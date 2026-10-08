@@ -24,13 +24,19 @@ skills/
 │       └── count_tokens.py
 ├── cp-hydrate/
 │   └── SKILL.md
+├── cp-milestone/
+│   └── SKILL.md
 ├── cp-plan/
 │   └── SKILL.md
 ├── cp-project/
 │   └── SKILL.md
 ├── cp-prune/
 │   └── SKILL.md
-└── cp-session-end/
+├── cp-session-end/
+│   └── SKILL.md
+├── cp-sync/
+│   └── SKILL.md
+└── cp-work/
     └── SKILL.md
 ```
 
@@ -70,9 +76,16 @@ All management artifacts live inside `.cp/`:
 | [cp-hydrate](cp-hydrate/SKILL.md) | Load context at session start |
 | [cp-compact](cp-compact/SKILL.md) | Compress session into memory |
 | [cp-checkpoint](cp-checkpoint/SKILL.md) | Create stable state at milestones |
+| [cp-milestone](cp-milestone/SKILL.md) | Sync and commit an approved work milestone (experimental) |
 | [cp-plan](cp-plan/SKILL.md) | Create/update living plans |
+| [cp-work](cp-work/SKILL.md) | Draft one opt-in work document (experimental) |
+| [cp-sync](cp-sync/SKILL.md) | Reconcile one selected work (experimental) |
 | [cp-prune](cp-prune/SKILL.md) | Remove stale content |
 | [cp-session-end](cp-session-end/SKILL.md) | End-of-session wrap-up |
+
+`cp-work`, `cp-sync`, and `cp-milestone` are field-test skills. They
+operate on one explicitly selected work at a time and do not change
+the existing artifact hierarchy or replace other skills yet.
 
 ## Recommended Execution Order
 
