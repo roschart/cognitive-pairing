@@ -7,9 +7,10 @@ purpose is to keep a human and an AI agent aligned while work outlasts
 one conversation, without forcing documentation on small tasks. This
 work now has a mapping of existing skills and artifacts and a candidate
 Git milestone flow. Drafts of `cp-sync`, `cp-work`, and `cp-milestone`
-exist in this repository but are not deployed. The first milestone is
-commit `87d7577`. Next: test the revised `cp-work` draft on this work
-and the paused Alloy investigation using a separate agent.
+are deployed to Copilot and Codex for testing, but remain experimental.
+The first milestone is commit `87d7577`. A separate agent manually
+reviewed this work against the `cp-work` draft before deployment.
+Next: test it on the paused Alloy investigation, then compare results.
 
 ## Why This Work Exists
 
@@ -233,17 +234,20 @@ small task. If a resumed conversation's association is uncertain, ask.
 
 ### `cp-work` (candidate)
 
-**Present:** An opt-in draft exists in `skills/cp-work/`; it has not
-been deployed or field-tested. **Future:** Explicitly create or reshape
-a work document, including an optional coordinating parent. Use a small
-structure by default and add sections when they solve a real problem.
+**Present:** An experimental draft exists in `skills/cp-work/` and is
+deployed to Copilot and Codex. Its first field test was a manual review
+before deployment, not an invocation of the installed skill.
+**Future:** Explicitly create or reshape a work document, including
+an optional coordinating parent. Use a small structure by default
+and add sections when they solve a real problem.
 This skill is not the sole editor: the agent may maintain the selected
 work during ordinary collaboration.
 
 ### `cp-sync` (candidate)
 
-**Present:** An opt-in draft exists in `skills/cp-sync/`; this document
-is its manual trial, not a run of an installed skill. **Future:**
+**Present:** An experimental draft exists in `skills/cp-sync/` and is
+deployed to Copilot and Codex. Its trial on this document was manual,
+not a run of an installed skill. **Future:**
 Reconcile the selected work with the conversation and actual outcomes;
 verify tasks, decisions, and especially the executive summary. Write
 only meaningful changes, then show a brief delta for human correction.
@@ -253,9 +257,10 @@ context window.
 
 ### `cp-milestone` (candidate)
 
-**Present:** An opt-in draft exists in `skills/cp-milestone/`; it has
-not been deployed or invoked as an installed skill. The first
-milestone commit (`87d7577`) followed its proposed convention.
+**Present:** An experimental draft exists in `skills/cp-milestone/` and
+is deployed to Copilot and Codex, but has not been invoked as an
+installed skill. The first milestone commit (`87d7577`) followed its
+proposed convention.
 **Future:** Invoke `cp-sync` for the selected work, show its delta and
 the exact proposed file set, and request explicit approval before
 committing only the reviewed changes with searchable work and milestone
@@ -399,10 +404,11 @@ cannot, the next task is discovery, not a vague implementation checkbox.
 - [ ] Field-test the first `cp-work` draft on two real works.
     - [x] Draft `cp-work` in this repository as an opt-in trial.
     - [x] Refine the draft and agree on test prompts and review criteria.
-    - [ ] Deploy it through the repository Makefile when approved;
-          never edit installed copies directly.
-    - [ ] Have a separate agent use it to review or reshape this
-          redesign work, preserving its useful content.
+    - [x] Deploy it to Copilot and Codex through the repository
+          Makefile; never edit installed copies directly.
+    - [x] Have a separate agent use the checked-in draft to review
+          this redesign work, preserving its useful content; the
+          draft was not invoked as an installed skill.
     - [ ] Have a separate agent use it to create a work for the idle
           Alloy log-replay investigation (AB#13452); do not investigate
           or change Alloy or the external work item in this trial.
@@ -448,5 +454,5 @@ cannot, the next task is discovery, not a vague implementation checkbox.
 
 ## Next Action
 
-Field-test the checked-in `cp-work` draft on this work and the paused
-Alloy investigation, then review the resulting documents.
+Field-test the checked-in `cp-work` draft on the paused Alloy
+investigation, then review both field-test results.

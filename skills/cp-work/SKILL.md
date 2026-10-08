@@ -84,9 +84,11 @@ Leave legacy artifacts untouched.
 
 ## Finish
 
-Create or edit only the selected work file. Report its path, current
-state, next action, and any unresolved attribution or canon conflicts.
-Let the human review it. This skill manages the work document; do not
-investigate the underlying engineering issue, modify application code
-or external work items, commit, open a PR, or claim a milestone as an
-implicit side effect.
+Create or edit only the selected work file. If reviewing an existing
+work reveals no meaningful improvement, leave it untouched; do not
+edit merely to record that this skill was exercised. Report its path,
+current state, next action, and any unresolved attribution or canon
+conflicts. Let the human review it. This skill manages the work
+document; do not investigate the underlying engineering issue, modify
+application code or external work items, commit, open a PR, or claim a
+milestone as an implicit side effect.
