@@ -8,9 +8,10 @@ one conversation, without forcing documentation on small tasks. This
 work now has a mapping of existing skills and artifacts and a candidate
 Git milestone flow. Drafts of `cp-sync`, `cp-work`, and `cp-milestone`
 are deployed to Copilot and Codex for testing, but remain experimental.
-The first milestone is commit `87d7577`. A separate agent manually
-reviewed this work against the `cp-work` draft before deployment.
-Next: test it on the paused Alloy investigation, then compare results.
+The first milestone is commit `87d7577`. Two field trials of `cp-work`
+produced satisfactory results: a manual review of this work and a new
+work for an external Alloy investigation. Next: reconcile `cp-sync`
+and `cp-workflows` reading rules with canon before further field tests.
 
 ## Why This Work Exists
 
@@ -235,8 +236,10 @@ small task. If a resumed conversation's association is uncertain, ask.
 ### `cp-work` (candidate)
 
 **Present:** An experimental draft exists in `skills/cp-work/` and is
-deployed to Copilot and Codex. Its first field test was a manual review
-before deployment, not an invocation of the installed skill.
+deployed to Copilot and Codex. A first review used the checked-in
+instructions before deployment; a second agent produced a work for
+the paused Alloy investigation after deployment. The agent's use of
+the installed skill was not independently verified here.
 **Future:** Explicitly create or reshape a work document, including
 an optional coordinating parent. Use a small structure by default
 and add sections when they solve a real problem.
@@ -246,8 +249,8 @@ work during ordinary collaboration.
 ### `cp-sync` (candidate)
 
 **Present:** An experimental draft exists in `skills/cp-sync/` and is
-deployed to Copilot and Codex. Its trial on this document was manual,
-not a run of an installed skill. **Future:**
+deployed to Copilot and Codex. Its first trial on this document was
+manual; it has now been invoked to reconcile this work. **Future:**
 Reconcile the selected work with the conversation and actual outcomes;
 verify tasks, decisions, and especially the executive summary. Write
 only meaningful changes, then show a brief delta for human correction.
@@ -257,10 +260,10 @@ context window.
 
 ### `cp-milestone` (candidate)
 
-**Present:** An experimental draft exists in `skills/cp-milestone/` and
-is deployed to Copilot and Codex, but has not been invoked as an
-installed skill. The first milestone commit (`87d7577`) followed its
-proposed convention.
+**Present:** An experimental draft exists in `skills/cp-milestone/`
+and is deployed to Copilot and Codex. This work is its first
+installed trial. The earlier milestone commit (`87d7577`) followed
+its proposed convention.
 **Future:** Invoke `cp-sync` for the selected work, show its delta and
 the exact proposed file set, and request explicit approval before
 committing only the reviewed changes with searchable work and milestone
@@ -291,6 +294,9 @@ migration cannot be handled safely as a one-time guided process.
 - The checked-in skills direct the main agent to read `.cp/` files,
   while the canon mandates sub-agent reading. Decide which rule to
   keep; do not silently reconcile the contradiction.
+- `cp-workflows` discourages rereading `.cp/` files after hydration,
+  while `cp-sync` must reconcile the latest selected work. The human
+  authorized direct rereading for this trial; canon remains unchanged.
 - The current canon requires five artifact types and two bookends.
   Replacing them needs explicit human-approved canon changes.
 
@@ -366,6 +372,11 @@ cannot, the next task is discovery, not a vague implementation checkbox.
   that work and show a brief, factual delta after writing.
 - Keep Git commits under human control. A milestone marker is metadata
   on an approved commit, not a new checkpoint document.
+- For `cp-sync`, reread the selected work's executive summary and tasks
+  at minimum; consult decisions, risks, and other sections when the
+  conversation or possible external edits make them relevant. This
+  trial uses direct reading; update the conflicting framework rules
+  only after explicit canon approval.
 - Preserve existing artifacts during migration until their replacement
   has been reviewed. Revise canon only with explicit approval.
 
@@ -401,7 +412,7 @@ cannot, the next task is discovery, not a vague implementation checkbox.
           then make an approved, searchable milestone commit (`87d7577`).
     - [x] Suggest the built-in `/compact` after committing; the human
           decides when to run it.
-- [ ] Field-test the first `cp-work` draft on two real works.
+- [x] Field-test the first `cp-work` draft on two real works.
     - [x] Draft `cp-work` in this repository as an opt-in trial.
     - [x] Refine the draft and agree on test prompts and review criteria.
     - [x] Deploy it to Copilot and Codex through the repository
@@ -409,12 +420,13 @@ cannot, the next task is discovery, not a vague implementation checkbox.
     - [x] Have a separate agent use the checked-in draft to review
           this redesign work, preserving its useful content; the
           draft was not invoked as an installed skill.
-    - [ ] Have a separate agent use it to create a work for the idle
-          Alloy log-replay investigation (AB#13452); do not investigate
-          or change Alloy or the external work item in this trial.
-    - [ ] Review both documents for factual accuracy, useful task
-          granularity, concise orientation, and optional links;
-          refine `cp-work` and revisit `cp-sync` from observed failures.
+    - [x] Have a separate agent create a work for the idle Alloy
+          log-replay investigation (AB#13452), without investigating
+          or changing Alloy or the external work item.
+    - [x] Review both documents for factual accuracy, useful task
+          granularity, concise orientation, and optional links. The
+          outputs are sufficient for this test; Alloy follow-up
+          belongs to its own work in another repository.
 - [ ] Turn the interaction model into actionable skill contracts.
     - [ ] Settle skill names and start/sync responsibilities, including
           a new task with no document and a resumed named conversation.
@@ -454,5 +466,6 @@ cannot, the next task is discovery, not a vague implementation checkbox.
 
 ## Next Action
 
-Field-test the checked-in `cp-work` draft on the paused Alloy
-investigation, then review both field-test results.
+Decide how `cp-sync` rereads the selected work and align that behavior
+with `cp-workflows` and the human-approved canon before the next field
+tests.
