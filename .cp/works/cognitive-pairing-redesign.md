@@ -6,9 +6,10 @@ CP is being redesigned using lessons from months of daily use. Its
 purpose is to keep a human and an AI agent aligned while work outlasts
 one conversation, without forcing documentation on small tasks. This
 work now has a mapping of existing skills and artifacts and a candidate
-Git milestone flow. Drafts of `cp-sync` and `cp-work` exist in this
-repository but are not deployed. A `cp-milestone` draft now exists.
-Next: review the first milestone commit before testing `cp-work`.
+Git milestone flow. Drafts of `cp-sync`, `cp-work`, and `cp-milestone`
+exist in this repository but are not deployed. The first milestone is
+commit `87d7577`. Next: test the revised `cp-work` draft on this work
+and the paused Alloy investigation using a separate agent.
 
 ## Why This Work Exists
 
@@ -115,10 +116,9 @@ finding significant states in commit history. **Future:** A searchable
 marker in a human-approved commit identifies a declared milestone for
 one work. It is not another Markdown artifact or a routine `cp-sync`
 output; a sync alone never authorizes a commit.
-The exact convention and retrieval command remain to be defined.
-The first proposed convention uses a descriptive commit subject with
+The first milestone used a descriptive commit subject with
 `CP-Work: <slug>` and `CP-Milestone: <slug>` in the message body. A
-candidate lookup is:
+working lookup is:
 
 ```bash
 git log --oneline --all-match \
@@ -254,7 +254,8 @@ context window.
 ### `cp-milestone` (candidate)
 
 **Present:** An opt-in draft exists in `skills/cp-milestone/`; it has
-not been deployed or used to commit.
+not been deployed or invoked as an installed skill. The first
+milestone commit (`87d7577`) followed its proposed convention.
 **Future:** Invoke `cp-sync` for the selected work, show its delta and
 the exact proposed file set, and request explicit approval before
 committing only the reviewed changes with searchable work and milestone
@@ -387,16 +388,17 @@ cannot, the next task is discovery, not a vague implementation checkbox.
           summary without inventing progress or committing changes.
     - [ ] Review the resulting delta and refine the sync contract
           before testing another work.
-- [ ] Mark the first milestone before testing `cp-work`.
+- [x] Mark the first milestone before testing `cp-work`.
     - [x] Draft `cp-milestone` to sync the selected work, present
           the exact commit scope and message for approval, and
           suggest `/compact` afterward.
-    - [ ] Review the synced work and selected repository changes,
-          then make an approved, searchable milestone commit.
-    - [ ] Suggest the built-in `/compact` after committing; the human
+    - [x] Review the synced work and selected repository changes,
+          then make an approved, searchable milestone commit (`87d7577`).
+    - [x] Suggest the built-in `/compact` after committing; the human
           decides when to run it.
 - [ ] Field-test the first `cp-work` draft on two real works.
     - [x] Draft `cp-work` in this repository as an opt-in trial.
+    - [x] Refine the draft and agree on test prompts and review criteria.
     - [ ] Deploy it through the repository Makefile when approved;
           never edit installed copies directly.
     - [ ] Have a separate agent use it to review or reshape this
@@ -423,6 +425,9 @@ cannot, the next task is discovery, not a vague implementation checkbox.
           clear; present ambiguous content for human review.
     - [ ] Retain source files until new works have been checked, and
           define an archive/rollback path.
+- [ ] Revisit the draft `cp-work`, `cp-sync`, and `cp-milestone` skills
+      after field tests and migration decisions; adjust their contracts
+      together before treating them as stable.
 - [ ] Implement the agreed skills and migration path; update docs and
       propose canon changes for explicit human approval.
 - [ ] Validate human orientation and isolated sync with two concurrent
@@ -443,6 +448,5 @@ cannot, the next task is discovery, not a vague implementation checkbox.
 
 ## Next Action
 
-Review the selected work and exact files for the first approved
-milestone commit. After that, suggest `/compact` before field-testing
-`cp-work`.
+Field-test the checked-in `cp-work` draft on this work and the paused
+Alloy investigation, then review the resulting documents.
