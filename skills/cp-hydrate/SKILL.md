@@ -1,6 +1,7 @@
 ---
 name: cp-hydrate
 description: >
+  Legacy session-start flow, slated for retirement after migration.
   Load operational context at the start of a new session. The agent
   reads .cp/ artifacts (project.md, canon.md, latest checkpoint,
   memory/active.md) and the active plans, then shows an alignment
@@ -14,6 +15,15 @@ metadata:
 # cp-hydrate
 
 Load operational context at the start of a new session.
+
+## Migration notice
+
+Before loading legacy artifacts, tell the human that `cp-hydrate`
+uses the older, scope-wide session flow. For a new work-based
+conversation, recommend `cp-start`, which selects one work. If the
+human still uses legacy artifacts, offer to continue with
+`cp-hydrate` as written. Wait for their choice before proceeding.
+Do not migrate files or invoke `cp-start` automatically.
 
 ---
 

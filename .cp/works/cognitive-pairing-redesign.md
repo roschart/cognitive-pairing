@@ -13,8 +13,11 @@ produced satisfactory results: a manual review of this work and a new
 work for an external Alloy investigation. The checked-in
 `cp-workflows` now describes migration and work freshness, and a local
 `cp-start` draft starts one selected work without global hydration.
-Canon now recognizes both flows and direct, scoped reading. Next:
-review and field-test `cp-start`, then add legacy-skill warnings.
+Canon now recognizes both flows and direct, scoped reading. Six
+legacy skills now carry migration notices; a temporary `cp-migrate`
+draft proposes reviewed conversion without moving existing
+artifacts. Next: review `cp-start`, deploy the aligned drafts,
+and field-test the new skills.
 
 ## Why This Work Exists
 
@@ -282,12 +285,13 @@ work needs no work item.
 
 ### `cp-migrate` (candidate)
 
-**Present:** Does not exist. **Future:** Support a reviewed conversion
-of projects and plans to works, attributing global memory and old
-checkpoint content only where ownership is clear. Keep historical
-plan and memory archives and all other sources intact until the new
-works are verified. A dedicated skill is justified only if the
-migration cannot be handled safely as a one-time guided process.
+**Present:** A temporary, untested draft exists in
+`skills/cp-migrate/`; it has not been deployed or run. **Future:**
+Support a reviewed conversion of projects and plans to works,
+attributing active memory and checkpoint content only where ownership
+is clear. Archive historical checkpoints after review and separate
+approval. Keep other sources intact until the new works are verified;
+decide their retirement separately.
 
 ## Cross-Cutting Tensions
 
@@ -416,7 +420,7 @@ cannot, the next task is discovery, not a vague implementation checkbox.
     - [x] Obtain human approval and update canon for direct reading,
           work state, and coexistence with legacy session flows;
           align dependent work-based skill contracts.
-    - [ ] Mark legacy skills slated for retirement so they warn users
+    - [x] Mark legacy skills slated for retirement so they warn users
           when invoked during migration, without changing their
           behavior or losing legacy artifacts.
 - [ ] Draft and field-test `cp-start` alongside `cp-hydrate`.
@@ -459,6 +463,9 @@ cannot, the next task is discovery, not a vague implementation checkbox.
           work-item links are recorded; require no commit for routine
           syncs.
 - [ ] Design a safe migration using this repository as a first case.
+    - [x] Draft a temporary `cp-migrate` skill for reviewed conversion
+          of legacy plans, project, and active memory into works, and
+          separate archival of historical checkpoints.
     - [ ] Map each existing plan to a work; identify whether any project
           merits a coordinating parent work.
     - [ ] Attribute global memory and checkpoints only when ownership is
@@ -488,6 +495,7 @@ cannot, the next task is discovery, not a vague implementation checkbox.
 
 ## Next Action
 
-Review and field-test `cp-start` selection behavior. Add warnings to
-legacy skills, then deploy aligned repository versions through the
-Makefile without retiring the legacy skills or artifacts.
+Review `cp-start` selection behavior. The legacy-skill warnings and
+`cp-migrate` draft are complete but undeployed. After review, deploy
+the aligned repository versions through the Makefile, then field-test
+the new skills before migrating legacy artifacts.

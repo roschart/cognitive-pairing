@@ -1,6 +1,7 @@
 ---
 name: cp-session-end
 description: >
+  Legacy session-close flow, slated for retirement after migration.
   Structured end-of-session wrap-up that ensures state is
   captured before closing. Sequences cp-compact, optionally
   cp-checkpoint and cp-plan updates, then produces a session
@@ -15,6 +16,17 @@ metadata:
 
 Structured end-of-session wrap-up that ensures state is
 captured before closing.
+
+## Migration notice
+
+Before starting the legacy wrap-up, tell the human that
+`cp-session-end` writes scope-wide state and is slated for
+retirement after migration. For a selected work, recommend
+`cp-sync` before pausing or optionally running the separate runtime
+`/compact`; the work-based flow has no required session-end ritual.
+If the human still uses legacy artifacts, offer to continue with
+`cp-session-end` as written. Wait for their choice before
+proceeding. Do not migrate files or invoke `cp-sync` automatically.
 
 ---
 

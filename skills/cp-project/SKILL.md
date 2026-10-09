@@ -1,7 +1,8 @@
 ---
 name: cp-project
 description: >
-  Create or refine the project declaration (.cp/project.md)
+  Legacy project-declaration flow, slated for retirement after
+  migration. Create or refine the project declaration (.cp/project.md)
   that defines intent, constraints, style, and scope. Use when
   starting a project with non-trivial complexity, when multiple
   plans are anticipated, or when the project's identity needs
@@ -16,6 +17,17 @@ metadata:
 
 Create or refine the project declaration that frames all work
 in the project.
+
+## Migration notice
+
+Before changing the legacy project declaration, tell the human that
+`cp-project` maintains `.cp/project.md` and is slated for retirement
+after migration. For a new work-based effort, recommend `cp-work`,
+which can create a coordinating parent work when shared direction
+needs one. If the human still uses the legacy project document,
+offer to continue with `cp-project` as written. Wait for their
+choice before proceeding. Do not migrate files or invoke `cp-work`
+automatically.
 
 ---
 

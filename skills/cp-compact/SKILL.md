@@ -1,6 +1,7 @@
 ---
 name: cp-compact
 description: >
+  Legacy global-memory flow, slated for retirement after migration.
   Compress the current session's working state into a minimal
   operational context file (.cp/memory/active.md). Use when more
   than ~30 exchanges have passed without compaction, before major
@@ -16,6 +17,17 @@ metadata:
 
 Compress the current session's working state into a minimal
 operational context file (`.cp/memory/active.md`).
+
+## Migration notice
+
+Before replacing global memory, tell the human that `cp-compact`
+maintains the older `.cp/memory/active.md` and is slated for
+retirement after migration. For a selected work, recommend
+`cp-sync` to persist its state; the runtime `/compact` is a
+separate, optional action to free conversation context. If the
+human still uses global memory, offer to continue with
+`cp-compact` as written. Wait for their choice before proceeding.
+Do not migrate files or invoke `cp-sync` automatically.
 
 ---
 

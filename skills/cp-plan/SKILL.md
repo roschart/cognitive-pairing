@@ -1,6 +1,7 @@
 ---
 name: cp-plan
 description: >
+  Legacy planning flow, slated for retirement after migration.
   Create or update a living plan document for a project or
   workstream. Use when starting a new plan, after major direction
   changes, after several sessions to mark completed work, or when
@@ -15,6 +16,16 @@ metadata:
 
 Create or update a living plan document for a project or
 workstream.
+
+## Migration notice
+
+Before changing a legacy plan, tell the human that `cp-plan`
+maintains `.cp/plans/` and is slated for retirement after migration.
+For new work-based planning, recommend `cp-work`, which creates or
+deliberately reshapes one work. If the human still uses legacy
+plans, offer to continue with `cp-plan` as written. Wait for their
+choice before proceeding. Do not migrate files or invoke `cp-work`
+automatically.
 
 ---
 

@@ -1,6 +1,7 @@
 ---
 name: cp-checkpoint
 description: >
+  Legacy checkpoint flow, slated for retirement after migration.
   Create a stable, recoverable state artifact at a coherent
   milestone. Use when a meaningful phase completes, before major
   pivots, before long pauses, or after resolving significant
@@ -15,6 +16,17 @@ metadata:
 
 Create a stable, recoverable state artifact at a coherent
 milestone.
+
+## Migration notice
+
+Before creating a legacy checkpoint, tell the human that
+`cp-checkpoint` creates scope-wide snapshot files and is slated
+for retirement after migration. Recommend `cp-milestone` only
+when the human wants to mark a significant state with an approved,
+searchable Git commit; routine state capture needs only `cp-sync`.
+If the human still uses checkpoints, offer to continue with
+`cp-checkpoint` as written. Wait for their choice before proceeding.
+Do not migrate files, commit, or invoke another skill automatically.
 
 ---
 

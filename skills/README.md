@@ -31,6 +31,8 @@ skills/
 │   └── SKILL.md
 ├── cp-milestone/
 │   └── SKILL.md
+├── cp-migrate/
+│   └── SKILL.md
 ├── cp-plan/
 │   └── SKILL.md
 ├── cp-project/
@@ -89,6 +91,7 @@ All management artifacts live inside `.cp/`:
 | [cp-compact](cp-compact/SKILL.md) | Compress session into memory |
 | [cp-checkpoint](cp-checkpoint/SKILL.md) | Create stable state at milestones |
 | [cp-milestone](cp-milestone/SKILL.md) | Sync and commit an approved work milestone (experimental) |
+| [cp-migrate](cp-migrate/SKILL.md) | Review legacy-to-work conversion (temporary draft) |
 | [cp-plan](cp-plan/SKILL.md) | Create/update living plans |
 | [cp-work](cp-work/SKILL.md) | Draft one opt-in work document (experimental) |
 | [cp-sync](cp-sync/SKILL.md) | Reconcile one selected work (experimental) |
@@ -100,6 +103,11 @@ All management artifacts live inside `.cp/`:
 `cp-start` has not yet been deployed. The work-based skills
 focus on one selected work (or a small task without a work document)
 and do not migrate legacy artifacts or retire other skills yet.
+The six legacy skills slated for retirement show an invocation-time
+notice and remain usable. `cp-prune`, `cp-discover`, and
+`cp-brainstorming` have no retirement notice. `cp-migrate` is a
+temporary, untested draft for a separately approved conversion; it
+does not run as part of the normal work-based flow.
 
 ## Recommended Execution Order
 
