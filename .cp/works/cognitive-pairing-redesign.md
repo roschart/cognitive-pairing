@@ -13,8 +13,8 @@ produced satisfactory results: a manual review of this work and a new
 work for an external Alloy investigation. The checked-in
 `cp-workflows` now describes migration and work freshness, and a local
 `cp-start` draft starts one selected work without global hydration.
-Canon still needs human-approved alignment. Next: review the `cp-start`
-draft and agree on the canon amendment.
+Canon now recognizes both flows and direct, scoped reading. Next:
+review and field-test `cp-start`, then add legacy-skill warnings.
 
 ## Why This Work Exists
 
@@ -149,8 +149,7 @@ that every skill is used regularly.
 It requires fresh reading of the selected work before reconciling it.
 **Strength:** One scope-resolution mechanism. **Future:** Retain for
 one selected work per conversation, without mandatory session closure
-or global active state. The conflicting canon rules still require
-human-approved changes.
+or global active state. Canon now recognizes the transitional model.
 
 ### `cp-discover`
 
@@ -297,15 +296,11 @@ migration cannot be handled safely as a one-time guided process.
 - Plan `Next Session`, global memory, and checkpoint `Pending Work`
   can disagree. The executive summary must reflect current tasks
   without becoming another competing task list.
-- The checked-in skills direct the main agent to read `.cp/` files,
-  while the canon mandates sub-agent reading. Decide which rule to
-  keep; do not silently reconcile the contradiction.
-- `cp-workflows` now requires a fresh read of the selected work before
-  editing; installed copies still contain the older no-rereading rule
-  until the repository change is deployed. Canon still requires
-  sub-agent reading, so the conflict is not fully resolved.
-- The current canon requires five artifact types and two bookends.
-  Replacing them needs explicit human-approved canon changes.
+- Canon now permits direct, scoped reading and a fresh read before
+  editing a work. Installed copies may still carry the older
+  no-rereading rule until deployment through the Makefile.
+- Legacy and work-based skills coexist; retiring legacy artifacts
+  still requires a reviewed migration and preservation of useful state.
 
 ## Target Model
 
@@ -384,9 +379,7 @@ cannot, the next task is discovery, not a vague implementation checkbox.
   on an approved commit, not a new checkpoint document.
 - For `cp-sync`, reread the selected work's executive summary and tasks
   at minimum; consult decisions, risks, and other sections when the
-  conversation or possible external edits make them relevant. This
-  trial uses direct reading; update the conflicting framework rules
-  only after explicit canon approval.
+  conversation or possible external edits make them relevant.
 - Preserve existing artifacts during migration until their replacement
   has been reviewed. Revise canon only with explicit approval.
 
@@ -420,9 +413,9 @@ cannot, the next task is discovery, not a vague implementation checkbox.
     - [x] Update the checked-in `cp-workflows` to describe coexistence
           of legacy skills and works, and require a fresh read before
           editing the selected work.
-    - [ ] Propose and obtain explicit human approval for canon changes
-          to the reading model, artifact types, and session bookends;
-          align dependent skill contracts with the approved rules.
+    - [x] Obtain human approval and update canon for direct reading,
+          work state, and coexistence with legacy session flows;
+          align dependent work-based skill contracts.
     - [ ] Mark legacy skills slated for retirement so they warn users
           when invoked during migration, without changing their
           behavior or losing legacy artifacts.
@@ -475,8 +468,8 @@ cannot, the next task is discovery, not a vague implementation checkbox.
 - [ ] Revisit the draft `cp-work`, `cp-sync`, and `cp-milestone` skills
       after field tests and migration decisions; adjust their contracts
       together before treating them as stable.
-- [ ] Implement the agreed skills and migration path; update docs and
-      propose canon changes for explicit human approval.
+- [ ] Implement the agreed skills and migration path; update remaining
+      docs and seek human approval for any further canon changes.
 - [ ] Validate human orientation and isolated sync with two concurrent
       works, a weeks-old paused work, a tiny task, and a multi-repo case.
 
@@ -495,8 +488,6 @@ cannot, the next task is discovery, not a vague implementation checkbox.
 
 ## Next Action
 
-Review the `cp-start` draft and its selection behavior. Draft a canon
-amendment for direct reading, fresh work state, and migration
-coexistence; obtain human approval before writing canon. Then add
-warnings to legacy skills and deploy aligned repository versions
-through the Makefile.
+Review and field-test `cp-start` selection behavior. Add warnings to
+legacy skills, then deploy aligned repository versions through the
+Makefile without retiring the legacy skills or artifacts.

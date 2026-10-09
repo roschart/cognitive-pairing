@@ -51,11 +51,10 @@ consult decisions, risks, and other sections when relevant, and
 preserve unaffected content. Ask if the conversation and the current
 file cannot be reconciled reliably.
 
-Canon still requires sub-agent reading of `.cp/` files and describes
-legacy artifact types and session bookends. Those rules conflict with
-the checked-in reading instructions and the proposed migration. Do
-not claim this skill overrides canon: surface the conflict and seek
-explicit human approval before amending canon.
+Canon now recognizes direct, scoped reading and the coexistence of
+legacy and work-based skills. Follow the legacy skill's own artifact
+contract when it is explicitly invoked; do not silently turn a
+legacy operation into a work-based one.
 
 ## Maintaining a selected work
 

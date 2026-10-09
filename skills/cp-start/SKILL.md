@@ -45,9 +45,9 @@ as proof of selection.
 
 After selection, obtain this scope's `canon.md` when present and read
 only the selected work. Canon is shared across works; do not use a
-different scope's canon. If canon and the skill instructions disagree
-about reading `.cp/`, surface the conflict and request a human
-decision rather than claiming this draft changes canon.
+different scope's canon. Follow its reading rules; if they conflict
+with `cp-workflows`, surface the discrepancy. Do not load unrelated
+works or legacy global state.
 
 Use the work's executive summary for the objective, current state,
 and next action; consult tasks, decisions, risks, and other relevant

@@ -22,9 +22,9 @@ the nearest `.cp/` found by searching downward. If there is no `.cp/`
 at this scope, stop and suggest `cp-discover` before creating a work.
 
 Use the canon already loaded in this conversation; otherwise obtain
-only this scope's `canon.md` when present. Respect the scope's rules
-for reading it; if those conflict with the installed `cp-workflows`
-instructions, surface the conflict instead of silently choosing one.
+only this scope's `canon.md` when present. Follow its reading rules;
+if they conflict with `cp-workflows`, surface the discrepancy rather
+than silently choosing one. Do not infer content from another scope.
 Do not load every plan, global memory, or the latest checkpoint to
 create a new work. If the proposed work conflicts with canon, make
 the discrepancy visible; never edit canon as part of this skill.

@@ -8,6 +8,11 @@ Skills are designed for AI agents — the agent reads the skill
 definition and executes it directly. Both the human and the agent
 benefit from the shared artifacts.
 
+The framework is being revised. Legacy skills and artifacts coexist
+with experimental work-based skills until a reviewed migration. See
+[canon](../.cp/canon.md) for current rules and the
+[redesign work](../.cp/works/cognitive-pairing-redesign.md) for open tasks.
+
 ## Folder Structure
 
 ```text
@@ -34,9 +39,13 @@ skills/
 │   └── SKILL.md
 ├── cp-session-end/
 │   └── SKILL.md
+├── cp-start/
+│   └── SKILL.md
 ├── cp-sync/
 │   └── SKILL.md
-└── cp-work/
+├── cp-work/
+│   └── SKILL.md
+└── cp-workflows/
     └── SKILL.md
 ```
 
@@ -57,6 +66,8 @@ All management artifacts live inside `.cp/`:
 .cp/
 ├── project.md          # Project declaration (intent)
 ├── canon.md            # Locked facts (human-curated)
+├── works/
+│   └── <slug>.md       # One independently resumable work
 ├── plans/
 │   ├── plan-<slug>.md  # Living plans
 │   └── archive/        # Completed plans
@@ -74,6 +85,7 @@ All management artifacts live inside `.cp/`:
 | [cp-discover](cp-discover/SKILL.md) | Explore brownfield project and bootstrap `.cp/` |
 | [cp-project](cp-project/SKILL.md) | Create or refine the project declaration |
 | [cp-hydrate](cp-hydrate/SKILL.md) | Load context at session start |
+| [cp-start](cp-start/SKILL.md) | Select and orient one work (experimental) |
 | [cp-compact](cp-compact/SKILL.md) | Compress session into memory |
 | [cp-checkpoint](cp-checkpoint/SKILL.md) | Create stable state at milestones |
 | [cp-milestone](cp-milestone/SKILL.md) | Sync and commit an approved work milestone (experimental) |
@@ -82,15 +94,20 @@ All management artifacts live inside `.cp/`:
 | [cp-sync](cp-sync/SKILL.md) | Reconcile one selected work (experimental) |
 | [cp-prune](cp-prune/SKILL.md) | Remove stale content |
 | [cp-session-end](cp-session-end/SKILL.md) | End-of-session wrap-up |
+| [cp-workflows](cp-workflows/SKILL.md) | Shared scope and transition rules |
 
-`cp-work`, `cp-sync`, and `cp-milestone` are field-test skills. They
-operate on one explicitly selected work at a time and do not change
-the existing artifact hierarchy or replace other skills yet.
+`cp-start`, `cp-work`, `cp-sync`, and `cp-milestone` are experimental.
+`cp-start` has not yet been deployed. The work-based skills
+focus on one selected work (or a small task without a work document)
+and do not migrate legacy artifacts or retire other skills yet.
 
 ## Recommended Execution Order
 
-The human interacts with two bookends. Everything else is either
-embedded in those skills or proposed by the agent during work.
+The flow below remains available for legacy artifacts. The
+experimental alternative uses `cp-start` to select one work,
+maintains it during ordinary collaboration, and invokes `cp-sync`
+when it needs reconciliation. An approved `cp-milestone` marks a
+significant state; it is not required for routine syncs.
 
 ```text
 First time:        cp-discover (brownfield onboarding)

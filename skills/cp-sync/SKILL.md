@@ -31,10 +31,9 @@ invent evidence from missing context or assume that deployed changes
 fixed an issue. If essential state is missing or contradictory, ask
 for clarification before changing it.
 
-The current canon and `cp-workflows` disagree about who reads `.cp/`
-files and whether they can be reread during a session. Surface this
-conflict when exercising the draft; do not claim this skill silently
-changes those rules or rewrites canon.
+Canon and `cp-workflows` require fresh, scoped reading before edits.
+This skill never changes canon; propose additions for human approval
+outside the sync.
 
 ## Reconcile
 

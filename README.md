@@ -24,6 +24,12 @@ outlines, summaries, documentation. This framework formalizes
 those patterns into a set of composable, versionable,
 AI-readable artifacts.
 
+The artifact hierarchy and workflow below describe the legacy model.
+This repository is testing work-based skills alongside it; neither
+legacy skills nor their artifacts have been retired. The
+[canon](.cp/canon.md) defines the transitional rules, and the
+[redesign work](.cp/works/cognitive-pairing-redesign.md) tracks migration.
+
 ## Artifact Hierarchy
 
 | Artifact         | Question it answers             | Owner         | Lifecycle     |
