@@ -4,7 +4,7 @@ description: >
   Reconcile one selected Cognitive Pairing work document with verified
   progress and the current conversation. Use when the human asks to
   sync a work before pausing, compacting context, or marking a milestone,
-  or when its executive summary, tasks, or decisions may have drifted.
+  or when its executive summary, tasks, or other state may have drifted.
   Does not commit, compact the conversation, or sync unrelated works.
 ---
 
@@ -46,10 +46,13 @@ Update only meaningful differences in the selected work:
 - Mark tasks done only when the outcome is supported. Add, revise,
   or remove tasks when scope changes; keep unresolved work visible.
   Do not equate a PR or work-item status with CP task completion.
-- Record consequential decisions and newly relevant constraints
-  where the document already keeps them, or add a section when it
-  would genuinely help. Distinguish decisions from open questions
-  and hypotheses from observed facts.
+- Look for consequential content that emerged during the work but
+  was not captured: settled decisions, concrete risks, new
+  constraints, or open questions needed to resume. Use an existing
+  section where it fits; add a named section when the content
+  warrants its own place. Do not add empty sections, put open
+  alternatives among decisions, mistake hypotheses for facts, or
+  record insights the human declined to capture.
 - Preserve useful structure, technical context, existing links,
   and the state of unrelated tasks. Avoid rewriting stable prose
   merely to make the sync look productive.

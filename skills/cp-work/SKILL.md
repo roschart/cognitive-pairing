@@ -63,10 +63,15 @@ title and helpful headings rather than imposing new names:
   checks; it is not a second task status.
 
 Keep even an explicitly requested tiny work short: a title, brief
-orientation, and a few checks may be enough. Add other sections
-only when they help this work: for example,
-`## Decisions`, `## Risks`, `## Potential Work`, or a more specific
-technical heading. Keep open questions distinct from committed tasks.
+orientation, and a few checks may be enough. Let sections emerge
+from the work's actual complexity. Use an existing section when it
+fits; add `## Decisions` for consequential settled choices, `## Risks`
+for concrete risks, or another section when distinct content would
+help someone resume the work. Record useful rationale and impact
+without inventing certainty. Do not add empty sections or treat
+open alternatives, hypotheses, and vague concerns as settled facts.
+Respect the human's choice not to capture an insight.
+Keep open questions distinct from committed tasks.
 For a paused work, state what it is waiting for and what evidence will
 allow it to resume; do not label it completed or invent a status field.
 For a coordinating parent, record shared direction and dependencies;

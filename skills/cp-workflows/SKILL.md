@@ -1,82 +1,94 @@
 ---
 name: cp-workflows
-description: Foundation rules for cognitive-pairing framework. Load this skill when using any cp-* skill (cp-hydrate, cp-brainstorming, cp-session-end, etc.) to understand the session model and artifact coherence principles.
+description: >
+  Foundation rules for Cognitive Pairing during migration. Load with
+  any cp-* skill to resolve scope and distinguish legacy artifacts and
+  skills from the experimental work-based flow.
 ---
 
 # cp-workflows
 
-Foundation rules for the cognitive-pairing framework.
+Foundation rules for Cognitive Pairing during its migration. Load this
+skill with any `cp-*` skill to resolve the nearest `.cp/` scope and
+understand which contracts are current and which are experimental.
 
-**Load this skill when using any cp-* skill** (cp-hydrate,
-cp-brainstorming, cp-session-end, etc.) to ensure you understand
-the session model, artifact hierarchy, and context coherence
-principles.
+## Migration
 
----
+Legacy artifacts and skills remain available while the work-based
+model is tested. Do not delete or silently convert existing material.
 
-## Session Model
+- `cp-hydrate` and `cp-session-end` are candidates for replacement by
+  `cp-start` and `cp-sync`.
+- `cp-plan` and `cp-project` are candidates for replacement by
+  `cp-work`; `cp-compact` by `cp-sync`; `cp-checkpoint` by
+  `cp-milestone`. `cp-prune` may be retired after migration.
+- `cp-start`, `cp-work`, `cp-sync`, and `cp-milestone` exist but are
+  experimental. Their use does not automatically retire legacy skills.
+- `project.md`, `plans/`, `memory/active.md`, and `checkpoints/`
+  coexist with `works/`. Keep their existing content until a reviewed
+  migration establishes what belongs in each work.
 
-```
-cp-hydrate (start) → work → cp-session-end (close)
-```
+The legacy session flow is `cp-hydrate` at the start and optionally
+`cp-session-end` at the close. The proposed flow selects one work with
+`cp-start`, reconciles it with `cp-sync`, and marks significant states
+with `cp-milestone`. A sync is useful before a context compaction or
+pause; a milestone is optional and requires human approval to commit.
+Do not require a session-end ritual or a milestone for routine work.
+Follow the selected skill's existing contract during migration; when
+invoking a legacy skill, warn that it follows the older artifact flow
+rather than silently redirecting its writes to a work. Neither flow
+authorizes running the other automatically.
 
-- **cp-hydrate** loads context from `.cp/` at session start
-- **cp-session-end** persists state at session close
-- These are the two **human entry points** — most other skills
-  are orchestrated internally
+## Reading and coherence
 
----
+Read only the relevant `.cp/` artifacts directly in the main context.
+Do not load every work or delegate small file reads to a sub-agent.
+At orientation, use the selected skill's required context. Treat that
+context as a starting point, not an immutable snapshot: before
+reconciling or editing a work, read its latest version, even if it was
+read earlier. At minimum, check its executive summary and tasks;
+consult decisions, risks, and other sections when relevant, and
+preserve unaffected content. Ask if the conversation and the current
+file cannot be reconciled reliably.
 
-## Context Coherence
+Canon still requires sub-agent reading of `.cp/` files and describes
+legacy artifact types and session bookends. Those rules conflict with
+the checked-in reading instructions and the proposed migration. Do
+not claim this skill overrides canon: surface the conflict and seek
+explicit human approval before amending canon.
 
-**cp-hydrate loads context ONCE at session start.**
+## Maintaining a selected work
 
-When working during a session:
-- ✅ Use the context loaded by cp-hydrate (canon, project,
-  active memory, plans)
-- ❌ Do not reread `.cp/` files directly
-- ❓ If you need information not in session context, ask the
-  human instead of reading files
+When the human has opted into a work document, keep that selected work
+useful during ordinary collaboration, not only when `cp-work` or
+`cp-sync` runs. Record consequential settled choices, concrete risks,
+new constraints, and other information needed to resume the work as
+they emerge. Prefer an existing section; add a named section when
+the content warrants its own place. Do not add empty sections or
+turn open alternatives into decisions or vague concerns into risks.
+Respect a human choice not to capture an insight. `cp-sync` reviews
+the work for meaningful omissions or drift; it is not the only time
+the work can change.
 
----
+## Artifact precedence
 
-## File Reading
-
-All `.cp/` file reading is done directly by the main agent:
-- Read `.cp/` files yourself with the file-reading tool
-- Do not delegate `.cp/` reads to a sub-agent — this task is
-  small enough not to need one, and delegating it adds
-  overhead without saving context
-- Skills that need `.cp/` content specify which files to read
-  and how to summarize them internally
-
----
-
-## Artifact Hierarchy
-
-```
-Canon > Project > Plan > Memory > Checkpoint
-```
-
-- **Canon**: immutable ground truth (human-owned)
-- **Project**: identity, intent, constraints, scope
-- **Plan**: current workstream goals and tasks
-- **Memory**: session-to-session operational state
-- **Checkpoint**: milestone snapshot
-
----
+Canon is human-approved and scope-wide. While legacy artifacts exist,
+their previous precedence remains `Canon > Project > Plan > Memory >
+Checkpoint`. The proposed work model keeps canon shared and makes one
+selected work the operational state; do not merge unrelated works or
+silently resolve contradictory artifacts during migration.
 
 ## `.cp/` Resolution
 
-**Always use the `scripts/find-cp-dir.sh` script** (bundled with
-this skill) to resolve the nearest `.cp/` directory. Never use
-`find` searching downward from the repo root — that bypasses
-monorepo scoping and picks the wrong context.
+**Always use the `scripts/find-cp-dir.sh` script** bundled with this
+skill to resolve the nearest `.cp/` directory. Never search downward
+from the repository root; that can select the wrong monorepo scope.
 
-Run it from the skill's base directory (provided in skill context):
+Run it from the current working directory with the skill base path
+supplied by the skill context:
 
 ```bash
-CP_DIR=$(bash scripts/find-cp-dir.sh)
+bash /path/to/cp-workflows/scripts/find-cp-dir.sh
 ```
 
 The script walks **upward** from `$PWD` (or a given path) and

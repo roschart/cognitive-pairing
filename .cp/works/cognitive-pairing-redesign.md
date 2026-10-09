@@ -10,8 +10,11 @@ Git milestone flow. Drafts of `cp-sync`, `cp-work`, and `cp-milestone`
 are deployed to Copilot and Codex for testing, but remain experimental.
 The first milestone is commit `87d7577`. Two field trials of `cp-work`
 produced satisfactory results: a manual review of this work and a new
-work for an external Alloy investigation. Next: reconcile `cp-sync`
-and `cp-workflows` reading rules with canon before further field tests.
+work for an external Alloy investigation. The checked-in
+`cp-workflows` now describes migration and work freshness, and a local
+`cp-start` draft starts one selected work without global hydration.
+Canon still needs human-approved alignment. Next: review the `cp-start`
+draft and agree on the canon amendment.
 
 ## Why This Work Exists
 
@@ -142,11 +145,12 @@ that every skill is used regularly.
 ### `cp-workflows`
 
 **Present:** Loaded with other `cp-*` skills; resolves the nearest
-`.cp/` and defines the artifact hierarchy and session bookends.
-**Strength:** One scope-resolution mechanism. **Future:** Retain and
-revise it for one selected work per conversation, without mandatory
-session closure or global active state. Its canon rules require human
-approval before changing.
+`.cp/` and describes legacy and experimental contracts side by side.
+It requires fresh reading of the selected work before reconciling it.
+**Strength:** One scope-resolution mechanism. **Future:** Retain for
+one selected work per conversation, without mandatory session closure
+or global active state. The conflicting canon rules still require
+human-approved changes.
 
 ### `cp-discover`
 
@@ -227,11 +231,13 @@ historical source material automatically during migration.
 
 ### `cp-start` (candidate)
 
-**Present:** Does not exist. **Future:** Resolve the nearest `.cp/`,
-list available works without loading them all, ask which work to open,
-then read canon and that work to orient both participants. Associate
-the conversation with that work; allow work without a document for a
-small task. If a resumed conversation's association is uncertain, ask.
+**Present:** An experimental draft exists in `skills/cp-start/`,
+alongside `cp-hydrate`; it has not been deployed or field-tested.
+**Future:** Resolve the nearest `.cp/`, list available works without
+loading them all, ask which work to open, then read canon and that work
+to orient both participants. Associate the conversation with that
+work; allow work without a document for a small task. If a resumed
+conversation's association is uncertain, ask.
 
 ### `cp-work` (candidate)
 
@@ -294,9 +300,10 @@ migration cannot be handled safely as a one-time guided process.
 - The checked-in skills direct the main agent to read `.cp/` files,
   while the canon mandates sub-agent reading. Decide which rule to
   keep; do not silently reconcile the contradiction.
-- `cp-workflows` discourages rereading `.cp/` files after hydration,
-  while `cp-sync` must reconcile the latest selected work. The human
-  authorized direct rereading for this trial; canon remains unchanged.
+- `cp-workflows` now requires a fresh read of the selected work before
+  editing; installed copies still contain the older no-rereading rule
+  until the repository change is deployed. Canon still requires
+  sub-agent reading, so the conflict is not fully resolved.
 - The current canon requires five artifact types and two bookends.
   Replacing them needs explicit human-approved canon changes.
 
@@ -368,6 +375,9 @@ cannot, the next task is discovery, not a vague implementation checkbox.
 - Keep `canon.md` shared per `.cp/` scope and human-approved.
 - Use `work` as the scale-neutral name and one document per independent
   work; do not require a separate project or memory artifact.
+- Let the selected work gain sections as consequential content emerges
+  during ordinary collaboration; `cp-sync` checks for omissions, not
+  just changes to pre-existing headings. Avoid empty template sections.
 - Select one work explicitly when starting a conversation; sync only
   that work and show a brief, factual delta after writing.
 - Keep Git commits under human control. A milestone marker is metadata
@@ -388,6 +398,8 @@ cannot, the next task is discovery, not a vague implementation checkbox.
     - [x] Specify the fate of each of the five existing artifact types,
           including content that must survive migration.
 - [ ] Define a usable work-document contract.
+    - [x] Define how meaningful sections emerge during ordinary work,
+          deliberate remodeling, and sync without a fixed template.
     - [ ] Test a tiny work, a paused long-running work, and a parent with
           children; test the adaptive task format and identify the
           minimum and optional sections for each.
@@ -404,6 +416,23 @@ cannot, the next task is discovery, not a vague implementation checkbox.
           summary without inventing progress or committing changes.
     - [ ] Review the resulting delta and refine the sync contract
           before testing another work.
+- [ ] Align framework reading and migration guidance.
+    - [x] Update the checked-in `cp-workflows` to describe coexistence
+          of legacy skills and works, and require a fresh read before
+          editing the selected work.
+    - [ ] Propose and obtain explicit human approval for canon changes
+          to the reading model, artifact types, and session bookends;
+          align dependent skill contracts with the approved rules.
+    - [ ] Mark legacy skills slated for retirement so they warn users
+          when invoked during migration, without changing their
+          behavior or losing legacy artifacts.
+- [ ] Draft and field-test `cp-start` alongside `cp-hydrate`.
+    - [x] Create an independent, read-only `cp-start` draft that selects
+          one work and orients without loading global legacy state.
+    - [ ] Review selection for a named work, ambiguous resumption, and
+          a small task without a work; refine from real use.
+    - [ ] Deploy the approved draft through the repository Makefile
+          without retiring `cp-hydrate`.
 - [x] Mark the first milestone before testing `cp-work`.
     - [x] Draft `cp-milestone` to sync the selected work, present
           the exact commit scope and message for approval, and
@@ -466,6 +495,8 @@ cannot, the next task is discovery, not a vague implementation checkbox.
 
 ## Next Action
 
-Decide how `cp-sync` rereads the selected work and align that behavior
-with `cp-workflows` and the human-approved canon before the next field
-tests.
+Review the `cp-start` draft and its selection behavior. Draft a canon
+amendment for direct reading, fresh work state, and migration
+coexistence; obtain human approval before writing canon. Then add
+warnings to legacy skills and deploy aligned repository versions
+through the Makefile.
