@@ -16,8 +16,9 @@ work for an external Alloy investigation. The checked-in
 Canon now recognizes both flows and direct, scoped reading. Six
 legacy skills now carry migration notices; a temporary `cp-migrate`
 draft proposes reviewed conversion without moving existing
-artifacts. Next: review `cp-start`, deploy the aligned drafts,
-and field-test the new skills.
+artifacts. The shared flow map now distinguishes creating a work from
+resuming one and separates sync from milestone approval. Next: validate
+these routes, deploy the aligned drafts, and field-test the new skills.
 
 ## Why This Work Exists
 
@@ -384,6 +385,13 @@ cannot, the next task is discovery, not a vague implementation checkbox.
 - For `cp-sync`, reread the selected work's executive summary and tasks
   at minimum; consult decisions, risks, and other sections when the
   conversation or possible external edits make them relevant.
+- Keep a concise cross-skill flow map in `cp-workflows`, with detailed
+  behavior and safeguards in each skill's own contract.
+- Use `cp-work` to create or reshape a work; keep `cp-start` read-only
+  for selecting and orienting around an existing work.
+- A standalone `cp-sync` may offer `cp-milestone` after significant
+  verified progress, but never starts it automatically. A milestone
+  includes a sync and must not prompt for itself a second time.
 - Preserve existing artifacts during migration until their replacement
   has been reviewed. Revise canon only with explicit approval.
 
@@ -426,6 +434,8 @@ cannot, the next task is discovery, not a vague implementation checkbox.
 - [ ] Draft and field-test `cp-start` alongside `cp-hydrate`.
     - [x] Create an independent, read-only `cp-start` draft that selects
           one work and orients without loading global legacy state.
+    - [x] Clarify the create-versus-resume route: `cp-work` creates or
+          reshapes; `cp-start` selects and orients.
     - [ ] Review selection for a named work, ambiguous resumption, and
           a small task without a work; refine from real use.
     - [ ] Deploy the approved draft through the repository Makefile
@@ -456,6 +466,9 @@ cannot, the next task is discovery, not a vague implementation checkbox.
 - [ ] Turn the interaction model into actionable skill contracts.
     - [ ] Settle skill names and start/sync responsibilities, including
           a new task with no document and a resumed named conversation.
+    - [x] Define the optional sync-to-milestone handoff without
+          automatically invoking the milestone flow or repeating its
+          prompt when sync is called from that flow.
     - [ ] Specify sync's write target, short delta, no-change behavior,
           ambiguity handling, and canon-approval boundary.
     - [ ] Decide the milestone commit convention and a matching Git log
@@ -484,8 +497,8 @@ cannot, the next task is discovery, not a vague implementation checkbox.
 
 - Which proposed skill names and divisions of responsibility survive
   comparison with actual usage?
-- What qualifies as a milestone, and which related changes belong in
-  its approved Git commit?
+- What concrete progress qualifies for a milestone offer, and which
+  related changes belong in its approved Git commit?
 - What should mark a declared milestone if all relevant changes were
   already committed and a sync produces no meaningful edits?
 - How should an active conversation discover that its selected work
@@ -495,7 +508,8 @@ cannot, the next task is discovery, not a vague implementation checkbox.
 
 ## Next Action
 
-Review `cp-start` selection behavior. The legacy-skill warnings and
-`cp-migrate` draft are complete but undeployed. After review, deploy
-the aligned repository versions through the Makefile, then field-test
-the new skills before migrating legacy artifacts.
+Validate `cp-start` routing and the sync-to-milestone handoff. The
+legacy-skill warnings and `cp-migrate` draft are complete but
+undeployed. After review, deploy the aligned repository versions
+through the Makefile, then field-test the new skills before migrating
+legacy artifacts.

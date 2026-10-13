@@ -62,11 +62,24 @@ If another conversation has changed the selected work, reconcile
 against its latest contents rather than replacing them with stale
 session context; ask when the two cannot be merged confidently.
 
+## Milestone Handoff
+
+After reconciling, consider whether verified progress represents a
+meaningful milestone, such as completing a substantial phase or
+deliverable. A changed work document or a high task count alone is not
+enough. If there is a concrete outcome and a reviewable set of related
+changes, briefly offer `cp-milestone` as an optional next step. Never
+invoke it automatically or request commit approval as part of a sync.
+
+When `cp-sync` is running as part of `cp-milestone`, do not make a
+separate milestone offer; continue the milestone flow instead.
+
 ## Report
 
 If no meaningful change is needed, leave the file untouched and say
 so. Otherwise write only the selected work file, then report a brief
 delta: what changed, what remains open, and any uncertainty that
-requires human correction. Never commit or invoke `/compact`.
+requires human correction. Include a milestone offer only when it
+meets the criteria above. Never commit or invoke `/compact`.
 Suggest `/compact` only when the work is ready to resume and freeing
 conversation context would help; the human decides when to run it.

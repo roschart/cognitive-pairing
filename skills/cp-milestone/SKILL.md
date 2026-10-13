@@ -11,7 +11,9 @@ description: >
 # cp-milestone
 
 Mark a significant state of one work with a reviewed Git commit,
-not a new checkpoint document. A routine `cp-sync` is not a milestone.
+not a new checkpoint document. A milestone is a distinct,
+human-approved commit flow that includes a sync; a routine `cp-sync`
+is not a milestone.
 
 ## Prepare
 
@@ -19,6 +21,8 @@ Resolve the nearest `.cp/` with `cp-workflows` and identify the one
 work the human wants to mark. Ask if its identity is ambiguous. Run
 `cp-sync` for that work first, then present its delta or no-change
 result. If `cp-sync` is unavailable, stop rather than claiming it ran.
+Because this sync is already part of a milestone, continue directly
+without asking the human to invoke `cp-milestone` again.
 For an explicitly authorized trial of repository source skills, the
 agent may follow the checked-in `cp-sync` instructions manually and
 must disclose that it was not an installed skill invocation.

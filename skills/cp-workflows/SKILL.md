@@ -39,6 +39,25 @@ invoking a legacy skill, warn that it follows the older artifact flow
 rather than silently redirecting its writes to a work. Neither flow
 authorizes running the other automatically.
 
+## Work-Based Flows
+
+Use the skill that matches the human's intent:
+
+```text
+New work:  cp-brainstorming (if needed) -> cp-work
+Resume:    cp-start -> select an existing work -> orient
+Progress:  cp-sync -> reconcile and report -> offer milestone if warranted
+Milestone: cp-milestone -> cp-sync -> review scope and message
+           -> explicit approval -> commit
+```
+
+`cp-start` is read-only: it selects and orients around an existing work,
+but does not create one. Use `cp-work` to create or reshape a work. A
+standalone `cp-sync` may offer a milestone when verified progress seems
+significant, but it never starts `cp-milestone` automatically. Detailed
+behavior and safeguards belong in the individual skill contracts; keep
+this map as the concise cross-skill overview.
+
 ## Reading and coherence
 
 Read only the relevant `.cp/` artifacts directly in the main context.

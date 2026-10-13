@@ -23,6 +23,12 @@ files as a side effect of starting a conversation.
 
 ## Select one work
 
+If the human wants to create or shape a new work rather than resume one,
+do not create it here: this skill is read-only. Route them to `cp-work`;
+when the intent itself is still unclear, `cp-brainstorming` can help
+before creating the work. Afterward, use `cp-start` to select and orient
+around that work if needed.
+
 List the names of available `.cp/works/*.md` files in this scope,
 excluding `works/archive/`. Do not read every work, infer the chosen
 one from modification time, or load global memory, plans, projects,
