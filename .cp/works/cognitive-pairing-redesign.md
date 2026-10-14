@@ -16,9 +16,11 @@ work for an external Alloy investigation. The checked-in
 Canon now recognizes both flows and direct, scoped reading. Six
 legacy skills now carry migration notices; a temporary `cp-migrate`
 draft proposes reviewed conversion without moving existing
-artifacts. The shared flow map now distinguishes creating a work from
-resuming one and separates sync from milestone approval. Next: validate
-these routes, deploy the aligned drafts, and field-test the new skills.
+artifacts. The agreed task model ends implementation tasks at the
+intended final PR becoming ready for review; post-PR validation is
+guidance, not a task. Archive the work at that boundary when all tasks
+are done, and reopen or follow up if new work appears. Next: validate
+the routes, deploy aligned drafts, and field-test the new skills.
 
 ## Why This Work Exists
 
@@ -353,6 +355,12 @@ spans several tasks. Omit absent links rather than writing `PR: no` or
 multiple tasks. Add links when known, without rewriting an earlier
 milestone commit solely to record a PR created afterward.
 
+Tasks cover development through marking the intended final PR ready
+for review. Deployment and production validation after that point are
+not completion criteria for these tasks; record them as human-facing
+post-PR guidance, not task checkboxes. If they reveal new work, reopen
+this work or create a separate follow-up.
+
 ## Work Modes
 
 Discovery, implementation, and follow-up describe the **dominant kind
@@ -361,7 +369,11 @@ work may occupy different modes at the same time. Discovery resolves
 unknowns; implementation delivers bounded changes; follow-up monitors
 external dependencies, outcomes, or maintenance without pretending the
 work is finished. Archive is a separate decision that the work is done
-or abandoned, not a fourth mode.
+or abandoned, not a fourth mode. It closes the active development
+lifecycle, not PR review or production follow-up: when all tasks are
+done and the intended final PR is ready for review, archive the work.
+If review or later validation creates new work, reopen it or create a
+follow-up work.
 An external work item's review status is not a CP mode: review and
 follow-up can coexist with ongoing implementation.
 
@@ -389,6 +401,12 @@ cannot, the next task is discovery, not a vague implementation checkbox.
   behavior and safeguards in each skill's own contract.
 - Use `cp-work` to create or reshape a work; keep `cp-start` read-only
   for selecting and orienting around an existing work.
+- Limit work tasks to development through the intended final PR being
+  marked ready; keep post-PR validation as human-facing guidance, not
+  task completion criteria.
+- Archive when all work tasks are done and the intended final PR is
+  ready for review; reopen the work or create follow-up work if new
+  work emerges.
 - A standalone `cp-sync` may offer `cp-milestone` after significant
   verified progress, but never starts it automatically. A milestone
   includes a sync and must not prompt for itself a second time.
@@ -405,6 +423,9 @@ cannot, the next task is discovery, not a vague implementation checkbox.
 - [ ] Define a usable work-document contract.
     - [x] Define how meaningful sections emerge during ordinary work,
           deliberate remodeling, and sync without a fixed template.
+    - [x] Define the task boundary at PR-ready, keep post-PR validation
+          outside task completion, and archive completed work at the
+          intended final PR; reopen or follow up if new work appears.
     - [ ] Test a tiny work, a paused long-running work, and a parent with
           children; test the adaptive task format and identify the
           minimum and optional sections for each.
