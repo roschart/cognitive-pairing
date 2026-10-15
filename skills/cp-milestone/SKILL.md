@@ -33,6 +33,17 @@ related deliverables the human intends to mark. Do not change the
 work document merely to force it into the commit's path history.
 Never infer that every dirty file belongs to this milestone.
 
+Archiving is optional and is not implied by a milestone. If every task
+in the work is done, confirm that the human considers the intended
+final PR ready for review; do not infer readiness from task state or
+branch state. When confirmed, offer to archive the work. If accepted,
+include the planned move from
+`.cp/works/<slug>.md` to `.cp/works/archive/<slug>.md` in the exact
+scope shown for approval. Follow `cp-work`'s archive safeguards. Do
+not move the file before the human approves that scope. If any task is
+incomplete, the PR is not ready, or the human declines, continue the
+milestone without archiving.
+
 Propose a concise, descriptive subject and a message body with:
 
 ```text
@@ -58,6 +69,8 @@ diff matches the approved set, then create a normal commit with the
 approved message. Do not amend an earlier commit, push, open a PR,
 or modify work items as an implicit side effect. If staging or the
 commit fails, report the error; do not claim a milestone was made.
+If the approved scope includes archiving, perform the approved move
+before staging and verify that the staged change records that move.
 
 Confirm the new commit can be found with both message markers, for
 example:

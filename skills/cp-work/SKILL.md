@@ -1,11 +1,11 @@
 ---
 name: cp-work
 description: >
-  Create or deliberately reshape one Cognitive Pairing work document
-  for independently resumable human-AI work. Use when the human asks
-  to start, capture, split, or restructure a work, including a paused
-  investigation or a coordinating parent work. Leave routine progress
-  reconciliation to cp-sync; trivial tasks need no work unless requested.
+  Create, reshape, archive, or reopen one Cognitive Pairing work
+  document for independently resumable human-AI work. Use when the
+  human asks to start, capture, split, restructure, complete, or resume
+  a work. Leave routine progress reconciliation to cp-sync; trivial
+  tasks need no work unless requested.
 ---
 
 # cp-work
@@ -87,13 +87,46 @@ lines of at most 80 characters outside headings and code blocks, and
 LF line endings. Use fenced code blocks with a language if needed.
 Leave legacy artifacts untouched.
 
+## Archive or reopen
+
+Use this procedure only for a work the human explicitly identifies.
+Read its latest contents before moving it. Do not infer that a work is
+finished from its age, a PR status, or the fact that its tasks happen
+to be checked.
+
+For a completed work, archive only when every task is done and the
+intended final PR is confirmed ready for review. The PR need not be
+merged, and post-PR deployment or production validation is guidance,
+not a task-completion gate. If new work appears later, reopen this work
+or create a separate follow-up. The human may also explicitly archive
+abandoned work; preserve its incomplete tasks and do not describe it as
+completed.
+If completion or PR readiness is unclear, ask before moving. If the
+criteria are not met, do not check tasks or archive a completed work
+just to force closure.
+
+Move the file, preserving its basename and contents, from
+`.cp/works/<slug>.md` to `.cp/works/archive/<slug>.md`. Create the
+archive directory when needed. Before moving, confirm the source exists
+and the destination does not. Never overwrite an archived work or
+rewrite it just to record the move. If the destination already exists,
+stop and ask how to resolve the conflict.
+
+Reopen only at the human's request. Move the selected file from
+`.cp/works/archive/<slug>.md` back to `.cp/works/<slug>.md`, preserving
+its contents. If that active path already exists, stop and ask rather
+than overwriting or merging either document. Once reopened, update the
+work only for substantive new state; do not manufacture tasks merely
+to mark the reopening.
+
 ## Finish
 
-Create or edit only the selected work file. If reviewing an existing
-work reveals no meaningful improvement, leave it untouched; do not
-edit merely to record that this skill was exercised. Report its path,
-current state, next action, and any unresolved attribution or canon
-conflicts. Let the human review it. This skill manages the work
+Create or edit only the selected work file, except for an explicitly
+requested archive or reopen move as defined above. If reviewing an
+existing work reveals no meaningful improvement, leave it untouched;
+do not edit merely to record that this skill was exercised. Report its
+path, current state, next action, and any unresolved attribution or
+canon conflicts. Let the human review it. This skill manages the work
 document; do not investigate the underlying engineering issue, modify
 application code or external work items, commit, open a PR, or claim a
 milestone as an implicit side effect.

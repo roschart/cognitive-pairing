@@ -49,14 +49,21 @@ Resume:    cp-start -> select an existing work -> orient
 Progress:  cp-sync -> reconcile and report -> offer milestone if warranted
 Milestone: cp-milestone -> cp-sync -> review scope and message
            -> explicit approval -> commit
+Archive:   cp-work -> confirm completion or abandonment -> move to
+           works/archive/
+Reopen:    cp-work -> human selects archived work -> move back to works/
 ```
 
 `cp-start` is read-only: it selects and orients around an existing work,
-but does not create one. Use `cp-work` to create or reshape a work. A
-standalone `cp-sync` may offer a milestone when verified progress seems
-significant, but it never starts `cp-milestone` automatically. Detailed
-behavior and safeguards belong in the individual skill contracts; keep
-this map as the concise cross-skill overview.
+but does not create one. Use `cp-work` to create, reshape, archive, or
+reopen a work. A standalone `cp-sync` may offer a milestone when
+verified progress seems significant, but it never starts `cp-milestone`
+automatically. Detailed archive and reopen rules belong to `cp-work`;
+`cp-start` excludes archived works from active selection. A milestone is
+not inherently terminal, though `cp-milestone` may offer an explicit
+archive move when the human confirms the final PR is ready and approves
+that move in the commit scope. Keep this map concise and put safeguards
+in each skill's own contract.
 
 ## Reading and coherence
 

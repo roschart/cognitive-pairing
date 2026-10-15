@@ -39,7 +39,9 @@ Otherwise ask which work to open, including the option of a small
 task without a document. If the scope has no works, say so and ask
 whether to proceed without one or create one explicitly with
 `cp-work`. If a requested work does not exist, do not invent it or
-silently select a different one.
+silently select a different one. If that exact work is in
+`works/archive/`, explain that it is archived and offer `cp-work` to
+reopen it; do not move or resume it as a side effect of orientation.
 
 An already-running conversation may have a selected work. Keep it
 when the association is clear and the human is resuming that work;
