@@ -19,8 +19,11 @@ draft proposes reviewed conversion without moving existing
 artifacts. The agreed task model ends implementation tasks at the
 intended final PR becoming ready for review; post-PR validation is
 guidance, not a task. Archive the work at that boundary when all tasks
-are done, and reopen or follow up if new work appears. Next: validate
-the routes, deploy aligned drafts, and field-test the new skills.
+are done, and reopen or follow up if new work appears. A reported
+field-use case exposed that the archive location and procedure are
+still undefined. Initial direction: keep archive rules in `cp-work`;
+let `cp-milestone` offer an explicit final archive step. Next: define
+and test that operation, validate the routes, and field-test the skills.
 
 ## Why This Work Exists
 
@@ -36,6 +39,12 @@ rarely add value. Project documents are uncommon in this user's work.
 
 The problem is not merely AI context size. The human also needs a fast,
 trustworthy answer to "what were we doing, and what comes next?"
+
+A human-reported interaction exposed an archive gap: after PR #2866 was
+reported ready and all work tasks were complete, an agent found no
+`works/archive/` directory or documented convention and asked how to
+proceed. The archive trigger is described here, but its location and
+procedure remain undecided.
 
 ## Artifacts
 
@@ -407,6 +416,9 @@ cannot, the next task is discovery, not a vague implementation checkbox.
 - Archive when all work tasks are done and the intended final PR is
   ready for review; reopen the work or create follow-up work if new
   work emerges.
+- Keep archive and reopen rules in `cp-work` for now. `cp-milestone`
+  may offer an explicit archive step after sync when the human confirms
+  this is the final PR; include the move in the approved commit.
 - A standalone `cp-sync` may offer `cp-milestone` after significant
   verified progress, but never starts it automatically. A milestone
   includes a sync and must not prompt for itself a second time.
@@ -426,6 +438,13 @@ cannot, the next task is discovery, not a vague implementation checkbox.
     - [x] Define the task boundary at PR-ready, keep post-PR validation
           outside task completion, and archive completed work at the
           intended final PR; reopen or follow up if new work appears.
+    - [ ] Define and test the archive operation: its canonical location,
+          whether it moves the work file, and how a work can be reopened.
+    - [x] Choose `cp-work` as the initial owner of archive/reopen rules;
+          defer a separate archive skill.
+    - [ ] Test an explicit final-archive offer in `cp-milestone` after
+          sync, with human confirmation and the move in the approved
+          commit.
     - [ ] Test a tiny work, a paused long-running work, and a parent with
           children; test the adaptive task format and identify the
           minimum and optional sections for each.
@@ -526,11 +545,15 @@ cannot, the next task is discovery, not a vague implementation checkbox.
   changed elsewhere before it syncs?
 - Does this iteration need a release number, and how does that relate
   to the older skill metadata and framework checkpoint versions?
+- Would a `cp-archive` wrapper that checks readiness, moves the work,
+  and hands off to `cp-milestone` reduce coupling or add needless
+  complexity compared with the integrated final-archive offer?
 
 ## Next Action
 
-Validate `cp-start` routing and the sync-to-milestone handoff. The
-legacy-skill warnings and `cp-migrate` draft are complete but
-undeployed. After review, deploy the aligned repository versions
-through the Makefile, then field-test the new skills before migrating
-legacy artifacts.
+Define the archive location and reopening behavior, then field-test
+the final-archive offer in `cp-milestone` after sync. Also validate
+`cp-start` routing and the sync-to-milestone handoff. The legacy-skill
+warnings and `cp-migrate` draft are complete but undeployed. After
+review, deploy the aligned repository versions through the Makefile,
+then field-test the new skills before migrating legacy artifacts.
