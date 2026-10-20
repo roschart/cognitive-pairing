@@ -548,6 +548,10 @@ cannot, the next task is discovery, not a vague implementation checkbox.
   already committed and a sync produces no meaningful edits?
 - How should an active conversation discover that its selected work
   changed elsewhere before it syncs?
+- How should `cp-sync` distinguish temporary investigation evidence
+  from durable work state, and when should it compress resolved detail
+  while preserving what is needed to explain, reproduce, or audit the
+  outcome?
 - Does this iteration need a release number, and how does that relate
   to the older skill metadata and framework checkpoint versions?
 - Would a `cp-archive` wrapper that checks readiness, moves the work,
