@@ -30,6 +30,26 @@ legacy skills nor their artifacts have been retired. The
 [canon](.cp/canon.md) defines the transitional rules, and the
 [redesign work](.cp/works/cognitive-pairing-redesign.md) tracks migration.
 
+## Experimental Work-Based Flow
+
+`cp-start` selects one work; `cp-work` creates or reshapes it;
+[`cp-sync`](skills/cp-sync/SKILL.md) reconciles it; `cp-milestone`
+adds an explicitly approved Git commit. These skills coexist with the
+legacy flow below.
+
+Each sync reviews the whole selected work for missing state and obsolete
+detail. Keep evidence while it supports open work; distill resolved
+investigations, completed subtasks, and expired risks into useful
+outcomes. Preserve active constraints and evidence needed for
+reproduction, audit, rollback, or explicit retention. Uncertain
+consequential deletions require clarification.
+
+The executive summary and pending tasks come first. An ordinary work
+should usually fit within 500-1500 words, but this is guidance, not a
+quota: small works can be shorter and necessary evidence can justify
+longer ones. Sync reports the cleanup without creating sidecar history,
+committing, archiving the work, or compacting the conversation.
+
 ## Artifact Hierarchy
 
 | Artifact         | Question it answers             | Owner         | Lifecycle     |

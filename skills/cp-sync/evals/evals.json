@@ -1,0 +1,44 @@
+{
+  "skill_name": "cp-sync",
+  "evals": [
+    {
+      "id": 1,
+      "name": "open-investigation",
+      "prompt": "Run cp-sync on the selected exporter-investigation work before I pause. No new results: the patch is deployed only to staging and the required observation has not happened. Use the fixture as the current work.",
+      "expected_output": "Preserve exact evidence, pending validation, active constraints, and uncertainty. Do not infer resolution from deployment or prune useful detail merely because the work is old. A no-change result is valid.",
+      "files": ["files/open-investigation.md"],
+      "assertions": [
+        "Preserve every pending task and all exact inline code spans, numeric evidence, and active constraints from the open investigation.",
+        "Do not claim the deployed candidate fixed the issue or mark pending validation complete.",
+        "Change no sandbox file outside the selected work; create no commit, archive move, or sidecar history."
+      ]
+    },
+    {
+      "id": 2,
+      "name": "resolved-investigation",
+      "prompt": "Run cp-sync on the selected exporter-investigation work before I pause. There are no new engineering results beyond those already recorded in the fixture. Use it as the current work.",
+      "expected_output": "Distill obsolete evidence and completed substeps while retaining the confirmed cause, fix, verification scope, pending handoff, active rollback rule, and useful links. Prioritize summary and pending tasks; report the cleanup without committing or archiving.",
+      "files": ["files/resolved-investigation.md"],
+      "assertions": [
+        "Reduce the resolved work to at most 60 percent of its original word count and remove obsolete sample timestamps and measurement tables.",
+        "Place Executive Summary first and Tasks second; preserve both pending tasks explicitly while reducing completed checkboxes to at most three useful outcomes.",
+        "Retain the confirmed duplicate-provider cause, single-provider fix, regression result, zero-duplicate 30-minute staging validation, production limitation, and all three supplied reference URLs.",
+        "Retain the active rollback threshold of 99.5 percent for 10 minutes and report that resolved detail was distilled without repeating the raw measurements.",
+        "Change no sandbox file outside the selected work; create no commit, archive move, or sidecar history."
+      ]
+    },
+    {
+      "id": 3,
+      "name": "complex-retention",
+      "prompt": "Run cp-sync on the selected cross-region-replay work before I pause. No new results. The work contains the only available rollback and audit evidence. Keep its Acceptance Matrix, Exact Interpretation Notes, and Worked Rollback Examples sections verbatim until sign-off. Use the fixture as the current work. Readiness of the final PR is still unconfirmed.",
+      "expected_output": "Keep required evidence even above 1500 words and explain the justified size. Preserve pending scope and provenance. Do not replace inline evidence with invented links, make sidecar archives, or claim completion.",
+      "files": ["files/complex-retention.md"],
+      "assertions": [
+        "Preserve Acceptance Matrix, Exact Interpretation Notes, and Worked Rollback Examples verbatim, including all fourteen matrix rows.",
+        "Keep the work above 1500 words and explain in the report that necessary audit or rollback evidence justifies exceeding advisory guidance.",
+        "Keep all four pending tasks explicit, the missing west checksum unresolved, and final PR readiness unconfirmed; preserve reported-versus-local evidence distinctions.",
+        "Change no sandbox file outside the selected work; create no commit, archive move, or sidecar history."
+      ]
+    }
+  ]
+}

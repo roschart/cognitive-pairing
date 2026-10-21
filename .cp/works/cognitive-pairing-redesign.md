@@ -2,452 +2,17 @@
 
 ## Executive Summary
 
-CP is being redesigned using lessons from months of daily use. Its
-purpose is to keep a human and an AI agent aligned while work outlasts
-one conversation, without forcing documentation on small tasks. This
-work now has a mapping of existing skills and artifacts and a candidate
-Git milestone flow. Drafts of `cp-sync`, `cp-work`, and `cp-milestone`
-are deployed to Copilot and Codex for testing, but remain experimental.
-The first milestone is commit `87d7577`. Two field trials of `cp-work`
-produced satisfactory results: a manual review of this work and a new
-work for an external Alloy investigation. The checked-in
-`cp-workflows` now describes migration and work freshness, and a local
-`cp-start` draft starts one selected work without global hydration.
-Canon now recognizes both flows and direct, scoped reading. Six
-legacy skills now carry migration notices; a temporary `cp-migrate`
-draft proposes reviewed conversion without moving existing
-artifacts. The agreed task model ends implementation tasks at the
-intended final PR becoming ready for review; post-PR validation is
-guidance, not a task. Archive the work at that boundary when all tasks
-are done, and reopen or follow up if new work appears. A reported
-field-use case exposed that the archive location and procedure are
-now specified in `cp-work`, with an optional final-archive offer in
-`cp-milestone`. `cp-start` routes archived work back through `cp-work`
-without reopening it implicitly. Next: field-test archive, reopen, and
-milestone behavior.
-
-## Why This Work Exists
-
-The current framework grew incrementally: visible plans for work longer
-than one conversation; canon for shared truths; memory and checkpoints
-to counter context loss; project documents for larger initiatives.
-Actual usage revealed a different shape. Multiple named conversations
-often work on unrelated plans in one repository. A single active memory
-and the latest global checkpoint mix their state, while hydration loads
-unrelated plans. `cp-compact` is useful during ongoing work, followed
-by Copilot's `/compact`; the session-end ritual and checkpoint files
-rarely add value. Project documents are uncommon in this user's work.
-
-The problem is not merely AI context size. The human also needs a fast,
-trustworthy answer to "what were we doing, and what comes next?"
-
-A human-reported interaction exposed an archive gap: after PR #2866 was
-reported ready and all work tasks were complete, an agent found no
-`works/archive/` directory or documented convention and asked how to
-proceed. This work now defines `.cp/works/archive/` as the canonical
-location, with an explicit move and reopen procedure owned by `cp-work`.
-The incident remains a human report, not an independently verified
-repository event.
-
-## Artifacts
-
-### `canon.md`
-
-**Present:** Human-approved facts shared across the nearest `.cp/`
-scope. `cp-discover` bootstraps it; `cp-hydrate` and other skills read it.
-**Strength:** Prevents settled repository context from being
-re-litigated. **Future:** Retain it as the only scope-wide state document.
-The human must approve amendments, including changes to framework rules;
-work-specific decisions belong in their work. `cp-start` reads canon,
-while `cp-sync` may propose, but never silently write, an addition.
-
-### `project.md`
-
-**Present:** `cp-project` creates a stable declaration of intent,
-constraints, and priorities above plans; `cp-hydrate` and `cp-plan`
-consult it. **Tension:** Most work does not justify a separate project
-layer. **Future:** Retire this artifact type. Put relevant intent in a
-work document; create a coordinating parent work only when several works
-need shared direction. `cp-work` would create or refine that parent.
-Migration must preserve distinct strategic context without duplicating
-it in every child.
-
-### `plans/plan-*.md`
-
-**Present:** `cp-plan` maintains direction, decisions, tasks, potential
-work, and a next-session note. `cp-hydrate` reads every active plan.
-**Strength:** Makes work visible and resumable beyond one conversation.
-**Tension:** Several plans compete for attention during hydration.
-**Future:** Replace each independently resumable plan with one
-`.cp/works/<slug>.md`, retaining useful context, decisions, open tasks,
-and pending ideas. `cp-work` handles deliberate creation or remodeling;
-ordinary work and `cp-sync` keep it current. A paused work stays
-selectable; only completed or discarded work moves to the archive.
-
-### `memory/active.md`
-
-**Present:** `cp-compact` replaces one global operational memory and
-archives its previous version; `cp-hydrate` loads it. **Strength:** Saves
-context that would otherwise vanish between conversations. **Tension:**
-Concurrent unrelated works overwrite or contaminate one another, and
-the file competes with each plan's next-session note. **Future:** Retire
-the global file in favor of a brief executive summary inside each work.
-`cp-start` presents the selected summary; `cp-sync` verifies its accuracy.
-Only unambiguously attributable focus, blockers, and unresolved matters
-move into a work during migration; a human resolves ambiguous ownership.
-
-### `checkpoints/`
-
-**Present:** `cp-checkpoint` creates immutable dated snapshots;
-`cp-hydrate` and `cp-compact` read the latest one across the scope.
-**Tension:** No demonstrated recovery benefit justifies separate
-checkpoint files, and the latest may belong to another work.
-**Future:** Retire new checkpoint documents. If a milestone merits
-marking, identify the approved Git commit containing that work's state
-with a searchable message convention. Preserve historical checkpoint
-files; carry forward only facts and decisions still relevant to a work.
-Do not manufacture retroactive milestone commits.
-
-### `works/<slug>.md`
-
-**Present:** This document is the first prototype; no existing skill
-owns the new format. **Future:** One document per independently
-resumable work, with sections added only as complexity demands. A brief
-task need not create one. `cp-work` can create it explicitly;
-`cp-brainstorming` can offer to create one after the human agrees.
-`cp-start` selects and reads it. The agent maintains it during ordinary
-work, while `cp-sync` reconciles its state and reports a short delta.
-Related works link to each other; a parent is another work, not a
-mandatory project layer. Tasks remain simple checks unless a block
-needs its own context or subordinate checks.
-
-### Executive Summary
-
-**Present:** The prototype has this section, but no existing skill
-guarantees that it reflects current work. **Future:** Treat it as the
-work's entry-point interface, not a separate file or a conversation
-history. It answers what matters now, where the work stands, and what
-comes next. `cp-start` uses it to orient both participants; `cp-sync`
-checks it against tasks, decisions, and actual outcomes and corrects
-stale or conflicting claims. Other sections, such as decisions, remain
-ordinary parts of the document unless they need their own skill contract.
-
-### Git Milestone Marker
-
-**Present:** Git versions documents, but CP has no agreed convention for
-finding significant states in commit history. **Future:** A searchable
-marker in a human-approved commit identifies a declared milestone for
-one work. It is not another Markdown artifact or a routine `cp-sync`
-output; a sync alone never authorizes a commit.
-The first milestone used a descriptive commit subject with
-`CP-Work: <slug>` and `CP-Milestone: <slug>` in the message body. A
-working lookup is:
-
-```bash
-git log --oneline --all-match \
-  --grep='^CP-Work: <slug>$' --grep='^CP-Milestone:'
-```
-
-Include the work document when syncing changes it; do not manufacture
-an edit just to make the commit appear in its path history. Review the
-exact file set before including related code. A milestone always syncs
-and commits, but it does not imply that the work is complete, a PR
-exists, or an external work item changes state.
-
-## Skills
-
-Names marked as candidates describe responsibilities, not final names.
-The current descriptions below reflect skill definitions, not a claim
-that every skill is used regularly.
-
-### `cp-workflows`
-
-**Present:** Loaded with other `cp-*` skills; resolves the nearest
-`.cp/` and describes legacy and experimental contracts side by side.
-It requires fresh reading of the selected work before reconciling it.
-**Strength:** One scope-resolution mechanism. **Future:** Retain for
-one selected work per conversation, without mandatory session closure
-or global active state. Canon now recognizes the transitional model.
-
-### `cp-discover`
-
-**Present:** Scans a new working scope and bootstraps canon, global
-memory, empty plan and checkpoint directories, and sometimes a project.
-**Strength:** Keeps initial context discovery collaborative.
-**Future:** Retain scope discovery and human-approved canon creation;
-do not require memory, a work document, or a project at bootstrap.
-Starting a new work in an established scope is not `cp-discover`.
-
-### `cp-brainstorming`
-
-**Present:** Explores unclear directions using relevant canon and
-context; it does not automatically write artifacts. **Strength:**
-Protects thinking before execution. **Future:** Retain. It may propose
-capturing an idea through `cp-work`, but neither a new work nor
-brainstorming is mandatory for a small task.
-
-### `cp-hydrate`
-
-**Present:** At session start, loads canon, project, global memory,
-latest checkpoint, and every active plan, then shows an alignment
-summary. **Tension:** Unrelated works appear together. **Future:**
-Replace with `cp-start` (candidate), which offers a lightweight choice
-before reading one work and orienting the human and agent.
-
-### `cp-plan`
-
-**Present:** Reads the plan, project, memory, canon, and latest
-checkpoint to create or update a living plan. **Strength:** Tracks
-direction and progress. **Future:** Retire after migration; `cp-work`
-handles deliberate document creation and restructuring. Planning
-sections remain available within a work, not as a separate artifact.
-
-### `cp-project`
-
-**Present:** Reads canon and an optional existing project declaration
-to create or refine `project.md`. **Strength:** Captures strategic
-intent when multiple plans share it. **Tension:** Adds a separate
-distinction between scales that often adds no value. **Future:** Retire
-after migration; `cp-work` can create a coordinating parent when needed.
-
-### `cp-compact`
-
-**Present:** Uses global memory, canon, latest checkpoint, and the
-conversation to replace `memory/active.md`; the built-in `/compact`
-must be run separately to free conversation context. **Strength:**
-Captures operational state during ongoing work. **Future:** Replace
-with `cp-sync` (candidate), which reconciles only the selected work.
-Copilot's `/compact` remains a separate operation, useful after any
-sync that has made the work safe to resume.
-
-### `cp-checkpoint`
-
-**Present:** Reads memory, canon, and the latest checkpoint and creates
-a dated immutable file at a milestone. **Tension:** These files have
-not proved useful for resuming work. **Future:** Retire; an approved
-Git milestone commit replaces new checkpoint files when a milestone is
-declared.
-
-### `cp-session-end`
-
-**Present:** Reads global state, invokes compact, optionally proposes
-canon, checkpoint and plan changes, and shows a session delta.
-**Tension:** Work often continues in a named conversation across
-days; closure is not a necessary state transition. **Future:** Retire
-the required ritual. `cp-sync` can reconcile work and show a delta
-mid-session or before stopping, without creating a milestone.
-
-### `cp-prune`
-
-**Present:** Reviews oversized global memory and accumulated
-checkpoints; drafts a shorter memory and recommends archiving.
-**Strength:** Challenges stale context. **Future:** Incorporate
-routine pruning in work maintenance and archival. Retain a separate
-maintenance skill only if real usage warrants it; never delete
-historical source material automatically during migration.
-
-### `cp-start` (candidate)
-
-**Present:** An experimental draft exists in `skills/cp-start/`,
-alongside `cp-hydrate`; it has not been deployed or field-tested.
-**Future:** Resolve the nearest `.cp/`, list available works without
-loading them all, ask which work to open, then read canon and that work
-to orient both participants. Associate the conversation with that
-work; allow work without a document for a small task. If a resumed
-conversation's association is uncertain, ask.
-
-### `cp-work` (candidate)
-
-**Present:** An experimental draft exists in `skills/cp-work/` and is
-deployed to Copilot and Codex. A first review used the checked-in
-instructions before deployment; a second agent produced a work for
-the paused Alloy investigation after deployment. The agent's use of
-the installed skill was not independently verified here.
-**Future:** Explicitly create or reshape a work document, including
-an optional coordinating parent. Use a small structure by default
-and add sections when they solve a real problem.
-This skill is not the sole editor: the agent may maintain the selected
-work during ordinary collaboration.
-
-### `cp-sync` (candidate)
-
-**Present:** An experimental draft exists in `skills/cp-sync/` and is
-deployed to Copilot and Codex. Its first trial on this document was
-manual; it has now been invoked to reconcile this work. **Future:**
-Reconcile the selected work with the conversation and actual outcomes;
-verify tasks, decisions, and especially the executive summary. Write
-only meaningful changes, then show a brief delta for human correction.
-Ask rather than guess the work if its identity is uncertain; never
-silently amend canon or create a commit. It does not free Copilot's
-context window.
-
-### `cp-milestone` (candidate)
-
-**Present:** An experimental draft exists in `skills/cp-milestone/`
-and is deployed to Copilot and Codex. This work is its first
-installed trial. The earlier milestone commit (`87d7577`) followed
-its proposed convention.
-**Future:** Invoke `cp-sync` for the selected work, show its delta and
-the exact proposed file set, and request explicit approval before
-committing only the reviewed changes with searchable work and milestone
-markers. Suggest `/compact` after the commit if the conversation
-continues; do not run it automatically.
-Opening a PR and updating or closing an external work item are optional
-follow-up steps, not prerequisites or automatic consequences of a CP
-milestone. Their links may be added to the work when available; a PR
-created after the commit cannot be linked in that same commit. Personal
-work needs no work item.
-
-### `cp-migrate` (candidate)
-
-**Present:** A temporary, untested draft exists in
-`skills/cp-migrate/`; it has not been deployed or run. **Future:**
-Support a reviewed conversion of projects and plans to works,
-attributing active memory and checkpoint content only where ownership
-is clear. Archive historical checkpoints after review and separate
-approval. Keep other sources intact until the new works are verified;
-decide their retirement separately.
-
-## Cross-Cutting Tensions
-
-- `cp-compact` does not read the selected plan, while it and
-  `cp-hydrate` use the latest checkpoint across unrelated works.
-- Plan `Next Session`, global memory, and checkpoint `Pending Work`
-  can disagree. The executive summary must reflect current tasks
-  without becoming another competing task list.
-- Canon now permits direct, scoped reading and a fresh read before
-  editing a work. Installed copies may still carry the older
-  no-rereading rule until deployment through the Makefile.
-- Legacy and work-based skills coexist; retiring legacy artifacts
-  still requires a reviewed migration and preservation of useful state.
-
-## Target Model
-
-- The nearest `.cp/` defines a working scope, usually one repository.
-  A multi-repository effort may use a lead repository and explicit links.
-- `canon.md` holds truths shared across that scope; additions require
-  human approval. Scope discovery remains distinct from starting work.
-- `.cp/works/<slug>.md` is one selectable document per independently
-  resumable work. Finished or discarded works move to `works/archive/`;
-  paused work remains selectable without loading it by default.
-- A work can range from a complex user story to a small set of epics.
-  Tiny tasks need no work file. The file gains sections when they serve
-  a real need, rather than when it crosses a numerical threshold.
-- A concise executive summary gives both participants their entry point.
-  Stable context, tasks, decisions, risks, design, and other sections
-  appear only where useful. The document manages coordination; code,
-  presentations, and other deliverables remain outside it.
-- Related works link to each other. Create a parent work only if shared
-  goals, priorities, dependencies, or risks need active coordination.
-- A conversation normally belongs to one selected work. Changing work
-  is possible but explicit and uncommon. If the association is lost,
-  the agent asks rather than updating an inferred destination.
-- Starting a conversation lists available works before reading one.
-  Syncing writes the selected document and reports a short delta for
-  human correction. Copilot's `/compact` separately frees context and
-  can follow a routine sync without a milestone commit.
-- The current document is the live state. Milestones, if worth marking,
-  require a sync and an approved Git commit with a searchable message
-  convention rather than appended checkpoint files. No skill commits
-  without human approval.
-
-## Task Representation
-
-Default to checklist items for bounded tasks and nested checks for
-straightforward breakdowns. Use a `###` heading under `## Tasks` only
-when a substantial block needs its own context, criteria, or subordinate
-checks; its heading groups the checks rather than introducing a second
-status field. Do not turn every checkbox into a structured record.
-
-PRs and external work items are optional links, not properties every
-task must carry. Place a link beneath a task when the relationship is
-useful and unambiguous; place it at work or milestone level when it
-spans several tasks. Omit absent links rather than writing `PR: no` or
-`Work item: no`. A task may span multiple PRs, and a PR may cover
-multiple tasks. Add links when known, without rewriting an earlier
-milestone commit solely to record a PR created afterward.
-
-Tasks cover development through marking the intended final PR ready
-for review. Deployment and production validation after that point are
-not completion criteria for these tasks; record them as human-facing
-post-PR guidance, not task checkboxes. If they reveal new work, reopen
-this work or create a separate follow-up.
-
-## Work Modes
-
-Discovery, implementation, and follow-up describe the **dominant kind
-of attention**, not mutually exclusive states. Different parts of one
-work may occupy different modes at the same time. Discovery resolves
-unknowns; implementation delivers bounded changes; follow-up monitors
-external dependencies, outcomes, or maintenance without pretending the
-work is finished. Archive is a separate decision that the work is done
-or abandoned, not a fourth mode. It closes the active development
-lifecycle, not PR review or production follow-up: when all tasks are
-done and the intended final PR is ready for review, archive the work.
-If review or later validation creates new work, reopen it or create a
-follow-up work.
-An external work item's review status is not a CP mode: review and
-follow-up can coexist with ongoing implementation.
-
-A task is implementation-ready when someone with this document and the
-repository can state its bounded objective, inputs, expected output,
-and acceptance criteria without relying on this conversation. If they
-cannot, the next task is discovery, not a vague implementation checkbox.
-
-## Decisions To Preserve
-
-- Keep `canon.md` shared per `.cp/` scope and human-approved.
-- Use `work` as the scale-neutral name and one document per independent
-  work; do not require a separate project or memory artifact.
-- Let the selected work gain sections as consequential content emerges
-  during ordinary collaboration; `cp-sync` checks for omissions, not
-  just changes to pre-existing headings. Avoid empty template sections.
-- Select one work explicitly when starting a conversation; sync only
-  that work and show a brief, factual delta after writing.
-- Keep Git commits under human control. A milestone marker is metadata
-  on an approved commit, not a new checkpoint document.
-- For `cp-sync`, reread the selected work's executive summary and tasks
-  at minimum; consult decisions, risks, and other sections when the
-  conversation or possible external edits make them relevant.
-- Keep a concise cross-skill flow map in `cp-workflows`, with detailed
-  behavior and safeguards in each skill's own contract.
-- Use `cp-work` to create or reshape a work; keep `cp-start` read-only
-  for selecting and orienting around an existing work.
-- Limit work tasks to development through the intended final PR being
-  marked ready; keep post-PR validation as human-facing guidance, not
-  task completion criteria.
-- Archive when all work tasks are done and the intended final PR is
-  ready for review; reopen the work or create follow-up work if new
-  work emerges.
-- Keep archive and reopen rules in `cp-work` for now. `cp-milestone`
-  may offer an explicit archive step after sync when the human confirms
-  this is the final PR; include the move in the approved commit.
-- A standalone `cp-sync` may offer `cp-milestone` after significant
-  verified progress, but never starts it automatically. A milestone
-  includes a sync and must not prompt for itself a second time.
-- Preserve existing artifacts during migration until their replacement
-  has been reviewed. Revise canon only with explicit approval.
+CP is evolving toward one resumable work per conversation, with legacy
+flows retained during migration. Experimental work-based skills exist;
+archive/reopen behavior and migration still need field testing. The
+current change adds semantic cleanup to `cp-sync`, prioritizing the
+executive summary and pending tasks with an advisory 500-1500-word range.
+Next: review its old/new comparison and this distilled work before
+deploying the revision and continuing lifecycle tests.
 
 ## Tasks
 
-- [x] Map the existing framework to this target.
-    - [x] Record each skill's trigger, inputs, writes, and dependencies;
-          flag overlap and contradictions with canon and deployed skills.
-    - [x] Specify the fate of each of the five existing artifact types,
-          including content that must survive migration.
 - [ ] Define a usable work-document contract.
-    - [x] Define how meaningful sections emerge during ordinary work,
-          deliberate remodeling, and sync without a fixed template.
-    - [x] Define the task boundary at PR-ready, keep post-PR validation
-          outside task completion, and archive completed work at the
-          intended final PR; reopen or follow up if new work appears.
-    - [x] Define the canonical archive location, move operation, and
-          collision-safe reopen procedure in `cp-work`.
-    - [x] Choose `cp-work` as the initial owner of archive/reopen rules;
-          defer a separate archive skill.
-    - [x] Specify the optional final-archive offer in `cp-milestone`
-          after sync, with human confirmation and the move in the
-          approved commit scope.
     - [ ] Field-test archive, reopen, and the final-archive offer after
           sync; confirm the move appears in the approved commit.
     - [ ] Test a tiny work, a paused long-running work, and a parent with
@@ -458,62 +23,23 @@ cannot, the next task is discovery, not a vague implementation checkbox.
     - [ ] Define work selection, pause, follow-up, completion, rejection,
           and archive behavior without forcing exclusive modes.
 - [ ] Draft and exercise `cp-sync` on this work.
-    - [x] Draft an opt-in sync for one explicitly selected,
-          existing work without requiring `cp-work` or migrating
-          legacy artifacts.
-    - [x] Reconcile this document with verified outcomes and the
-          current conversation; check tasks, decisions, and executive
-          summary without inventing progress or committing changes.
+    - [x] Add current-value compression, retention safeguards, and
+          advisory size guidance to the checked-in contract.
+    - [ ] Review the three-case old/new comparison and this work's
+          cleanup; deploy the approved revision through the Makefile.
     - [ ] Review the resulting delta and refine the sync contract
           before testing another work.
 - [ ] Align framework reading and migration guidance.
-    - [x] Update the checked-in `cp-workflows` to describe coexistence
-          of legacy skills and works, and require a fresh read before
-          editing the selected work.
-    - [x] Obtain human approval and update canon for direct reading,
-          work state, and coexistence with legacy session flows;
-          align dependent work-based skill contracts.
-    - [x] Mark legacy skills slated for retirement so they warn users
-          when invoked during migration, without changing their
-          behavior or losing legacy artifacts.
+      Source guidance and migration notices are drafted; deployment
+      and migration review remain separate.
 - [ ] Draft and field-test `cp-start` alongside `cp-hydrate`.
-    - [x] Create an independent, read-only `cp-start` draft that selects
-          one work and orients without loading global legacy state.
-    - [x] Clarify the create-versus-resume route: `cp-work` creates or
-          reshapes; `cp-start` selects and orients.
     - [ ] Review selection for a named work, ambiguous resumption, and
           a small task without a work; refine from real use.
     - [ ] Deploy the approved draft through the repository Makefile
           without retiring `cp-hydrate`.
-- [x] Mark the first milestone before testing `cp-work`.
-    - [x] Draft `cp-milestone` to sync the selected work, present
-          the exact commit scope and message for approval, and
-          suggest `/compact` afterward.
-    - [x] Review the synced work and selected repository changes,
-          then make an approved, searchable milestone commit (`87d7577`).
-    - [x] Suggest the built-in `/compact` after committing; the human
-          decides when to run it.
-- [x] Field-test the first `cp-work` draft on two real works.
-    - [x] Draft `cp-work` in this repository as an opt-in trial.
-    - [x] Refine the draft and agree on test prompts and review criteria.
-    - [x] Deploy it to Copilot and Codex through the repository
-          Makefile; never edit installed copies directly.
-    - [x] Have a separate agent use the checked-in draft to review
-          this redesign work, preserving its useful content; the
-          draft was not invoked as an installed skill.
-    - [x] Have a separate agent create a work for the idle Alloy
-          log-replay investigation (AB#13452), without investigating
-          or changing Alloy or the external work item.
-    - [x] Review both documents for factual accuracy, useful task
-          granularity, concise orientation, and optional links. The
-          outputs are sufficient for this test; Alloy follow-up
-          belongs to its own work in another repository.
 - [ ] Turn the interaction model into actionable skill contracts.
     - [ ] Settle skill names and start/sync responsibilities, including
           a new task with no document and a resumed named conversation.
-    - [x] Define the optional sync-to-milestone handoff without
-          automatically invoking the milestone flow or repeating its
-          prompt when sync is called from that flow.
     - [ ] Specify sync's write target, short delta, no-change behavior,
           ambiguity handling, and canon-approval boundary.
     - [ ] Decide the milestone commit convention and a matching Git log
@@ -521,9 +47,6 @@ cannot, the next task is discovery, not a vague implementation checkbox.
           work-item links are recorded; require no commit for routine
           syncs.
 - [ ] Design a safe migration using this repository as a first case.
-    - [x] Draft a temporary `cp-migrate` skill for reviewed conversion
-          of legacy plans, project, and active memory into works, and
-          separate archival of historical checkpoints.
     - [ ] Map each existing plan to a work; identify whether any project
           merits a coordinating parent work.
     - [ ] Attribute global memory and checkpoints only when ownership is
@@ -537,6 +60,108 @@ cannot, the next task is discovery, not a vague implementation checkbox.
       docs and seek human approval for any further canon changes.
 - [ ] Validate human orientation and isolated sync with two concurrent
       works, a weeks-old paused work, a tiny task, and a multi-repo case.
+- [x] Map legacy skills and artifacts to the work-based target.
+- [x] Establish the milestone convention; first approved commit `87d7577`.
+- [x] Review two `cp-work` trials: this redesign and the external Alloy
+      investigation (AB#13452); both were satisfactory. The first trial
+      was manual; installed invocation in the second was not verified.
+
+## Why This Work Exists
+
+Global memory and the latest checkpoint mix unrelated conversations;
+hydrating every plan loads irrelevant state. A work must answer what
+matters now and what comes next for both the human and the agent.
+Field feedback also shows that investigation trails accumulate after
+their useful life. The human mainly consults the executive summary
+and pending tasks, not resolved risks or completed subtasks.
+
+## Target and Continuing Constraints
+
+- Retain shared, human-approved canon in the nearest `.cp/` scope.
+  Use one explicitly selected `.cp/works/<slug>.md` per independently
+  resumable work; tiny tasks need no file. Multi-repository work can
+  use a lead repository and links.
+- Replace separate projects, plans, global memory, and new checkpoints
+  only after reviewed migration. Preserve useful strategic context,
+  pending ideas, and attributable state. Parent works coordinate shared
+  direction and dependencies without copying children's tasks.
+- `cp-discover` remains scope discovery and canon bootstrap, not work
+  creation. `cp-start` is read-only selection and orientation;
+  `cp-work` creates or reshapes; ordinary collaboration maintains
+  meaningful state; `cp-sync` reconciles one work and reports a delta.
+  No mandatory session-end ritual or global active work is required.
+- Sections emerge from real content. Prefer checklist tasks and simple
+  nesting; use task headings only for substantial blocks with context
+  or criteria. An implementation-ready task needs a bounded objective,
+  inputs, expected output, and acceptance criteria; otherwise discover
+  those first. PR and work-item links are optional, not status fields.
+- Discovery, implementation, and follow-up describe attention, not
+  exclusive states. Paused work remains selectable and states what
+  will unblock it. External work-item status does not determine CP mode.
+- Implementation tasks end at the intended final PR becoming ready for
+  review. Post-PR validation is guidance, not a completion checkbox.
+  Archive only when all tasks are done and the human confirms readiness;
+  reopen or create follow-up work if review or validation reveals more.
+- Archive/reopen rules remain in `cp-work`: move to or from
+  `.cp/works/archive/`, preserve the basename, and never overwrite a
+  collision. `cp-start` routes archived work through `cp-work`.
+- A milestone includes sync and explicit approval of exact files and
+  message. Its optional archive move must be in that approval.
+  Routine sync never commits, changes external items, or runs `/compact`.
+  Milestones use `CP-Work` and `CP-Milestone` message markers; later
+  PR links do not justify amending a commit.
+
+## Semantic Compression Contract
+
+Each sync reads the whole current work and removes detail only after
+its operational value expires. Retain evidence for open investigations,
+dependencies, reproduction, audit, rollback, or explicit human requests.
+Distill resolved trails into cause, change, validation scope, limitations,
+and useful references; collapse completed subtasks without hiding
+unfinished scope. Keep still-active decisions and rationale. Preserve
+uncertain consequential content and ask rather than guessing.
+
+Put a short executive summary and findable pending tasks first. Use
+500-1500 words as guidance, never a minimum or cap. Larger necessary
+evidence is valid; do not create sidecar history to evade the target.
+Report the cleanup without repeating discarded detail. Canon and
+legacy artifacts remain outside this operation.
+
+## Migration Map and Source Contracts
+
+| Legacy responsibility | Intended replacement |
+| --- | --- |
+| Project declaration and plans | One work, or a coordinating parent |
+| Global active memory | Work state and executive summary |
+| New checkpoint documents | Approved Git milestone commits |
+| `cp-hydrate` | `cp-start` |
+| `cp-plan`, `cp-project` | `cp-work` |
+| `cp-compact`, `cp-session-end` | `cp-sync`, without mandatory closure |
+| `cp-checkpoint` | `cp-milestone` |
+| `cp-prune` | Routine sync cleanup; separate maintenance remains undecided |
+
+Keep `cp-discover`, `cp-brainstorming`, and shared `cp-workflows`.
+Preserve historical sources until reviewed migration; do not manufacture
+retroactive milestone commits.
+
+Detailed source contracts: [cp-workflows](../../skills/cp-workflows/SKILL.md),
+[cp-work](../../skills/cp-work/SKILL.md),
+[cp-sync](../../skills/cp-sync/SKILL.md), and
+[cp-milestone](../../skills/cp-milestone/SKILL.md).
+The [sync cases](../../skills/cp-sync/evals/evals.json) cover open evidence,
+resolved history, and mandatory retention above the advisory size.
+One old/new trial per case passed 12/12 checks for the revision versus
+8/12 for the baseline: resolved detail shrank from 617 to 297 words;
+the open and mandatory-retention cases stayed unchanged in both.
+These trials do not replace human review or field testing.
+
+Earlier `cp-work`, `cp-sync`, and `cp-milestone` drafts were deployed to
+Copilot and Codex. The current compression revision is source-only
+pending review; its comparisons are manual source-instruction trials,
+not installed skill invocations. `cp-start` deployment remains pending
+in this work. Legacy warnings and the temporary `cp-migrate` draft
+remain undeployed; migration has not been run. Deploy through the
+repository Makefile, never by editing installed copies.
 
 ## Open Questions
 
@@ -548,10 +173,8 @@ cannot, the next task is discovery, not a vague implementation checkbox.
   already committed and a sync produces no meaningful edits?
 - How should an active conversation discover that its selected work
   changed elsewhere before it syncs?
-- How should `cp-sync` distinguish temporary investigation evidence
-  from durable work state, and when should it compress resolved detail
-  while preserving what is needed to explain, reproduce, or audit the
-  outcome?
+- Does the new semantic compression preserve enough context in field use,
+  and is the advisory 500-1500-word range useful across work sizes?
 - Does this iteration need a release number, and how does that relate
   to the older skill metadata and framework checkpoint versions?
 - Would a `cp-archive` wrapper that checks readiness, moves the work,
@@ -560,8 +183,7 @@ cannot, the next task is discovery, not a vague implementation checkbox.
 
 ## Next Action
 
-Field-test archive and reopen behavior, including the final-archive
-offer in `cp-milestone` after sync. Also validate `cp-start` routing
-and the sync-to-milestone handoff. The legacy-skill warnings and
-`cp-migrate` draft remain undeployed. Field-test the new skills before
+Review the compression comparison and this distilled work, then deploy
+the approved revision. Continue archive/reopen and final-archive field
+tests, `cp-start` routing, and the sync-to-milestone handoff before
 migrating legacy artifacts.

@@ -95,6 +95,13 @@ Respect a human choice not to capture an insight. `cp-sync` reviews
 the work for meaningful omissions or drift; it is not the only time
 the work can change.
 
+The executive summary and pending tasks are the primary reading path.
+`cp-sync` also reviews the whole selected work for obsolete detail,
+distilling resolved history while retaining evidence and decisions
+that still serve open work or retention obligations. Its advisory
+size range is not a cap on necessary context. This cleanup does not
+authorize pruning legacy sources or other works.
+
 ## Artifact precedence
 
 Canon is human-approved and scope-wide. While legacy artifacts exist,

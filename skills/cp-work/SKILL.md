@@ -52,15 +52,22 @@ title and helpful headings rather than imposing new names:
   is about, its current state, and the next concrete action. Orient a
   reader who has not seen the conversation; do not retell its history
   or duplicate the entire task list.
-- `## Why This Work Exists`: the objective, relevant evidence and
-  constraints needed to resume without the conversation. Identify
-  uncertain claims as such. Link an external source when known.
 - `## Tasks`: actionable checks reflecting the current state. Use
   `- [ ]` for pending work and `- [x]` only for verified outcomes.
   Nest checks for simple breakdowns. Add a `###` heading beneath
   `## Tasks` only when a substantial block needs its own context,
   acceptance criteria, or subordinate checks. A heading groups
   checks; it is not a second task status.
+- `## Why This Work Exists`: the objective, relevant evidence and
+  constraints needed to resume without the conversation. Identify
+  uncertain claims as such. Link an external source when known.
+
+Prioritize the executive summary and pending tasks over historical
+detail. Use 500-1500 words as an advisory range for an ordinary work,
+not a minimum or hard cap; tiny works need less and complex work may
+need more. Keep detailed evidence while it serves unresolved work or
+retention obligations. `cp-sync` owns routine semantic compression as
+details lose their value; do not build a permanent investigation log.
 
 Keep even an explicitly requested tiny work short: a title, brief
 orientation, and a few checks may be enough. Let sections emerge
@@ -104,6 +111,10 @@ completed.
 If completion or PR readiness is unclear, ask before moving. If the
 criteria are not met, do not check tasks or archive a completed work
 just to force closure.
+
+If resolved investigation detail still overwhelms the work, offer
+`cp-sync` before archiving. Do not invoke it implicitly or make a
+size target an archive gate. A milestone already includes that sync.
 
 Move the file, preserving its basename and contents, from
 `.cp/works/<slug>.md` to `.cp/works/archive/<slug>.md`. Create the
